@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShipPostitioner.cs" />
     <EmbeddedResource Include="Battleship.resx">
       <DependentUpon>Battleship.cs</DependentUpon>
     </EmbeddedResource>

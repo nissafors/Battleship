@@ -6,6 +6,14 @@ using System.Windows.Forms;
 
 namespace Battleship
 {
+    enum Square { Water, Ship, Hit, Miss, Forbidden }
+    enum Orientation { None, Vertical, Horizontal }
+    struct Ship
+    {
+        int length;
+        Orientation orientation;
+    }
+
     static class Program
     {
         /// <summary>
