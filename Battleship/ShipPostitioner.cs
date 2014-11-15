@@ -38,23 +38,57 @@ namespace Battleship
         // Fields
         List<Channel> channels;
 
-        public void AutoPosition(Square[,] grid, Ship[] ships)
+        public void AutoPosition(Square[,] grid, int[] shipLengths)
         {
-            if (GridTooSmall(grid, ships))
+            const int MAXTRIES = 1000;
+            List<Channel> channelsLongEnough = new List<Channel>();
+            Random rnd = new Random();
+            int channel, startPos, row, col, resetCount = 0;
+
+            resetGrid(grid);
+            for (int i = 0; i < shipLengths.Length; i++)
             {
-                throw new InsufficientGridSpaceException();
-            }
-            foreach (Ship ship in ships)
-            {
+                // Ta reda på alla kanaler
+                ListChannels(grid);
+                // Lägg alla kanaler som är långa nog i en egen lista
+                channelsLongEnough = channels.FindAll(c => c.Length >= shipLengths[i]);
+                if (channelsLongEnough.Count == 0)
+                {
+                    resetGrid(grid);
+                    channels = null;
+                    i = -1;
+                    resetCount++;
+                    if (resetCount > MAXTRIES)
+                    {
+                        throw new InsufficientGridSpaceException();
+                    }
+                    continue;
+                }
+                // Slumpa fram en kanal
+                channel = rnd.Next(0, channelsLongEnough.Count);
+                // Slumpa fram en startposition i den kanalen
+                startPos = rnd.Next(0, channelsLongEnough[channel].Length - shipLengths[i] + 1);
+                if (channelsLongEnough[channel].orientation == Orientation.Horizontal)
+                {
+                    row = channelsLongEnough[channel].StartRow;
+                    col = channelsLongEnough[channel].StartCol + startPos;
+                }
+                else
+                {
+                    row = channelsLongEnough[channel].StartRow + startPos;
+                    col = channelsLongEnough[channel].StartCol;
+                }
+                // Lägg båten där
+                SetShip(grid, shipLengths[i], channelsLongEnough[channel].orientation, row, col);
             }
         }
 
-        public bool SetShip(Square[,] grid, Ship ship, int row, int col)
+        public bool SetShip(Square[,] grid, int shipLength, Orientation orientation, int row, int col)
         {
             // Make sure we know our channels
             //if (channels == null)
             //{
-                ListChannels(grid);
+            ListChannels(grid);
             //}
 
             // Is there a channel were caller wants to place the ship?
@@ -66,8 +100,8 @@ namespace Battleship
                     case Orientation.Vertical:
                         if (col == c.StartCol &&
                             row >= c.StartRow &&
-                            row + ship.length <= c.StartRow + c.Length &&
-                            ship.orientation == Orientation.Vertical)
+                            row + shipLength <= c.StartRow + c.Length &&
+                            orientation == Orientation.Vertical)
                         {
                             ok = true;
                         }
@@ -75,8 +109,8 @@ namespace Battleship
                     case Orientation.Horizontal:
                         if (row == c.StartRow &&
                             col >= c.StartCol &&
-                            col + ship.length <= c.StartCol + c.Length &&
-                            ship.orientation == Orientation.Horizontal)
+                            col + shipLength <= c.StartCol + c.Length &&
+                            orientation == Orientation.Horizontal)
                         {
                             ok = true;
                         }
@@ -89,9 +123,9 @@ namespace Battleship
                 return false;
             }
 
-            for (int i = 0; i < ship.length; i++)
+            for (int i = 0; i < shipLength; i++)
             {
-                switch (ship.orientation)
+                switch (orientation)
                 {
                     case Orientation.Horizontal:
                         grid[row, col + i] = Square.Ship;
@@ -108,20 +142,20 @@ namespace Battleship
             return true;
         }
 
-        public bool GridTooSmall(Square[,] grid, Ship[] ships)
+        public bool GridTooSmall(Square[,] grid, int[] shipLengths)
         {
             return false;
         }
 
-        public void PrintChannelList(Square[,] grid)
+        private void resetGrid(Square[,] grid)
         {
-            ListChannels(grid);
-            foreach (Channel c in channels)
+            for (int row = 0; row < grid.GetLength(0); row++)
             {
-                Console.WriteLine(c.orientation + " | row, col: " + c.StartRow + ", " +
-                    c.StartCol + " | Length: " + c.Length);
+                for (int col = 0; col < grid.GetLength(1); col++)
+                {
+                    grid[row, col] = Square.Water;
+                }
             }
-            channels = null;
         }
 
         private void setForbiddenSquares(Square[,] grid)

@@ -8,11 +8,6 @@ namespace Battleship
 {
     enum Square { Water, Ship, Hit, Miss, Sunk, Forbidden };
     enum Orientation { None, Vertical, Horizontal }
-    struct Ship
-    {
-        int length;
-        Orientation orientation;
-    }
 
     static class Program
     {
