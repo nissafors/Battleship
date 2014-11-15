@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI.cs" />
     <Compile Include="Battleship.cs">
       <SubType>Form</SubType>
     </Compile>
