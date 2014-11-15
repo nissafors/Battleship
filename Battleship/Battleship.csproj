@@ -51,9 +51,10 @@
     <Compile Include="Battleship.Designer.cs">
       <DependentUpon>Battleship.cs</DependentUpon>
     </Compile>
+    <Compile Include="InsufficientGridSpaceException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShipPostitioner.cs" />
+    <Compile Include="ShipPositioner.cs" />
     <EmbeddedResource Include="Battleship.resx">
       <DependentUpon>Battleship.cs</DependentUpon>
     </EmbeddedResource>

@@ -6,8 +6,8 @@ using System.Windows.Forms;
 
 namespace Battleship
 {
-    enum Square { Water, Ship, Hit, Miss, Sunk, Forbidden };
-    enum Orientation { None, Vertical, Horizontal }
+    public enum Square { Water, Ship, Hit, Miss, Sunk, Forbidden };
+    public enum Orientation { None, Vertical, Horizontal }
 
     static class Program
     {
