@@ -12,8 +12,6 @@ namespace Battleship
 {
     public partial class Battleship : Form
     {
-        public enum Square { Water, Ship, Hit, Miss, Sunk, Forbidden };
-
         public Battleship()
         {
             InitializeComponent();

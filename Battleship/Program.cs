@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Battleship
 {
-    enum Square { Water, Ship, Hit, Miss, Forbidden }
+    enum Square { Water, Ship, Hit, Miss, Sunk, Forbidden };
     enum Orientation { None, Vertical, Horizontal }
     struct Ship
     {
