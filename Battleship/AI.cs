@@ -24,7 +24,7 @@ namespace Battleship
         /// <param name="playFieldArray">The array containing the playing field.</param>
         /// <param name="firstCoord">The first dimension coordinate that the AI fires at.</param>
         /// <param name="secondCoord">The second dimension coordinate that the AI fires at.</param>
-        private static void Shoot(Square[,] playFieldArray, out int firstCoord, out int secondCoord)
+        public static void Shoot(Square[,] playFieldArray, out int firstCoord, out int secondCoord)
         {
             int minFirst = 0, maxFirst = playFieldArray.GetLength(0), minSecond = 0, maxSecond = playFieldArray.GetLength(1);
             Random randomizeCoord = new Random();
