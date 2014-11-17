@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------
+// <copyright file="InsufficientGridSpaceException.cs" company="none">
+//    Copyright (c) Andreas Andersson 2014
+// </copyright>
+// <author>Andreas Andersson</author>
+//-----------------------------------------------------
 
 namespace Battleship
 {
+    using System;
+
     /// <summary>
     /// Exception to be thrown when the playing field grid was too small to hold all the ships.
     /// </summary>
