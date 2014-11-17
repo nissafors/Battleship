@@ -51,7 +51,7 @@ namespace Battleship
                 // Find long enough channels and add those to a list
                 this.ListChannels(grid);
                 channelsLongEnough = this.channels.FindAll(c => c.Length >= shipLengths[i]);
-                
+
                 // If no long enough channels were found: Reset grid and try again. Give
                 // up and throw exception after MAXTRIES times.
                 if (channelsLongEnough.Count == 0)
@@ -67,7 +67,7 @@ namespace Battleship
 
                     continue;
                 }
-                
+
                 // Randomize which channel to use and how far into it to place the ship.
                 channel = rnd.Next(0, channelsLongEnough.Count);
                 startPos = rnd.Next(0, channelsLongEnough[channel].Length - shipLengths[i] + 1);
@@ -83,7 +83,7 @@ namespace Battleship
                     row = channelsLongEnough[channel].StartRow + startPos;
                     col = channelsLongEnough[channel].StartCol;
                 }
-                
+
                 // Add the ship to the grid
                 this.SetShip(grid, shipLengths[i], channelsLongEnough[channel].Orientation, row, col);
             }
@@ -102,7 +102,7 @@ namespace Battleship
             // Make sure we know our channels
             if (this.channels == null)
             {
-            this.ListChannels(grid);
+                this.ListChannels(grid);
             }
 
             // Is there a channel were caller wants to place the ship?
@@ -161,11 +161,60 @@ namespace Battleship
                 }
             }
 
-            // Update forbidden squares on the grid
-            this.SetForbiddenSquares(grid);
-
             // Nullify channels
             this.channels = null;
+            return true;
+        }
+
+        /// <summary>
+        /// Remove a ship from the playing field at given coordinates.</summary>
+        /// <param name="grid">The playing field grid.</param>
+        /// <param name="row">Least significant row.</param>
+        /// <param name="col">Least significant column.</param>
+        /// <returns>Returns true if a ship was found and removed successfully.</returns>
+        public bool RemoveShip(Square[,] grid, int row, int col)
+        {
+            // If this is not the uppermost, leftmost (row, col) on the ship, 
+            // or if this is not a ship at all, return false.
+            if ((grid[row, col] != Square.Ship) ||
+                ((col - 1 >= 0 && row - 1 >= 0) &&
+                (grid[row - 1, col] == Square.Ship || grid[row, col - 1] == Square.Ship)))
+            {
+                return false;
+            }
+
+            // Remove adjacent ship squares.
+            if (col + 1 < grid.GetLength(0) && grid[row, col + 1] == Square.Ship)
+            {
+                // This is a ship with horizontal orientation
+                for (int c = col; c < grid.GetLength(1); c++)
+                {
+                    if (grid[row, c] == Square.Ship)
+                    {
+                        grid[row, c] = Square.Water;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // This is a ship with vertical orientation
+                for (int r = row; r < grid.GetLength(0); r++)
+                {
+                    if (grid[r, col] == Square.Ship)
+                    {
+                        grid[r, col] = Square.Water;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
             return true;
         }
 
@@ -261,6 +310,24 @@ namespace Battleship
         }
 
         /// <summary>
+        /// Change all Square.Forbidden in <paramref name="grid"/> to Square.Water.
+        /// </summary>
+        /// <param name="grid">The playing field grid.</param>
+        private void RemoveForbiddenSquares(Square[,] grid)
+        {
+            for (int row = 0; row < grid.GetLength(1); row++)
+            {
+                for (int col = 0; col < grid.GetLength(0); col++)
+                {
+                    if (grid[row, col] == Square.Forbidden)
+                    {
+                        grid[row, col] = Square.Water;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Find all contiguous Square.Water's and write them to the channels field.
         /// </summary>
         /// <param name="grid">The playing field grid.</param>
@@ -269,6 +336,9 @@ namespace Battleship
             this.channels = new List<Channel>();
             Square[] squareArray;
             Orientation or;
+
+            // Find all squares adjacent to a ship and mark them
+            this.SetForbiddenSquares(grid);
 
             for (int dim = 0; dim < 2; dim++)
             {
@@ -279,6 +349,9 @@ namespace Battleship
                     this.channels.AddRange(this.ChannelsFromArray(squareArray, or, j));
                 }
             }
+
+            // Remove marks from grid
+            this.RemoveForbiddenSquares(grid);
         }
 
         /// <summary>
@@ -356,7 +429,7 @@ namespace Battleship
 
             return channels;
         }
-        
+
         /// <summary>
         /// Describes contiguous Square.Water's in the playing field grid.
         /// </summary>
@@ -364,13 +437,13 @@ namespace Battleship
         {
             /// <summary>The orientation of the channel.</summary>
             public Orientation Orientation;
-            
+
             /// <summary>Start row within the grid.</summary>
             public int StartRow;
-            
+
             /// <summary>Start column within the grid.</summary>
             public int StartCol;
-            
+
             /// <summary>The length of the channel.</summary>
             public int Length;
         }
