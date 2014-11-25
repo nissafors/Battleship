@@ -19,78 +19,70 @@ namespace Battleship
         /// <param name="row">Hit row</param>
         /// <param name="col">Hit col</param>
         /// <returns>Returns true if the ship was sunk</returns>
-        private bool IsSunk(Square[,] grid, int row, int col)
+        private static bool IsSunk(Square[,] grid, int row, int col)
         {
-            bool testUp, testDown, testLeft, testRight;
+            int newRow, newCol;
+            bool[] testDir = { true, true, true, true };
 
-            // In which directions should we test for hits?
-            testUp = (row - 1 >= 0 && grid[row - 1, col] == Square.Hit) ? true : false;
-            testDown = (row + 1 < grid.GetLength(1) && grid[row + 1, col] == Square.Hit) ? true : false;
-            testLeft = (col - 1 >= 0 & grid[row, col - 1] == Square.Hit) ? true : false;
-            testRight = (col + 1 < grid.GetLength(0) && grid[row, col + 1] == Square.Hit) ? true : false;
-            
-            // Loop through array and test for hits?
-            int greatestDimension = (grid.GetLength(0) > grid.GetLength(1)) ? grid.GetLength(0) : grid.GetLength(1);
-            for (int i = 1; i < greatestDimension; i++)
+            // Max limit of the loop is the largest dimension of grid[,]
+            int arrayLen = (grid.GetLength(0) > grid.GetLength(1)) ? grid.GetLength(0) : grid.GetLength(1);
+
+            // Start at one position away from (row, col) and step further away at each increment of i
+            for (int i = 1; i < arrayLen; i++)
             {
-                if (testUp && row - i >= 0 && grid[row - i, col] == Square.Hit) {
-                    testUp = true;
-                }
-                else
+                // Loop through four directions: 0 = up, 1 = down, 2 = left and 3 = right
+                for (int dir = 0; dir < 4; dir++)
                 {
-                    if (row - i >= 0 && grid[row - i, col] == Square.Ship)
+                    // Set row and column to test
+                    newRow = (dir == 0 && testDir[0]) ? row - i : row;
+                    newRow = (dir == 1 && testDir[1]) ? row + i : row;
+                    newCol = (dir == 2 && testDir[2]) ? col - i : col;
+                    newCol = (dir == 3 && testDir[3]) ? col - i : col;
+
+                    // If we got this far, the Square at (newRow, newCol) is next to a Square.Hit. If
+                    // that Square is also a Square.Hit, continue to investigate that direction,
+                    // otherwise not. If it is a Square.Ship, obviously not all the squares of that
+                    // ship has been hit and it's therefore not sunk: return false.
+                    switch (GetSquare(grid, newRow, newCol))
                     {
-                        return false;
+                        case Square.Hit:
+                            testDir[dir] = true;
+                            break;
+                        case Square.Ship:
+                            return false;
+                        default:
+                            testDir[dir] = false;
+                            break;
                     }
-                    testUp = false;
                 }
 
-                if (testUp && row + i < grid.GetLength(1) && grid[row + i, col] == Square.Hit)
-                {
-                    testUp = true;
-                }
-                else
-                {
-                    if (row + i < grid.GetLength(1) && grid[row + i, col] == Square.Ship)
-                    {
-                        return false;
-                    }
-                    testUp = false;
-                }
-
-                if (testUp && col - i >= 0 && grid[row, col - i] == Square.Hit)
-                {
-                    testUp = true;
-                }
-                else
-                {
-                    if (col - i >= 0 && grid[row, col - i] == Square.Ship)
-                    {
-                        return false;
-                    }
-                    testUp = false;
-                }
-
-                if (testUp && col + i < grid.GetLength(0) && grid[row, col + i] == Square.Hit)
-                {
-                    testUp = true;
-                }
-                else
-                {
-                    if (col + i < grid.GetLength(0) && grid[row, col + i] == Square.Ship)
-                    {
-                        return false;
-                    }
-                    testUp = false;
-                }
-
-                if (testUp == testDown == testLeft == testRight == false)
+                // If no directions are to be tested next loop, then break.
+                if (testDir[0] == testDir[1] == testDir[2] == testDir[3] == false)
                 {
                     break;
                 }
             }
 
+            // If no Square.Ship was found next to any Square.Hit on this ship, it was sunk.
             return true;
+        }
+
+        /// <summary>
+        /// Check which Square value is at grid[row, col]. Also test if we're in the range of grid.
+        /// </summary>
+        /// <param name="grid">Game board</param>
+        /// <param name="row">Grid row</param>
+        /// <param name="col">Grid column</param>
+        /// <returns>Returns the Square value at grid[row, col] or Square.Forbidden if out of bounds.</returns>
+        private static Square GetSquare(Square[,] grid, int row, int col)
+        {
+            if (row < 0 || row >= grid.GetLength(1) || col < 0 || col >= grid.GetLength(0))
+            {
+                // We're outside the grid
+                return Square.Forbidden;
+            }
+
+            return grid[row, col];
         }
     }
 }
