@@ -52,6 +52,7 @@
       <DependentUpon>Battleship.cs</DependentUpon>
     </Compile>
     <Compile Include="InsufficientGridSpaceException.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipPositioner.cs" />
