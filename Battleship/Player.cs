@@ -1,8 +1,16 @@
-﻿//-----------------------------------------------------
+﻿// TODO:
+// * Document LaunchAtTarget()
+// * Comment LaunchAtTarget() (?)
+// * Fix error in LaunchAtTarget()
+// * Rewrite Squares of sunken ship
+
+
+
+//-----------------------------------------------------
 // <copyright file="Player.cs" company="none">
-//    Copyright (c) Andreas Andersson 2014
+//    Copyright (c) Torbjörn Widström & Andreas Andersson 2014
 // </copyright>
-// <author>Andreas Andersson</author>
+// <author>Torbjörn Widström & Andreas Andersson</author>
 //-----------------------------------------------------
 
 namespace Battleship
@@ -15,6 +23,31 @@ namespace Battleship
     {
         public static Square LaunchAtTarget(Square[,] grid, int row, int col)
         {
+            if (grid[row, col] == Square.Hit ||
+                grid[row, col] == Square.Miss ||
+                grid[row, col] == Square.Sunk)
+            {
+                return Square.Forbidden;
+            }
+            else if (grid[row, col] == Square.Ship)
+            {
+                grid[row, col] = Square.Hit;
+
+                // FUNKAR INTE! Använd IsSunk()-metoden nedan istället.
+                if (grid[row, col] == Square.Sunk)
+                {
+                    grid[row, col] = Square.Sunk;
+                    return Square.Sunk;
+                }
+                else
+                {
+                    return Square.Hit;
+                }
+            }
+            else
+            {
+                return Square.Miss;
+            }
         }
 
         /// <summary>
