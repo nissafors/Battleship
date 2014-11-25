@@ -1,24 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------
+// <copyright file="Player.cs" company="none">
+//    Copyright (c) Andreas Andersson 2014
+// </copyright>
+// <author>Andreas Andersson</author>
+//-----------------------------------------------------
 
 namespace Battleship
 {
-    class Player
+    /// <summary>
+    /// This class provides methods for shooting at given coordinate on the game board and get
+    /// the result of the shot.
+    /// </summary>
+    public class Player
     {
-        static Square LaunchAtTarget(Square[,] grid, int row, int col)
+        public static Square LaunchAtTarget(Square[,] grid, int row, int col)
         {
         }
 
         /// <summary>
-        /// Test if ship that was hit at row, col is sunk
+        /// Test if ship that was hit at row, col is sunk.
         /// </summary>
-        /// <param name="grid">Gameboard</param>
-        /// <param name="row">Hit row</param>
-        /// <param name="col">Hit col</param>
-        /// <returns>Returns true if the ship was sunk</returns>
+        /// <param name="grid">Game board.</param>
+        /// <param name="row">Hit row.</param>
+        /// <param name="col">Hit col.</param>
+        /// <returns>Returns true if the ship was sunk.</returns>
         private static bool IsSunk(Square[,] grid, int row, int col)
         {
             int newRow, newCol;
@@ -70,9 +75,9 @@ namespace Battleship
         /// <summary>
         /// Check which Square value is at grid[row, col]. Also test if we're in the range of grid.
         /// </summary>
-        /// <param name="grid">Game board</param>
-        /// <param name="row">Grid row</param>
-        /// <param name="col">Grid column</param>
+        /// <param name="grid">Game board.</param>
+        /// <param name="row">Grid row.</param>
+        /// <param name="col">Grid column.</param>
         /// <returns>Returns the Square value at grid[row, col] or Square.Forbidden if out of bounds.</returns>
         private static Square GetSquare(Square[,] grid, int row, int col)
         {
