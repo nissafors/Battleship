@@ -2,8 +2,6 @@
 // * Document LaunchAtTarget()
 // * Comment LaunchAtTarget() (?)
 // * Fix error in LaunchAtTarget()
-// * Rewrite Squares of sunken ship
-
 
 
 //-----------------------------------------------------
@@ -15,6 +13,9 @@
 
 namespace Battleship
 {
+    using System.Collections.Generic;
+    using System.Drawing;
+
     /// <summary>
     /// This class provides methods for shooting at given coordinate on the game board and get
     /// the result of the shot.
@@ -61,6 +62,10 @@ namespace Battleship
         {
             int newRow, newCol;
             bool[] testDir = { true, true, true, true };
+            List<Point> hitList = new List<Point>();
+
+            // Given coordinates should be a hit. Store them.
+            hitList.Add(new Point(col, row));
 
             // Max limit of the loop is the largest dimension of grid[,]
             int arrayLen = (grid.GetLength(0) > grid.GetLength(1)) ? grid.GetLength(0) : grid.GetLength(1);
@@ -73,35 +78,48 @@ namespace Battleship
                 {
                     // Set row and column to test
                     newRow = (dir == 0 && testDir[0]) ? row - i : row;
-                    newRow = (dir == 1 && testDir[1]) ? row + i : row;
+                    newRow = (dir == 1 && testDir[1]) ? row + i : newRow;
                     newCol = (dir == 2 && testDir[2]) ? col - i : col;
-                    newCol = (dir == 3 && testDir[3]) ? col - i : col;
+                    newCol = (dir == 3 && testDir[3]) ? col + i : newCol;
 
-                    // If we got this far, the Square at (newRow, newCol) is next to a Square.Hit. If
-                    // that Square is also a Square.Hit, continue to investigate that direction,
-                    // otherwise not. If it is a Square.Ship, obviously not all the squares of that
-                    // ship has been hit and it's therefore not sunk: return false.
-                    switch (GetSquare(grid, newRow, newCol))
+                    if (testDir[dir])
                     {
-                        case Square.Hit:
-                            testDir[dir] = true;
-                            break;
-                        case Square.Ship:
-                            return false;
-                        default:
-                            testDir[dir] = false;
-                            break;
+                        // If we got this far, the Square at (newRow, newCol) is next to a Square.Hit. If
+                        // that Square is also a Square.Hit, continue to investigate this direction,
+                        // otherwise not. If it is a Square.Ship, obviously not all the squares of that
+                        // ship has been hit and it's therefore not sunk: return false.
+                        switch (GetSquare(grid, newRow, newCol))
+                        {
+                            case Square.Hit:
+                                testDir[dir] = true;
+                                // Save coordinates so we can easily rewrite the grid if the ship is sunk
+                                hitList.Add(new Point(newCol, newRow));
+                                break;
+                            case Square.Ship:
+                                return false;
+                            default:
+                                testDir[dir] = false;
+                                break;
+                        }
                     }
                 }
 
                 // If no directions are to be tested next loop, then break.
-                if (testDir[0] == testDir[1] == testDir[2] == testDir[3] == false)
+                if (testDir[0] == false &&
+                    testDir[1] == false &&
+                    testDir[2] == false &&
+                    testDir[3] == false)
                 {
                     break;
                 }
             }
 
             // If no Square.Ship was found next to any Square.Hit on this ship, it was sunk.
+            // Rewrite grid and return true
+            foreach (Point hit in hitList)
+            {
+                grid[hit.Y, hit.X] = Square.Sunk;
+            }
             return true;
         }
 
