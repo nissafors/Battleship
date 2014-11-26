@@ -315,9 +315,9 @@ namespace Battleship
         /// <param name="grid">The playing field grid.</param>
         private void RemoveForbiddenSquares(Square[,] grid)
         {
-            for (int row = 0; row < grid.GetLength(1); row++)
+            for (int row = 0; row < grid.GetLength(0); row++)
             {
-                for (int col = 0; col < grid.GetLength(0); col++)
+                for (int col = 0; col < grid.GetLength(1); col++)
                 {
                     if (grid[row, col] == Square.Forbidden)
                     {
