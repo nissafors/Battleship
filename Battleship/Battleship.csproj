@@ -51,6 +51,9 @@
     <Compile Include="Battleship.Designer.cs">
       <DependentUpon>Battleship.cs</DependentUpon>
     </Compile>
+    <Compile Include="BattleshipPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="InsufficientGridSpaceException.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />

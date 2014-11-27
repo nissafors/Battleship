@@ -1,6 +1,6 @@
 ﻿namespace Battleship
 {
-    partial class Battleship
+    partial class BattleshipForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,18 +30,27 @@
         {
             this.SuspendLayout();
             // 
-            // Battleship
+            // BattleshipForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Name = "Battleship";
+            this.ClientSize = new System.Drawing.Size(506, 452);
+            this.Name = "BattleshipForm";
             this.Text = "Battleship";
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+
+
+
+
+
+
+
+
     }
 }
 
