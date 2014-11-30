@@ -127,7 +127,7 @@ namespace Battleship
         /// <returns>Returns the Square value at grid[row, col] or Square.Forbidden if out of bounds.</returns>
         private static Square GetSquare(Square[,] grid, int row, int col)
         {
-            if (row < 0 || row >= grid.GetLength(1) || col < 0 || col >= grid.GetLength(0))
+            if (row < 0 || row >= grid.GetLength(0) || col < 0 || col >= grid.GetLength(1))
             {
                 // We're outside the grid
                 return Square.Forbidden;

@@ -51,11 +51,15 @@
     <Compile Include="Battleship.Designer.cs">
       <DependentUpon>Battleship.cs</DependentUpon>
     </Compile>
+    <Compile Include="BattleshipPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="InsufficientGridSpaceException.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipPositioner.cs" />
+    <Compile Include="AudioEffect.cs" />
     <EmbeddedResource Include="Battleship.resx">
       <DependentUpon>Battleship.cs</DependentUpon>
     </EmbeddedResource>
@@ -80,6 +84,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="forbidden.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="hit.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="miss.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="sunk.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
