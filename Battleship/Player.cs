@@ -1,12 +1,6 @@
-﻿// TODO:
-// * Document LaunchAtTarget()
-// * Comment LaunchAtTarget() (?)
-// * Fix error in LaunchAtTarget()
-
-
-//-----------------------------------------------------
+﻿//-----------------------------------------------------
 // <copyright file="Player.cs" company="none">
-//    Copyright (c) Torbjörn Widström & Andreas Andersson 2014
+//      Copyright (c) Torbjörn Widström & Andreas Andersson 2014
 // </copyright>
 // <author>Torbjörn Widström & Andreas Andersson</author>
 //-----------------------------------------------------
@@ -22,8 +16,16 @@ namespace Battleship
     /// </summary>
     public class Player
     {
+        /// <summary>
+        /// Tests if shot is a hit, miss, sunk or forbidden.
+        /// </summary>
+        /// <param name="grid">Game board.</param>
+        /// <param name="row">Hit row.</param>
+        /// <param name="col">Hit col.</param>
+        /// <returns>Return if shot is a hit, miss, sunk or forbidden.</returns>
         public static Square LaunchAtTarget(Square[,] grid, int row, int col)
-        {
+        {   
+            // Tests if shot is forbidden. 
             if (grid[row, col] == Square.Hit ||
                 grid[row, col] == Square.Miss ||
                 grid[row, col] == Square.Sunk)
@@ -33,17 +35,10 @@ namespace Battleship
             else if (grid[row, col] == Square.Ship)
             {
                 grid[row, col] = Square.Hit;
-
-                // FUNKAR INTE! Använd IsSunk()-metoden nedan istället.
-                if (grid[row, col] == Square.Sunk)
-                {
-                    grid[row, col] = Square.Sunk;
-                    return Square.Sunk;
-                }
-                else
-                {
-                    return Square.Hit;
-                }
+                
+                // Call the method IsSunk.
+                IsSunk(grid, row, col);
+                return Square.Sunk;
             }
             else
             {
