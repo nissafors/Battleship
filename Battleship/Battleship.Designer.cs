@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(506, 452);
             this.Name = "BattleshipForm";
-            this.Text = "PAT";
+            this.Text = "Sänka Skepp";
             this.ResumeLayout(false);
 
         }
