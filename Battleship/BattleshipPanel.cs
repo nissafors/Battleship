@@ -108,18 +108,19 @@ namespace Battleship
         {
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             this.SuspendLayout();
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //se.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             for (int row = 0; row < rows; row++)
             {
                 for (int column = 0; column < columns; column++)
                 {
                     if (playField[column, row] == Square.Hit)
                     {
+                        
                         e.Graphics.FillRectangle(Brushes.Red, column * squareWidth, row * squareHeight, squareWidth, squareHeight);
                     }
                     else if (playField[column, row] == Square.Miss)
                     {
-                        e.Graphics.FillRectangle(Brushes.Black, column * squareWidth, row * squareHeight, squareWidth, squareHeight);
+                        e.Graphics.DrawImageUnscaled(Image.FromFile(@"images\miss.png"), column * squareWidth - 1, row * squareHeight - 1);
                     }
                     else if (isPlayer && playField[column, row] == Square.Ship)
                     {
@@ -131,7 +132,7 @@ namespace Battleship
                     }
                     else
                     {
-                        e.Graphics.FillRectangle(Brushes.Blue, column * squareWidth, row * squareHeight, squareWidth, squareHeight);
+                        e.Graphics.DrawImageUnscaled(Image.FromFile(@"images\water.png"), column * squareWidth - 1, row * squareHeight - 1);
                     }
                 }
             }

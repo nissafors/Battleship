@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="squares.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="271.82415"
+     inkscape:cy="562.85714"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="748"
+     inkscape:window-x="-8"
+     inkscape:window-y="22"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3043"
+       transform="matrix(0.30864197,0,0,0.30864197,155.7037,339.13929)"
+       inkscape:export-filename="C:\Users\Andreas\Documents\Visual Studio 2013\Projects\Battleship\Battleship\ship.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         y="482.36218"
+         x="280"
+         height="80"
+         width="80"
+         id="rect2989"
+         style="fill:#cccccc;stroke:#000000" />
+      <path
+         d="m 355.35534,522.36218 c 0,19.52622 -15.82913,35.35534 -35.35534,35.35534 -19.52621,0 -35.35534,-15.82912 -35.35534,-35.35534 0,-19.52621 15.82913,-35.35534 35.35534,-35.35534 19.52621,0 35.35534,15.82913 35.35534,35.35534 z"
+         sodipodi:ry="35.355339"
+         sodipodi:rx="35.355339"
+         sodipodi:cy="522.36218"
+         sodipodi:cx="320"
+         id="path2991"
+         style="fill:#4d4d4d;stroke:#000000"
+         sodipodi:type="arc"
+         transform="matrix(0.80078679,0,0,0.80078679,63.748227,104.06145)" />
+    </g>
+    <g
+       transform="matrix(0.30864197,0,0,0.30864197,129.46914,339.13929)"
+       id="g3047"
+       inkscape:export-filename="C:\Users\Andreas\Documents\Visual Studio 2013\Projects\Battleship\Battleship\sunk.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         style="fill:#214478;stroke:#000000"
+         id="rect3049"
+         width="80"
+         height="80"
+         x="280"
+         y="482.36218" />
+      <path
+         transform="matrix(0.80078679,0,0,0.80078679,63.748227,104.06145)"
+         sodipodi:type="arc"
+         style="fill:#3771c8;stroke:#000000"
+         id="path3051"
+         sodipodi:cx="320"
+         sodipodi:cy="522.36218"
+         sodipodi:rx="35.355339"
+         sodipodi:ry="35.355339"
+         d="m 355.35534,522.36218 c 0,19.52622 -15.82913,35.35534 -35.35534,35.35534 -19.52621,0 -35.35534,-15.82912 -35.35534,-35.35534 0,-19.52621 15.82913,-35.35534 35.35534,-35.35534 19.52621,0 35.35534,15.82913 35.35534,35.35534 z" />
+    </g>
+    <g
+       transform="matrix(0.30864197,0,0,0.30864197,208.17284,339.13929)"
+       id="g3066"
+       style="fill:#87aade"
+       inkscape:export-filename="C:\Users\Andreas\Documents\Visual Studio 2013\Projects\Battleship\Battleship\miss.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         style="fill:#87aade;stroke:#000000"
+         id="rect3068"
+         width="80"
+         height="80"
+         x="280"
+         y="482.36218" />
+      <path
+         transform="matrix(1.0996066,0,0,1.0996066,-31.874113,-52.03072)"
+         sodipodi:type="arc"
+         style="fill:#87aade;stroke:#000000"
+         id="path3070"
+         sodipodi:cx="320"
+         sodipodi:cy="522.36218"
+         sodipodi:rx="35.355339"
+         sodipodi:ry="35.355339"
+         d="m 355.35534,522.36218 c 0,19.52622 -15.82913,35.35534 -35.35534,35.35534 -19.52621,0 -35.35534,-15.82912 -35.35534,-35.35534 0,-19.52621 15.82913,-35.35534 35.35534,-35.35534 19.52621,0 35.35534,15.82913 35.35534,35.35534 z" />
+      <path
+         d="m 344.96201,522.36218 c 0,13.78614 -11.17587,24.96201 -24.96201,24.96201 -13.78614,0 -24.96201,-11.17587 -24.96201,-24.96201 0,-13.78614 11.17587,-24.96201 24.96201,-24.96201 13.78614,0 24.96201,11.17587 24.96201,24.96201 z"
+         sodipodi:ry="24.962011"
+         sodipodi:rx="24.962011"
+         sodipodi:cy="522.36218"
+         sodipodi:cx="320"
+         id="path3072"
+         style="fill:#87aade;stroke:#000000"
+         sodipodi:type="arc"
+         transform="matrix(1.0996066,0,0,1.0996066,-31.874113,-52.03072)" />
+      <path
+         transform="matrix(1.0996066,0,0,1.0996066,-31.874113,-52.03072)"
+         sodipodi:type="arc"
+         style="fill:#87aade;stroke:#000000"
+         id="path3074"
+         sodipodi:cx="320"
+         sodipodi:cy="522.36218"
+         sodipodi:rx="13.59431"
+         sodipodi:ry="13.59431"
+         d="m 333.59431,522.36218 c 0,7.50793 -6.08638,13.59431 -13.59431,13.59431 -7.50793,0 -13.59431,-6.08638 -13.59431,-13.59431 0,-7.50793 6.08638,-13.59431 13.59431,-13.59431 7.50793,0 13.59431,6.08638 13.59431,13.59431 z" />
+      <path
+         d="m 323.20098,522.36218 c 0,1.76786 -1.43313,3.20098 -3.20098,3.20098 -1.76785,0 -3.20098,-1.43312 -3.20098,-3.20098 0,-1.76785 1.43313,-3.20098 3.20098,-3.20098 1.76785,0 3.20098,1.43313 3.20098,3.20098 z"
+         sodipodi:ry="3.2009823"
+         sodipodi:rx="3.2009823"
+         sodipodi:cy="522.36218"
+         sodipodi:cx="320"
+         id="path3076"
+         style="fill:#87aade;stroke:#000000"
+         sodipodi:type="arc"
+         transform="matrix(1.0996066,0,0,1.0996066,-31.874113,-52.03072)" />
+    </g>
+    <g
+       id="g3113"
+       transform="matrix(0.30864197,0,0,0.30864197,100.36861,366.03523)"
+       inkscape:export-filename="C:\Users\Andreas\Documents\Visual Studio 2013\Projects\Battleship\Battleship\hit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g3101"
+         transform="translate(9.2857145,-87.142857)">
+        <rect
+           y="482.36218"
+           x="280"
+           height="80"
+           width="80"
+           id="rect3103"
+           style="fill:#cccccc;stroke:#000000" />
+        <path
+           d="m 355.35534,522.36218 c 0,19.52622 -15.82913,35.35534 -35.35534,35.35534 -19.52621,0 -35.35534,-15.82912 -35.35534,-35.35534 0,-19.52621 15.82913,-35.35534 35.35534,-35.35534 19.52621,0 35.35534,15.82913 35.35534,35.35534 z"
+           sodipodi:ry="35.355339"
+           sodipodi:rx="35.355339"
+           sodipodi:cy="522.36218"
+           sodipodi:cx="320"
+           id="path3105"
+           style="fill:#4d4d4d;stroke:#000000"
+           sodipodi:type="arc"
+           transform="matrix(0.80078679,0,0,0.80078679,63.748227,104.06145)" />
+      </g>
+      <g
+         transform="matrix(1.0407622,-0.16478454,0.16478454,1.0407622,80.267368,-55.207065)"
+         id="g3107">
+        <path
+           sodipodi:type="star"
+           style="fill:#ff0000;stroke:#ff0000"
+           id="path3109"
+           sodipodi:sides="5"
+           sodipodi:cx="210"
+           sodipodi:cy="480.93362"
+           sodipodi:r1="41.701687"
+           sodipodi:r2="20.850843"
+           sodipodi:arg1="0.5903779"
+           sodipodi:arg2="1.2186964"
+           inkscape:flatsided="false"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 244.64286,504.14791 -27.45204,-3.64263 -18.56369,20.54927 -5.01879,-27.23407 -25.28002,-11.30505 24.35025,-13.18895 2.93978,-27.53617 20.06808,19.08285 27.0969,-5.71324 -11.94749,24.9828 z"
+           transform="matrix(0.91100822,0,0,0.91100822,-28.993231,56.414066)"
+           inkscape:transform-center-x="3.2016558"
+           inkscape:transform-center-y="0.44530432" />
+        <path
+           inkscape:transform-center-y="0.28633945"
+           inkscape:transform-center-x="2.0587591"
+           transform="matrix(0.58580497,0,0,0.58580497,39.299451,212.81524)"
+           d="m 244.64286,504.14791 -27.45204,-3.64263 -18.56369,20.54927 -5.01879,-27.23407 -25.28002,-11.30505 24.35025,-13.18895 2.93978,-27.53617 20.06808,19.08285 27.0969,-5.71324 -11.94749,24.9828 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="false"
+           sodipodi:arg2="1.2186964"
+           sodipodi:arg1="0.5903779"
+           sodipodi:r2="20.850843"
+           sodipodi:r1="41.701687"
+           sodipodi:cy="480.93362"
+           sodipodi:cx="210"
+           sodipodi:sides="5"
+           id="path3111"
+           style="fill:#ffff00;stroke:#ff0000"
+           sodipodi:type="star" />
+      </g>
+    </g>
+    <g
+       id="g3146"
+       transform="matrix(0.30864197,0,0,0.30864197,118.44621,365.81477)"
+       inkscape:export-filename="C:\Users\Andreas\Documents\Visual Studio 2013\Projects\Battleship\Battleship\water.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <rect
+         y="395.93362"
+         x="485.71429"
+         height="80"
+         width="80"
+         id="rect3123"
+         style="fill:#87aade;stroke:#000000" />
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path3138"
+         d="m 489.64287,413.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 489.64287,429.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         id="path3140"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path3142"
+         d="m 489.64287,445.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 489.64287,461.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         id="path3144"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+    </g>
+    <g
+       transform="matrix(0.30864197,0,0,0.30864197,170.91534,365.81477)"
+       id="g3153">
+      <rect
+         style="fill:#87aade;stroke:#000000"
+         id="rect3155"
+         width="80"
+         height="80"
+         x="485.71429"
+         y="395.93362" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 489.64287,413.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         id="path3157"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path3159"
+         d="m 489.64287,429.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 489.64287,445.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         id="path3161"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         inkscape:connector-curvature="0"
+         id="path3163"
+         d="m 489.64287,461.07648 c 23.47109,20.92118 51.97438,-24.00666 72.14285,0 l 0,0.35714"
+         style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+    <g
+       id="g5387"
+       style="fill:#ff0000;stroke:#ff0000;stroke-width:6;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(0.30864197,0,0,0.30864197,131.01235,354.57139)"
+       inkscape:export-filename="C:\Users\Andreas\Documents\Visual Studio 2013\Projects\Battleship\Battleship\forbidden.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5383"
+         d="m 620,437.36218 70,70"
+         style="fill:#ff0000;stroke:#ff0000;stroke-width:6;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path5385"
+         d="m 620,507.36218 70,-70"
+         style="fill:#ff0000;stroke:#ff0000;stroke-width:6;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
+  </g>
+</svg>

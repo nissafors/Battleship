@@ -20,7 +20,7 @@ namespace Battleship
             InitializeComponent();
 
             // TODO: Must be accessible for settings form
-            int squareSize = 15;
+            int squareSize = 25;
             int rows = 20, cols = 20;
 
             this.playerField = new Battleship.BattleshipPanel(rows, cols, true);
@@ -50,7 +50,9 @@ namespace Battleship
                 col = e.Location.X / computerField.SquareHeight;
                 row = e.Location.Y / computerField.SquareWidth;
 
-                computerField.PlayerShoot(col, row);
+                AudioEffect player = new AudioEffect();
+                player.Sound = computerField.PlayerShoot(col, row);
+                player.Play();
             }
         }
     }

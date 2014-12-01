@@ -41,11 +41,12 @@ namespace Battleship
         /// own sound effect, while passing other Square's results in no sound.</param>
         public AudioEffect(Square effect)
         {
+            const string PATH = @"audio\";
             // Initialize filenames and the Effect property
-            this.soundFile[(int)Square.Hit] = "hit.wav";
-            this.soundFile[(int)Square.Miss] = "miss.wav";
-            this.soundFile[(int)Square.Sunk] = "sunk.wav";
-            this.soundFile[(int)Square.Forbidden] = "forbidden.wav";
+            this.soundFile[(int)Square.Hit] = PATH + "hit.wav";
+            this.soundFile[(int)Square.Miss] = PATH + "miss.wav";
+            this.soundFile[(int)Square.Sunk] = PATH + "sunk.wav";
+            this.soundFile[(int)Square.Forbidden] = PATH + "forbidden.wav";
             this.Sound = effect;
         }
 
