@@ -36,12 +36,19 @@ namespace Battleship
             {
                 grid[row, col] = Square.Hit;
                 
-                // Call the method IsSunk.
-                IsSunk(grid, row, col);
-                return Square.Sunk;
+                // Test if the ship is sunk and return proper value
+                if (IsSunk(grid, row, col))
+                {
+                    return Square.Sunk;
+                }
+                else
+                {
+                    return Square.Hit;
+                }
             }
             else
             {
+                grid[row, col] = Square.Miss;
                 return Square.Miss;
             }
         }

@@ -61,16 +61,24 @@ namespace Battleship
         /// </summary>
         public void Play()
         {
+            SoundPlayer player;
+
             // Don't do anything if we don't have any sound file for Effect
             if (this.soundFile[(int)this.Sound] == null)
             {
                 return;
             }
 
+            //if (Sound == Square.Sunk)
+            //{
+            //    // Play torpedo sound first
+            //    player = new SoundPlayer(this.soundFile[(int)Square.Hit]);
+            //    player.PlaySync();
+            //}
+
             // Play sound
-            SoundPlayer player = new SoundPlayer(this.soundFile[(int)this.Sound]);
+            player = new SoundPlayer(this.soundFile[(int)this.Sound]);
             player.Play();
-            player.Dispose();
         }
     }
 }
