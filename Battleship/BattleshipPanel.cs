@@ -165,7 +165,6 @@ namespace Battleship
             hitType = Player.LaunchAtTarget(playField, row, col);
             if (hitType != Square.Forbidden)
             {
-                playField[col, row] = hitType;
                 this.Refresh();
             }
 
@@ -183,7 +182,7 @@ namespace Battleship
 
             if (AI.Shoot(playField, out row, out col))
             {
-                playField[col, row] = Player.LaunchAtTarget(playField, row, col);
+                Player.LaunchAtTarget(playField, row, col);
                 this.Refresh();
                 return playField[col, row];
             }

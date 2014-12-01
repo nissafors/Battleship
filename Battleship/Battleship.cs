@@ -18,21 +18,25 @@ namespace Battleship
         public BattleshipForm()
         {
             InitializeComponent();
-            
-            this.playerField = new Battleship.BattleshipPanel(20, 20, true);
+
+            // TODO: Must be accessible for settings form
+            int squareSize = 15;
+            int rows = 20, cols = 20;
+
+            this.playerField = new Battleship.BattleshipPanel(rows, cols, true);
 
             this.playerField.Location = new System.Drawing.Point(50, 50);
             this.playerField.Name = "playerPanel";
-            this.playerField.Size = new System.Drawing.Size(200, 200);
+            this.playerField.Size = new System.Drawing.Size(rows * squareSize, cols * squareSize);
             this.playerField.TabIndex = 0;
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(playerField);
 
-            this.computerField = new Battleship.BattleshipPanel(20, 20, false);
+            this.computerField = new Battleship.BattleshipPanel(rows, cols, false);
 
-            this.computerField.Location = new System.Drawing.Point(350, 50);
+            this.computerField.Location = new System.Drawing.Point(100 + cols * squareSize, 50);
             this.computerField.Name = "computerPanel";
-            this.computerField.Size = new System.Drawing.Size(200, 200);
+            this.computerField.Size = new System.Drawing.Size(rows * squareSize, cols * squareSize);
             this.computerField.TabIndex = 0;
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(computerField);
