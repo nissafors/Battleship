@@ -99,6 +99,44 @@ namespace Battleship
         /// <returns>Returns false if ship is too close to another ship or off the grid.</returns>
         public bool SetShip(Square[,] grid, int shipLength, Orientation orientation, int row, int col)
         {
+            // Is there a channel where caller wants to place the ship?
+            if (!IsSettable(grid, shipLength, orientation, row, col))
+            {
+                return false;
+            }
+
+            // Write ship to grid.
+            for (int i = 0; i < shipLength; i++)
+            {
+                switch (orientation)
+                {
+                    case Orientation.Horizontal:
+                        grid[row, col + i] = Square.Ship;
+                        break;
+                    case Orientation.Vertical:
+                        grid[row + i, col] = Square.Ship;
+                        break;
+                    default:
+                        return false;
+                }
+            }
+
+            // Nullify channels
+            this.channels = null;
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if ship can be set at (row, col).
+        /// </summary>
+        /// <param name="grid">Game board grid.</param>
+        /// <param name="shipLength">The length of the ship.</param>
+        /// <param name="orientation">The orientation of the ship.</param>
+        /// <param name="row">Topmost row.</param>
+        /// <param name="col">Leftmost column.</param>
+        /// <returns>Returns true if ship can be placed at (row, col).</returns>
+        public bool IsSettable(Square[,] grid, int shipLength, Orientation orientation, int row, int col)
+        {
             // Make sure we know our channels
             if (this.channels == null)
             {
@@ -139,31 +177,7 @@ namespace Battleship
                 }
             }
 
-            // If not: Ship cannot be set!
-            if (!ok)
-            {
-                return false;
-            }
-
-            // Write ship to grid.
-            for (int i = 0; i < shipLength; i++)
-            {
-                switch (orientation)
-                {
-                    case Orientation.Horizontal:
-                        grid[row, col + i] = Square.Ship;
-                        break;
-                    case Orientation.Vertical:
-                        grid[row + i, col] = Square.Ship;
-                        break;
-                    default:
-                        return false;
-                }
-            }
-
-            // Nullify channels
-            this.channels = null;
-            return true;
+            return ok;
         }
 
         /// <summary>
