@@ -267,7 +267,7 @@ namespace Battleship
         /// Set squares surrounding ships to Square.Forbidden.
         /// </summary>
         /// <param name="grid">The playing field grid.</param>
-        private void SetForbiddenSquares(Square[,] grid)
+        public void SetForbiddenSquares(Square[,] grid)
         {
             // Work on a framed grid
             Square[,] tempGrid = new Square[grid.GetLength(0) + 2, grid.GetLength(1) + 2];
@@ -313,7 +313,7 @@ namespace Battleship
         /// Change all Square.Forbidden in <paramref name="grid"/> to Square.Water.
         /// </summary>
         /// <param name="grid">The playing field grid.</param>
-        private void RemoveForbiddenSquares(Square[,] grid)
+        public void RemoveForbiddenSquares(Square[,] grid)
         {
             for (int row = 0; row < grid.GetLength(0); row++)
             {
