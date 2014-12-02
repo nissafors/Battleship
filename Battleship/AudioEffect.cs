@@ -15,7 +15,7 @@ namespace Battleship
     /// Sound file credits:
     /// hit.wav:         Mike Koenig (soundbible.com)
     /// miss.wav:        Steveygos93 (soundbible.com)
-    /// sunk.wav:        Mike Koenig (soundbible.com)
+    /// sunk.wav:        Mike Koenig (soundbible.com) (Edited by Andreas Andersson 2014)
     /// forbidden.wav:   Mike Koenig (soundbible.com)
     /// </summary>
     public class AudioEffect
@@ -64,18 +64,11 @@ namespace Battleship
         {
             SoundPlayer player;
 
-            // Don't do anything if we don't have any sound file for Effect
+            // Don't do anything if we don't have any sound file for this Square
             if (this.soundFile[(int)this.Sound] == null)
             {
                 return;
             }
-
-            //if (Sound == Square.Sunk)
-            //{
-            //    // Play torpedo sound first
-            //    player = new SoundPlayer(this.soundFile[(int)Square.Hit]);
-            //    player.PlaySync();
-            //}
 
             // Play sound
             player = new SoundPlayer(this.soundFile[(int)this.Sound]);
