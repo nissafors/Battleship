@@ -19,8 +19,9 @@ namespace Battleship
         /// <summary>
         /// Constants for the images that is drawn. TODO: Change the arrow images to correct ones once they exist.
         /// </summary>
-        private const string IMAGEPATH = @"images\", FORBIDDENIMAGE = "forbidden.png", RIGHTARROWIMAGE = "forbidden.png", DOWNARROWIMAGE = "forbidden.png",
-            MISSIMAGE = "miss.png", SHIPIMAGE = "ship.png", SUNKIMAGE = "sunk.png", WATERIMAGE = "water.png",  HITIMAGE = "hit.png";
+        private const string IMAGEPATH = @"images\", FORBIDDENIMAGE = "forbidden.png", MISSIMAGE = "miss.png", 
+            SHIPIMAGE = "ship.png", SUNKIMAGE = "sunk.png", WATERIMAGE = "water.png",  HITIMAGE = "hit.png", 
+            RIGHTARROWIMAGE = "right.png", DOWNARROWIMAGE = "down.png", LEFTARROWIMAGE = "forbidden.png", UPARROWIMAGE = "forbidden.png";
 
         /// <summary>
         /// Number of rows and columns in the play field and the row and column that a ship is being placed at.
@@ -183,30 +184,46 @@ namespace Battleship
                     shipPlacer.SetShip(this.playField, shipLength, Orientation.Horizontal, this.shipRow, this.shipCol);
                     addingShip = true;
                 }
+                else if (this.playField[row, col] == Square.ArrowUp)
+                {
+                    // Remove the arrows and place the ship vertically
+                    this.RemoveArrows();
+                    shipPlacer.SetShip(this.playField, shipLength, Orientation.Vertical, this.shipRow - shipLength + 1, this.shipCol);
+                    addingShip = true;
+                }
+                else if (this.playField[row, col] == Square.ArrowLeft)
+                {
+                    // Remove the arrows and place the ship horizontally
+                    this.RemoveArrows();
+                    shipPlacer.SetShip(this.playField, shipLength, Orientation.Horizontal, this.shipRow, this.shipCol - shipLength + 1);
+                    addingShip = true;
+                }
             }
             else if (this.playField[row, col] == Square.Ship)
             {
                 // Does the player want to remove the ship in the chosen square?
-                int checkRow = row, checkCol = col;
-                while (playField[checkRow, checkCol] == Square.Ship)
+                int findRow = row, findCol = col;
+                while (true)
                 {
-                    if (checkRow > 0 &&
-                        playField[checkRow - 1, checkCol] == Square.Ship)
+                    // Look for the top-left most square of the selected ship
+                    if (findRow > 0 &&
+                        this.playField[findRow - 1, findCol] == Square.Ship)
                     {
-                        checkRow--;
+                        findRow--;
                     }
-                    else if (checkCol > 0 &&
-                        playField[checkRow, checkCol - 1] == Square.Ship)
+                    else if (findCol > 0 &&
+                        this.playField[findRow, findCol - 1] == Square.Ship)
                     {
-                        checkCol--;
+                        findCol--;
                     }
                     else
                     {
+                        // Found the top-left most square of the ship so break out of the loop.
                         break;
                     }
                 }
 
-                shipPlacer.RemoveShip(this.playField, checkRow, checkCol);
+                shipPlacer.RemoveShip(this.playField, findRow, findCol);
             }
             else
             {
@@ -225,12 +242,33 @@ namespace Battleship
                     this.playField[row + 1, col] = Square.ArrowDown;
                     addingShip = true;
                 }
+
+                // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
+                // with regards to the size of the field and then check if it's settable from the far side of the ship
+                if (row - shipLength >= 0 &&
+                    shipPlacer.IsSettable(this.playField, shipLength, Orientation.Vertical, row - shipLength + 1, col))
+                {
+                    // The ship fits to the above of the chosen spot.
+                    this.playField[row - 1, col] = Square.ArrowUp;
+                    addingShip = true;
+                }
+
+                // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
+                // with regards to the size of the field and then check if it's settable from the far side of the ship
+                if (col - shipLength >= 0 &&
+                    shipPlacer.IsSettable(this.playField, shipLength, Orientation.Horizontal, row, col - shipLength + 1))
+                {
+                    // The ship fits to the left of the chosen spot.
+                    this.playField[row, col - 1] = Square.ArrowLeft;
+                    addingShip = true;
+                }
             }
 
             // Should be moved to another method maybe?
             // Is called when placing a ship by so need to be done each time.
-            shipPlacer.RemoveForbiddenSquares(this.playField);
-            shipPlacer.SetForbiddenSquares(this.playField);
+            this.UpdateForbiddenSquares();
+            //shipPlacer.RemoveForbiddenSquares(this.playField);
+            //shipPlacer.SetForbiddenSquares(this.playField);
 
             if (addingShip && this.isPlacing)
             {
@@ -254,6 +292,25 @@ namespace Battleship
         }
 
         /// <summary>
+        /// Updates the forbidden squares to show the player where 
+        /// he can or can't place ships
+        /// </summary>
+        private void UpdateForbiddenSquares()
+        {
+            // TODO: Implement function, with or without static functions from ShipPositioner
+            return;
+        }
+
+        /// <summary>
+        /// Clears all forbidden squares in preparation of starting the game
+        /// </summary>
+        public void ClearForbiddenSquares()
+        {
+            // TODO: Implement function, with or without static functions from ShipPositioner
+            return;
+        }
+
+        /// <summary>
         /// Automatically place ships on the play field using the numbers in 
         /// <paramref name="shipLengths"/> as lengths for the ships.
         /// </summary>
@@ -262,6 +319,22 @@ namespace Battleship
         {
             ShipPositioner shipPlacer = new ShipPositioner();
             shipPlacer.AutoPosition(this.playField, shipLengths);
+        }
+
+        /// <summary>
+        /// Changes the number of rows and columns in the play field.
+        /// Resets all fields and values.
+        /// </summary>
+        /// <param name="numColumns">Number of columns</param>
+        /// <param name="numRows">Number of rows</param>
+        public void ChangeSize(int numColumns, int numRows)
+        {
+            this.playField = new Square[numRows, numColumns];
+            this.columns = numColumns;
+            this.rows = numRows;
+            this.isPlacing = false;
+            this.SquareHeight = this.ClientSize.Height / this.columns;
+            this.SquareWidth = this.ClientSize.Width / this.rows;
         }
 
         /// <summary>
@@ -305,6 +378,14 @@ namespace Battleship
                     {
                         paintEvent.Graphics.DrawImageUnscaled(Image.FromFile(IMAGEPATH + DOWNARROWIMAGE), columnPlace, rowPlace);
                     }
+                    else if (this.playField[row, column] == Square.ArrowLeft)
+                    {
+                        paintEvent.Graphics.DrawImageUnscaled(Image.FromFile(IMAGEPATH + LEFTARROWIMAGE), columnPlace, rowPlace);
+                    }
+                    else if (this.playField[row, column] == Square.ArrowUp)
+                    {
+                        paintEvent.Graphics.DrawImageUnscaled(Image.FromFile(IMAGEPATH + UPARROWIMAGE), columnPlace, rowPlace);
+                    }
                     else if (this.playField[row, column] == Square.Forbidden)
                     {
                         paintEvent.Graphics.DrawImageUnscaled(Image.FromFile(IMAGEPATH + FORBIDDENIMAGE), columnPlace, rowPlace);
@@ -340,7 +421,10 @@ namespace Battleship
             {
                 for (int column = 0; column < this.columns; column++)
                 {
-                    if (this.playField[row, column] == Square.ArrowDown || this.playField[row, column] == Square.ArrowRight)
+                    if (this.playField[row, column] == Square.ArrowDown || 
+                        this.playField[row, column] == Square.ArrowRight ||
+                        this.playField[row, column] == Square.ArrowUp ||
+                        this.playField[row, column] == Square.ArrowLeft)
                     {
                         this.playField[row, column] = Square.Water;
                     }
