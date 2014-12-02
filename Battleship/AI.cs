@@ -15,7 +15,6 @@ namespace Battleship
     /// </summary>
     public class AI
     {
-
         /// <summary>
         /// Chooses which square the AI in the Battleships game will shoot at.
         /// <para>The coordinates will be returned in <paramref name="rowCoord"/> and <paramref name="colCoord"/></para>
@@ -27,8 +26,8 @@ namespace Battleship
         /// <returns>True if valid coordinates could be found otherwise false.</returns>
         public static bool Shoot(Square[,] playFieldArray, out int rowCoord, out int colCoord)
         {
-            const int arrayBuffer = 1, neighbour = 1;
-            int rowMin = 1, rowMax = playFieldArray.GetLength(0) + 1, colMin = 1, colMax = playFieldArray.GetLength(1) + 1;
+            const int ArrayBuffer = 1, Neighbour = 1;
+            int rowMin = 1, rowMax = playFieldArray.GetLength(0), colMin = 1, colMax = playFieldArray.GetLength(1);
             Random randomizeCoord = new Random();
             int chosenRandom;
             bool foundHit = false;
@@ -36,12 +35,12 @@ namespace Battleship
 
             // Add a buffer around the playFieldArray to avoid having to check for edges
             // Do this by making a new array with an extra row and column on each side.
-            Square[,] bufferedSquareArray = new Square[rowMax + 2 * arrayBuffer, colMax + 2 * arrayBuffer];
-            for (int row = 0; row < rowMax - arrayBuffer; row++)
+            Square[,] bufferedSquareArray = new Square[rowMax + (2 * ArrayBuffer), colMax + (2 * ArrayBuffer)];
+            for (int row = 0; row < (rowMax - ArrayBuffer); row++)
             {
-                for (int col = 0; col < colMax - arrayBuffer; col++)
+                for (int col = 0; col < colMax - ArrayBuffer; col++)
                 {
-                    bufferedSquareArray[row + arrayBuffer, col + arrayBuffer] = playFieldArray[row, col];
+                    bufferedSquareArray[row + ArrayBuffer, col + ArrayBuffer] = playFieldArray[row, col];
                 }
             }
 
@@ -56,13 +55,15 @@ namespace Battleship
                         foundHit = true;
                         allowedCoordinates.Clear();
 
-                        // Check for other hits along 1st dimension
-                        if (bufferedSquareArray[row + neighbour, col] == Square.Hit)
+                        // Check for other hits along each dimension
+                        if (bufferedSquareArray[row + Neighbour, col] == Square.Hit)
                         {
+                            // Found a hit along the rows
                             // Add square to the left unless we are at the edge or there is a miss
-                            if (bufferedSquareArray[row - neighbour, col] != Square.Miss)
+                            if (row > rowMin && 
+                                bufferedSquareArray[row - Neighbour, col] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row - neighbour, col));
+                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, col));
                             }
 
                             // Find end of hits on the boat along the first dimension
@@ -72,62 +73,68 @@ namespace Battleship
                             }
 
                             // Add the square right of the last hit unless we are at the edge or there is a miss
-                            if (bufferedSquareArray[row, col] == Square.Water ||
-                                bufferedSquareArray[row, col] == Square.Ship)
+                            if (row < rowMax &&
+                                (bufferedSquareArray[row, col] == Square.Water ||
+                                bufferedSquareArray[row, col] == Square.Ship))
                             {
                                 allowedCoordinates.Add(Tuple.Create(row, col));
                             }
 
                             foundHit = true;
                         }
-
-                        // Check for other hits along 2nd dimension
-                        else if (bufferedSquareArray[row, col + neighbour] == Square.Hit)
+                        else if (bufferedSquareArray[row, col + Neighbour] == Square.Hit)
                         {
+                            // Found a hit along the columns
                             // Add square above the hit unless we are at the edge or there is a miss
-                            if (bufferedSquareArray[row, col - neighbour] != Square.Miss)
+                            if (col > colMin && 
+                                bufferedSquareArray[row, col - Neighbour] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col - neighbour));
+                                allowedCoordinates.Add(Tuple.Create(row, col - Neighbour));
                             }
 
-                            // Find end of hits on the boat along the seond dimension
+                            // Find end of hits on the boat along the second dimension
                             while (bufferedSquareArray[row, col] == Square.Hit)
                             {
                                 col++;
                             }
 
                             // Add the square below the last hit unless we are at the edge or there is a miss
-                            if (bufferedSquareArray[row, col] == Square.Water ||
-                                bufferedSquareArray[row, col] == Square.Ship)
+                            if (col < colMax && 
+                                (bufferedSquareArray[row, col] == Square.Water ||
+                                bufferedSquareArray[row, col] == Square.Ship))
                             {
                                 allowedCoordinates.Add(Tuple.Create(row, col));
                             }
 
                             foundHit = true;
                         }
-
                         else
                         {
                             // No other hits were found.
-                            // Make sure that we haven't tried to fire in each direction but missed
-                            if (bufferedSquareArray[row - neighbour, col] != Square.Miss)
+                            // Make sure that we aren't at the edge and haven't tried 
+                            // to fire in each direction but missed
+                            if (row > rowMin &&
+                                bufferedSquareArray[row - Neighbour, col] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row - neighbour, col));
+                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, col));
                             }
 
-                            if (bufferedSquareArray[row, col - neighbour] != Square.Miss)
+                            if (col > colMin &&
+                                bufferedSquareArray[row, col - Neighbour] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col - neighbour));
+                                allowedCoordinates.Add(Tuple.Create(row, col - Neighbour));
                             }
 
-                            if (bufferedSquareArray[row + neighbour, col] != Square.Miss)
+                            if (row < rowMax &&
+                                bufferedSquareArray[row + Neighbour, col] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row + neighbour, col));
+                                allowedCoordinates.Add(Tuple.Create(row + Neighbour, col));
                             }
 
-                            if (bufferedSquareArray[row, col + neighbour] != Square.Miss)
+                            if (col < colMax &&
+                                bufferedSquareArray[row, col + Neighbour] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col + neighbour));
+                                allowedCoordinates.Add(Tuple.Create(row, col + Neighbour));
                             }
                         }
                     }
@@ -136,14 +143,14 @@ namespace Battleship
                         // We haven't already found a hit and the current square is water or ship.
                         // Check the eight squares around the current square for sunk ships since 
                         // ships can't be next to each other.
-                        if (bufferedSquareArray[row - neighbour, col - neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row, col - neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row + neighbour, col - neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row - neighbour, col] != Square.Sunk &&
-                            bufferedSquareArray[row + neighbour, col] != Square.Sunk &&
-                            bufferedSquareArray[row - neighbour, col + neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row, col + neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row + neighbour, col + neighbour] != Square.Sunk)
+                        if (bufferedSquareArray[row - Neighbour, col - Neighbour] != Square.Sunk &&
+                            bufferedSquareArray[row, col - Neighbour] != Square.Sunk &&
+                            bufferedSquareArray[row + Neighbour, col - Neighbour] != Square.Sunk &&
+                            bufferedSquareArray[row - Neighbour, col] != Square.Sunk &&
+                            bufferedSquareArray[row + Neighbour, col] != Square.Sunk &&
+                            bufferedSquareArray[row - Neighbour, col + Neighbour] != Square.Sunk &&
+                            bufferedSquareArray[row, col + Neighbour] != Square.Sunk &&
+                            bufferedSquareArray[row + Neighbour, col + Neighbour] != Square.Sunk)
                         {
                             // If it is a square with water or ship with no sunk ship next to it
                             // then add it to the allowed coordinates
@@ -160,8 +167,8 @@ namespace Battleship
                 // non-buffered array
                 // Then return the chosen coordinates
                 chosenRandom = randomizeCoord.Next(allowedCoordinates.Count);
-                rowCoord = allowedCoordinates[chosenRandom].Item1 - arrayBuffer;
-                colCoord = allowedCoordinates[chosenRandom].Item2 - arrayBuffer;
+                rowCoord = allowedCoordinates[chosenRandom].Item1 - ArrayBuffer;
+                colCoord = allowedCoordinates[chosenRandom].Item2 - ArrayBuffer;
                 return true;
             }
             else
