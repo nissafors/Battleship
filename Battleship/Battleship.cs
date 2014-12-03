@@ -15,13 +15,17 @@ namespace Battleship
         private BattleshipPanel playerField;
         private BattleshipPanel computerField;
 
+        public static int rows = 10;
+        public static int cols = 10;
+       
         public BattleshipForm()
         {
             InitializeComponent();
+            
 
             // TODO: Must be accessible for settings form
             const int squareSize = 25;
-            int rows = 15, cols = 15;
+            
 
             this.playerField = new Battleship.BattleshipPanel(rows, cols, true);
 
@@ -74,6 +78,55 @@ namespace Battleship
             {
                 playerField.PlayerHandleShip(col, row, 3);
             }
+
         }
+        public void formSize()
+        {
+
+            this.playerField.ChangeSize(rows, cols);
+            this.computerField.ChangeSize(rows, cols);
+
+
+
+            if (rows == 10) 
+            {
+                this.Size = new Size(660, 400);
+                computerField.Location = new Point(350, 50);
+            }
+            else if (rows == 15)
+            {
+                this.Size = new Size(920, 525);
+                computerField.Location = new Point(475, 50);
+            }
+            else if (rows == 20)
+            {
+                this.Size = new Size(1170, 650);
+                computerField.Location = new Point(600, 50);
+            }
+            else if (rows == 25)
+            {
+                this.Size = new Size(1425, 775);
+                computerField.Location = new Point(725, 50);
+            }
+            else if (rows == 30) //Fixa annan lösning!!
+            {
+                this.Size = new Size(1670, 900);
+                computerField.Location = new Point(850, 50);
+                
+            }
+
+            this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
+            
+            this.playerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
+
+        }
+
+        private void inställningarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Options optionForm = new Options(this);
+            optionForm.Show();
+        }
+
+       
     }
 }
