@@ -21,7 +21,7 @@ namespace Battleship
         /// </summary>
         private const string IMAGEPATH = @"images\", FORBIDDENIMAGE = "forbidden.png", MISSIMAGE = "miss.png", 
             SHIPIMAGE = "ship.png", SUNKIMAGE = "sunk.png", WATERIMAGE = "water.png",  HITIMAGE = "hit.png", 
-            RIGHTARROWIMAGE = "right.png", DOWNARROWIMAGE = "down.png", LEFTARROWIMAGE = "forbidden.png", UPARROWIMAGE = "forbidden.png";
+            RIGHTARROWIMAGE = "right.png", DOWNARROWIMAGE = "down.png", LEFTARROWIMAGE = "left.png", UPARROWIMAGE = "up.png";
 
         /// <summary>
         /// Number of rows and columns in the play field and the row and column that a ship is being placed at.
