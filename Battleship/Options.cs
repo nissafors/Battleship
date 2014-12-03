@@ -17,28 +17,25 @@ namespace Battleship
             InitializeComponent();
             this._BsForm = BattleshipForm;
         }
+
         private readonly BattleshipForm _BsForm;
 
         private void optionsAvbryt_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Vill du spara inställningarna?", "Är du säker?", MessageBoxButtons.YesNoCancel);
+            var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNoCancel);
 
             if (result == DialogResult.Yes)
             {
-                //spara
+                saveSettings();
                 this.Close();
             }
-
             else if (result == DialogResult.No)
             {
-                //spara inte
-
                 this.Close();
             }
             else if (result == DialogResult.Cancel)
             {
-                //gå tillbaka
-
+          
             }
         }
 
@@ -46,34 +43,14 @@ namespace Battleship
 
         private void optionsSpela_Click(object sender, EventArgs e)
         {
-            if (sizeBox.SelectedIndex == 0)
-            {
-                BattleshipForm.cols = 10;
-                BattleshipForm.rows = 10;
-                
-            }
-            
-            else if(sizeBox.SelectedIndex == 1)
-            {
-                BattleshipForm.cols = 15;
-                BattleshipForm.rows = 15;
-            }
-            else if (sizeBox.SelectedIndex == 2)
-            {
-                BattleshipForm.cols = 20;
-                BattleshipForm.rows = 20;
-            }
-            else if (sizeBox.SelectedIndex == 3)
-            {
-                BattleshipForm.cols = 25;
-                BattleshipForm.rows = 25;
-            }
-            else if (sizeBox.SelectedIndex == 4)
-            {
-                BattleshipForm.cols = 30;
-                BattleshipForm.rows = 30;
-            }
-            
+            saveSettings();
+        }
+
+
+        private void saveSettings()
+        {
+            BattleshipForm.cols = Convert.ToInt32(sizeComboBox.SelectedItem);
+            BattleshipForm.rows = Convert.ToInt32(sizeComboBox.SelectedItem);
             this._BsForm.formSize();
             this.Close();
         }

@@ -37,7 +37,7 @@
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
-            this.sizeBox = new System.Windows.Forms.ComboBox();
+            this.sizeComboBox = new System.Windows.Forms.ComboBox();
             this.optionsAvbryt = new System.Windows.Forms.Button();
             this.optionsSpela = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
@@ -139,20 +139,18 @@
             this.numericUpDown5.Size = new System.Drawing.Size(114, 20);
             this.numericUpDown5.TabIndex = 15;
             // 
-            // sizeBox
+            // sizeComboBox
             // 
-            this.sizeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sizeBox.FormattingEnabled = true;
-            this.sizeBox.Items.AddRange(new object[] {
+            this.sizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sizeComboBox.FormattingEnabled = true;
+            this.sizeComboBox.Items.AddRange(new object[] {
             "10",
             "15",
-            "20",
-            "25",
-            "30"});
-            this.sizeBox.Location = new System.Drawing.Point(95, 27);
-            this.sizeBox.Name = "sizeBox";
-            this.sizeBox.Size = new System.Drawing.Size(121, 21);
-            this.sizeBox.TabIndex = 14;
+            "20"});
+            this.sizeComboBox.Location = new System.Drawing.Point(95, 27);
+            this.sizeComboBox.Name = "sizeComboBox";
+            this.sizeComboBox.Size = new System.Drawing.Size(121, 21);
+            this.sizeComboBox.TabIndex = 14;
             // 
             // optionsAvbryt
             // 
@@ -191,7 +189,7 @@
             this.Controls.Add(this.numericUpDown2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.numericUpDown5);
-            this.Controls.Add(this.sizeBox);
+            this.Controls.Add(this.sizeComboBox);
             this.Controls.Add(this.optionsAvbryt);
             this.Controls.Add(this.optionsSpela);
             this.MaximizeBox = false;
@@ -218,7 +216,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numericUpDown5;
-        private System.Windows.Forms.ComboBox sizeBox;
+        private System.Windows.Forms.ComboBox sizeComboBox;
         private System.Windows.Forms.Button optionsAvbryt;
         private System.Windows.Forms.Button optionsSpela;
 

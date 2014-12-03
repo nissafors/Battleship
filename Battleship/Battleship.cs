@@ -80,9 +80,10 @@ namespace Battleship
             }
 
         }
+       
+        
         public void formSize()
         {
-
             this.playerField.ChangeSize(rows, cols);
             this.computerField.ChangeSize(rows, cols);
 
@@ -102,17 +103,6 @@ namespace Battleship
             {
                 this.Size = new Size(1170, 650);
                 computerField.Location = new Point(600, 50);
-            }
-            else if (rows == 25)
-            {
-                this.Size = new Size(1425, 775);
-                computerField.Location = new Point(725, 50);
-            }
-            else if (rows == 30) //Fixa annan lösning!!
-            {
-                this.Size = new Size(1670, 900);
-                computerField.Location = new Point(850, 50);
-                
             }
 
             this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
