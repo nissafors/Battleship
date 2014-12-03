@@ -16,6 +16,7 @@ namespace Battleship
         {
             InitializeComponent();
             this._BsForm = BattleshipForm;
+            sizeComboBox.SelectedIndex = 0;
         }
 
         private readonly BattleshipForm _BsForm;
@@ -38,9 +39,7 @@ namespace Battleship
           
             }
         }
-
-        
-
+     
         private void optionsSpela_Click(object sender, EventArgs e)
         {
             saveSettings();

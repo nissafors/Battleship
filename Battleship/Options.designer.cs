@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,6 +41,7 @@
             this.sizeComboBox = new System.Windows.Forms.ComboBox();
             this.optionsAvbryt = new System.Windows.Forms.Button();
             this.optionsSpela = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -51,36 +53,36 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(19, 30);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(40, 13);
+            this.label5.Size = new System.Drawing.Size(43, 13);
             this.label5.TabIndex = 23;
-            this.label5.Text = "Storlek";
+            this.label5.Text = "Storlek:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(19, 154);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 13);
+            this.label4.Size = new System.Drawing.Size(71, 13);
             this.label4.TabIndex = 22;
-            this.label4.Text = "Hangarfartyg";
+            this.label4.Text = "Hangarfartyg:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(19, 128);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.Size = new System.Drawing.Size(42, 13);
             this.label3.TabIndex = 21;
-            this.label3.Text = "Ubåtar";
+            this.label3.Text = "Ubåtar:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(19, 102);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 13);
+            this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 20;
-            this.label2.Text = "Kryssare";
+            this.label2.Text = "Kryssare:";
             // 
             // numericUpDown4
             // 
@@ -93,6 +95,7 @@
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(114, 20);
             this.numericUpDown4.TabIndex = 19;
+            this.toolTip1.SetToolTip(this.numericUpDown4, "Välj antal hangarfartyg som ska vara med i spelet.");
             // 
             // numericUpDown3
             // 
@@ -105,6 +108,7 @@
             this.numericUpDown3.Name = "numericUpDown3";
             this.numericUpDown3.Size = new System.Drawing.Size(114, 20);
             this.numericUpDown3.TabIndex = 18;
+            this.toolTip1.SetToolTip(this.numericUpDown3, "Välj antal ubåtar som ska vara med i spelet.");
             // 
             // numericUpDown2
             // 
@@ -117,15 +121,16 @@
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(114, 20);
             this.numericUpDown2.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.numericUpDown2, "Välj antal kryssare som ska vara med i spelet.");
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(19, 76);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(39, 13);
+            this.label6.Size = new System.Drawing.Size(42, 13);
             this.label6.TabIndex = 16;
-            this.label6.Text = "Jagare";
+            this.label6.Text = "Jagare:";
             // 
             // numericUpDown5
             // 
@@ -138,6 +143,7 @@
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(114, 20);
             this.numericUpDown5.TabIndex = 15;
+            this.toolTip1.SetToolTip(this.numericUpDown5, "Välj antal jagare som ska vara med i spelet.");
             // 
             // sizeComboBox
             // 
@@ -151,6 +157,7 @@
             this.sizeComboBox.Name = "sizeComboBox";
             this.sizeComboBox.Size = new System.Drawing.Size(121, 21);
             this.sizeComboBox.TabIndex = 14;
+            this.toolTip1.SetToolTip(this.sizeComboBox, "Välj storlek på spelplanen. (x*x)");
             // 
             // optionsAvbryt
             // 
@@ -219,6 +226,7 @@
         private System.Windows.Forms.ComboBox sizeComboBox;
         private System.Windows.Forms.Button optionsAvbryt;
         private System.Windows.Forms.Button optionsSpela;
+        private System.Windows.Forms.ToolTip toolTip1;
 
     }
 }

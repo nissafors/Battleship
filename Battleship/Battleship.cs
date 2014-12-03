@@ -87,28 +87,13 @@ namespace Battleship
             this.playerField.ChangeSize(rows, cols);
             this.computerField.ChangeSize(rows, cols);
 
+            this.AutoSize = true;
+            this.Padding = new Padding(0, 0, 50, 50);
 
+            computerField.Location = new Point((25 * cols) + 100, 50);
 
-            if (rows == 10) 
-            {
-                this.Size = new Size(660, 400);
-                computerField.Location = new Point(350, 50);
-            }
-            else if (rows == 15)
-            {
-                this.Size = new Size(920, 525);
-                computerField.Location = new Point(475, 50);
-            }
-            else if (rows == 20)
-            {
-                this.Size = new Size(1170, 650);
-                computerField.Location = new Point(600, 50);
-            }
-
-            this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
-            
+            this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);       
             this.playerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
-
         }
 
         private void inställningarToolStripMenuItem_Click(object sender, EventArgs e)
