@@ -33,6 +33,8 @@
             this.inställningarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnStartGame = new System.Windows.Forms.Button();
             this.lblSetShip = new System.Windows.Forms.Label();
+            this.nyttSpelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +51,9 @@
             // arkivToolStripMenuItem
             // 
             this.arkivToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.inställningarToolStripMenuItem});
+            this.nyttSpelToolStripMenuItem,
+            this.inställningarToolStripMenuItem,
+            this.avslutaToolStripMenuItem});
             this.arkivToolStripMenuItem.Name = "arkivToolStripMenuItem";
             this.arkivToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.arkivToolStripMenuItem.Text = "Arkiv";
@@ -81,6 +85,19 @@
             this.lblSetShip.TabIndex = 2;
             this.lblSetShip.Text = "Placera skepp";
             // 
+            // nyttSpelToolStripMenuItem
+            // 
+            this.nyttSpelToolStripMenuItem.Name = "nyttSpelToolStripMenuItem";
+            this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.nyttSpelToolStripMenuItem.Text = "Nytt spel";
+            this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.nyttSpelToolStripMenuItem_Click);
+            // 
+            // avslutaToolStripMenuItem
+            // 
+            this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
+            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.avslutaToolStripMenuItem.Text = "Avsluta";
+            // 
             // BattleshipForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -106,6 +123,8 @@
         private System.Windows.Forms.ToolStripMenuItem inställningarToolStripMenuItem;
         private System.Windows.Forms.Button btnStartGame;
         private System.Windows.Forms.Label lblSetShip;
+        private System.Windows.Forms.ToolStripMenuItem nyttSpelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem avslutaToolStripMenuItem;
 
 
 
