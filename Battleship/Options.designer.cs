@@ -42,6 +42,8 @@
             this.optionsAvbryt = new System.Windows.Forms.Button();
             this.optionsSpela = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.soundCheckBox = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -162,7 +164,7 @@
             // optionsAvbryt
             // 
             this.optionsAvbryt.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.optionsAvbryt.Location = new System.Drawing.Point(141, 192);
+            this.optionsAvbryt.Location = new System.Drawing.Point(149, 225);
             this.optionsAvbryt.Name = "optionsAvbryt";
             this.optionsAvbryt.Size = new System.Drawing.Size(75, 23);
             this.optionsAvbryt.TabIndex = 13;
@@ -172,7 +174,7 @@
             // 
             // optionsSpela
             // 
-            this.optionsSpela.Location = new System.Drawing.Point(60, 192);
+            this.optionsSpela.Location = new System.Drawing.Point(68, 225);
             this.optionsSpela.Name = "optionsSpela";
             this.optionsSpela.Size = new System.Drawing.Size(75, 23);
             this.optionsSpela.TabIndex = 12;
@@ -180,13 +182,35 @@
             this.optionsSpela.UseVisualStyleBackColor = true;
             this.optionsSpela.Click += new System.EventHandler(this.optionsSpela_Click);
             // 
+            // soundCheckBox
+            // 
+            this.soundCheckBox.AutoSize = true;
+            this.soundCheckBox.Checked = true;
+            this.soundCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.soundCheckBox.Location = new System.Drawing.Point(102, 191);
+            this.soundCheckBox.Name = "soundCheckBox";
+            this.soundCheckBox.Size = new System.Drawing.Size(15, 14);
+            this.soundCheckBox.TabIndex = 24;
+            this.soundCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(19, 191);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(30, 13);
+            this.label1.TabIndex = 25;
+            this.label1.Text = "Ljud:";
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.optionsAvbryt;
-            this.ClientSize = new System.Drawing.Size(236, 230);
+            this.ClientSize = new System.Drawing.Size(236, 260);
             this.ControlBox = false;
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.soundCheckBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -227,6 +251,8 @@
         private System.Windows.Forms.Button optionsAvbryt;
         private System.Windows.Forms.Button optionsSpela;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.CheckBox soundCheckBox;
+        private System.Windows.Forms.Label label1;
 
     }
 }

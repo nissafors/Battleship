@@ -223,10 +223,11 @@ namespace Battleship
             this.playerField.ChangeSize(rows, cols);
             this.computerField.ChangeSize(rows, cols);
 
-            this.AutoSize = true;
+            this.Width = (SQUARESIZE * cols * 2 + 168);
+            this.Height = (SQUARESIZE * rows + 158);
             this.Padding = new Padding(0, 0, 50, 50);
 
-            computerField.Location = new Point((25 * cols) + 100, 50);
+            computerField.Location = new Point((25 * cols) + 100, 70);
 
             this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);       
             this.playerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
