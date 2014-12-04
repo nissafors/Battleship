@@ -55,21 +55,18 @@ namespace Battleship
                                 allowedCoordinates.Add(Tuple.Create(row - Neighbour, column));
                             }
 
-                            // Find the end of hits on the ship below the hit
+                            // Find the last of hits on the ship below the found hit
                             while (row < rowMax &&
                                 playFieldArray[row, column] == Square.Hit)
                             {
                                 row++;
                             }
 
-                            // Add the square below the last hit unless we are at the edge or there is a miss
-                            if (playFieldArray[row, column] == Square.Water ||
-                                playFieldArray[row, column] == Square.Ship)
+                            // Add the square below the last hit unless there is a miss
+                            if (playFieldArray[row, column] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, column));
+                                allowedCoordinates.Add(Tuple.Create(row, column));
                             }
-
-                            foundHit = true;
                         }
                         else if (column < colMax &&
                         playFieldArray[row, column + Neighbour] == Square.Hit)
@@ -82,22 +79,18 @@ namespace Battleship
                                 allowedCoordinates.Add(Tuple.Create(row, column - Neighbour));
                             }
 
-                            // Find the end of hits to the right of the hit
+                            // Find the last of the hits to the right of the found hit
                             while (column < colMax &&
                                 playFieldArray[row, column] == Square.Hit)
                             {
                                 column++;
                             }
 
-                            // Add the square to the right  of the last hit unless we are at 
-                            // the edge or there is a miss
-                            if (playFieldArray[row, column] == Square.Water ||
-                                playFieldArray[row, column] == Square.Ship)
+                            // Add the square to the right of the last hit unless there is a miss
+                            if (playFieldArray[row, column] != Square.Miss)
                             {
                                 allowedCoordinates.Add(Tuple.Create(row, column));
                             }
-
-                            foundHit = true;
                         }
                         else
                         {
@@ -129,41 +122,42 @@ namespace Battleship
                             }
                         }
                     }
-                    else if (!foundHit && (playFieldArray[row, column] == Square.Water || playFieldArray[row, column] == Square.Ship))
+                    else if (playFieldArray[row, column] == Square.Water || 
+                            playFieldArray[row, column] == Square.Ship)
                     {
-                        // We haven't already found a hit and the current square is water or ship.
+                        // The current square is water or ship.
                         // Check the squares around the current square for sunk ships since
                         // ships can't be next to each other.
-                        if (row != rowMin &&
-                            column != colMin &&
+                        if (row != rowMin && 
+                            column != colMin && 
                             playFieldArray[row - Neighbour, column - Neighbour] == Square.Sunk)
                         {
                             // There is a sunk ship above and left of the current square
                         }
                         else if (column != colMin &&
-                            playFieldArray[row, column - Neighbour] == Square.Sunk)
+                                playFieldArray[row, column - Neighbour] == Square.Sunk)
                         {
                             // There is a sunk ship to the left the current square
                         }
                         else if (row < rowMax && 
-                            column != colMin && 
-                            playFieldArray[row + Neighbour, column - Neighbour] == Square.Sunk)
+                                column != colMin && 
+                                playFieldArray[row + Neighbour, column - Neighbour] == Square.Sunk)
                         {
                             // There is a sunk ship below and left of the current square
                         }
                         else if (row != rowMin &&
-                            playFieldArray[row - Neighbour, column] == Square.Sunk)
+                                playFieldArray[row - Neighbour, column] == Square.Sunk)
                         {
                             // There is a sunk ship above the current square
                         }
                         else if (row < rowMax &&
-                            playFieldArray[row + Neighbour, column] == Square.Sunk)
+                                playFieldArray[row + Neighbour, column] == Square.Sunk)
                         {
                             // There is a sunk ship below the current square
                         }
                         else if (row != rowMin &&
-                            column < colMax &&
-                            playFieldArray[row - Neighbour, column + Neighbour] == Square.Sunk)
+                                column < colMax &&
+                                playFieldArray[row - Neighbour, column + Neighbour] == Square.Sunk)
                         {
                             // There is a sunk ship above and right of the current square
                         }
@@ -173,8 +167,8 @@ namespace Battleship
                             // There is a sunk ship right the current square
                         }
                         else if (row < rowMax &&
-                            column < colMax &&
-                            playFieldArray[row + Neighbour, column + Neighbour] == Square.Sunk)
+                                column < colMax &&
+                                playFieldArray[row + Neighbour, column + Neighbour] == Square.Sunk)
                         {
                             // There is a sunk ship below and right of the current square
                         }
