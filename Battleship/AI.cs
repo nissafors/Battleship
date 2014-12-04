@@ -26,84 +26,75 @@ namespace Battleship
         /// <returns>True if valid coordinates could be found otherwise false.</returns>
         public static bool Shoot(Square[,] playFieldArray, out int rowCoord, out int colCoord)
         {
-            const int ArrayBuffer = 1, Neighbour = 1;
-            int rowMin = 1, rowMax = playFieldArray.GetLength(0), colMin = 1, colMax = playFieldArray.GetLength(1);
+            const int Neighbour = 1;
+            int rowMin = 0, rowMax = playFieldArray.GetLength(0) - 1, colMin = 0, colMax = playFieldArray.GetLength(1) - 1;
             Random randomizeCoord = new Random();
             int chosenRandom;
             bool foundHit = false;
-            List<Tuple<int, int>> allowedCoordinates = new List<Tuple<int, int>>(); // Array or list to hold possible 
-
-            // Add a buffer around the playFieldArray to avoid having to check for edges
-            // Do this by making a new array with an extra row and column on each side.
-            Square[,] bufferedSquareArray = new Square[rowMax + (2 * ArrayBuffer), colMax + (2 * ArrayBuffer)];
-            for (int row = 0; row < (rowMax - ArrayBuffer); row++)
-            {
-                for (int col = 0; col < colMax - ArrayBuffer; col++)
-                {
-                    bufferedSquareArray[row + ArrayBuffer, col + ArrayBuffer] = playFieldArray[row, col];
-                }
-            }
+            List<Tuple<int, int>> allowedCoordinates = new List<Tuple<int, int>>(); // List to hold possible coordinates
 
             // Loop through entire array with nested loop
-            for (int row = rowMin; row < rowMax && !foundHit; row++)
+            for (int row = 0; row <= rowMax && !foundHit; row++)
             {
-                for (int col = colMin; col < colMax && !foundHit; col++)
+                for (int column = 0; column <= colMax && !foundHit; column++)
                 {
-                    if (bufferedSquareArray[row, col] == Square.Hit)
+                    if (playFieldArray[row, column] == Square.Hit)
                     {
                         // Found a hit but not sunk ship, clear allowedCoordinates to fire only around that hit
                         foundHit = true;
                         allowedCoordinates.Clear();
 
-                        // Check for other hits along each dimension
-                        if (bufferedSquareArray[row + Neighbour, col] == Square.Hit)
+                        if (row < rowMax &&
+                            playFieldArray[row + Neighbour, column] == Square.Hit)
                         {
-                            // Found a hit along the rows
-                            // Add square to the left unless we are at the edge or there is a miss
-                            if (row > rowMin && 
-                                bufferedSquareArray[row - Neighbour, col] != Square.Miss)
+                            // There is a hit below the the found hit, add the square above the 
+                            // found hit unless we are at the edge or there is a miss
+                            if (row != rowMin &&
+                                playFieldArray[row - Neighbour, column] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, col));
+                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, column));
                             }
 
-                            // Find end of hits on the boat along the first dimension
-                            while (bufferedSquareArray[row, col] == Square.Hit)
+                            // Find the end of hits on the ship below the hit
+                            while (row < rowMax &&
+                                playFieldArray[row, column] == Square.Hit)
                             {
                                 row++;
                             }
 
-                            // Add the square right of the last hit unless we are at the edge or there is a miss
-                            if (row < rowMax &&
-                                (bufferedSquareArray[row, col] == Square.Water ||
-                                bufferedSquareArray[row, col] == Square.Ship))
+                            // Add the square below the last hit unless we are at the edge or there is a miss
+                            if (playFieldArray[row, column] == Square.Water ||
+                                playFieldArray[row, column] == Square.Ship)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col));
+                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, column));
                             }
 
                             foundHit = true;
                         }
-                        else if (bufferedSquareArray[row, col + Neighbour] == Square.Hit)
+                        else if (column < colMax &&
+                        playFieldArray[row, column + Neighbour] == Square.Hit)
                         {
-                            // Found a hit along the columns
-                            // Add square above the hit unless we are at the edge or there is a miss
-                            if (col > colMin && 
-                                bufferedSquareArray[row, col - Neighbour] != Square.Miss)
+                            // There is a another hit to the right of the found hit, add the square 
+                            // left of the hit unless we are at the edge or there is a miss
+                            if (column != colMin &&
+                                playFieldArray[row, column - Neighbour] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col - Neighbour));
+                                allowedCoordinates.Add(Tuple.Create(row, column - Neighbour));
                             }
 
-                            // Find end of hits on the boat along the second dimension
-                            while (bufferedSquareArray[row, col] == Square.Hit)
+                            // Find the end of hits to the right of the hit
+                            while (column < colMax &&
+                                playFieldArray[row, column] == Square.Hit)
                             {
-                                col++;
+                                column++;
                             }
 
-                            // Add the square below the last hit unless we are at the edge or there is a miss
-                            if (col < colMax && 
-                                (bufferedSquareArray[row, col] == Square.Water ||
-                                bufferedSquareArray[row, col] == Square.Ship))
+                            // Add the square to the right  of the last hit unless we are at 
+                            // the edge or there is a miss
+                            if (playFieldArray[row, column] == Square.Water ||
+                                playFieldArray[row, column] == Square.Ship)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col));
+                                allowedCoordinates.Add(Tuple.Create(row, column));
                             }
 
                             foundHit = true;
@@ -111,50 +102,87 @@ namespace Battleship
                         else
                         {
                             // No other hits were found.
-                            // Make sure that we aren't at the edge and haven't tried 
-                            // to fire in each direction but missed
-                            if (row > rowMin &&
-                                bufferedSquareArray[row - Neighbour, col] != Square.Miss)
+                            // Make sure we are not at the edge in each direction and
+                            // that we haven't tried to fire there but missed
+                            if (row != rowMin &&
+                                playFieldArray[row - Neighbour, column] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, col));
+                                allowedCoordinates.Add(Tuple.Create(row - Neighbour, column));
                             }
 
-                            if (col > colMin &&
-                                bufferedSquareArray[row, col - Neighbour] != Square.Miss)
+                            if (column != colMin &&
+                                playFieldArray[row, column - Neighbour] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col - Neighbour));
+                                allowedCoordinates.Add(Tuple.Create(row, column - Neighbour));
                             }
 
                             if (row < rowMax &&
-                                bufferedSquareArray[row + Neighbour, col] != Square.Miss)
+                                playFieldArray[row + Neighbour, column] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row + Neighbour, col));
+                                allowedCoordinates.Add(Tuple.Create(row + Neighbour, column));
                             }
 
-                            if (col < colMax &&
-                                bufferedSquareArray[row, col + Neighbour] != Square.Miss)
+                            if (column < colMax &&
+                                playFieldArray[row, column + Neighbour] != Square.Miss)
                             {
-                                allowedCoordinates.Add(Tuple.Create(row, col + Neighbour));
+                                allowedCoordinates.Add(Tuple.Create(row, column + Neighbour));
                             }
                         }
                     }
-                    else if (!foundHit && (bufferedSquareArray[row, col] == Square.Water || bufferedSquareArray[row, col] == Square.Ship))
+                    else if (!foundHit && (playFieldArray[row, column] == Square.Water || playFieldArray[row, column] == Square.Ship))
                     {
                         // We haven't already found a hit and the current square is water or ship.
-                        // Check the eight squares around the current square for sunk ships since 
+                        // Check the squares around the current square for sunk ships since
                         // ships can't be next to each other.
-                        if (bufferedSquareArray[row - Neighbour, col - Neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row, col - Neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row + Neighbour, col - Neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row - Neighbour, col] != Square.Sunk &&
-                            bufferedSquareArray[row + Neighbour, col] != Square.Sunk &&
-                            bufferedSquareArray[row - Neighbour, col + Neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row, col + Neighbour] != Square.Sunk &&
-                            bufferedSquareArray[row + Neighbour, col + Neighbour] != Square.Sunk)
+                        if (row != rowMin &&
+                            column != colMin &&
+                            playFieldArray[row - Neighbour, column - Neighbour] == Square.Sunk)
+                        {
+                            // There is a sunk ship above and left of the current square
+                        }
+                        else if (column != colMin &&
+                            playFieldArray[row, column - Neighbour] == Square.Sunk)
+                        {
+                            // There is a sunk ship to the left the current square
+                        }
+                        else if (row < rowMax && 
+                            column != colMin && 
+                            playFieldArray[row + Neighbour, column - Neighbour] == Square.Sunk)
+                        {
+                            // There is a sunk ship below and left of the current square
+                        }
+                        else if (row != rowMin &&
+                            playFieldArray[row - Neighbour, column] == Square.Sunk)
+                        {
+                            // There is a sunk ship above the current square
+                        }
+                        else if (row < rowMax &&
+                            playFieldArray[row + Neighbour, column] == Square.Sunk)
+                        {
+                            // There is a sunk ship below the current square
+                        }
+                        else if (row != rowMin &&
+                            column < colMax &&
+                            playFieldArray[row - Neighbour, column + Neighbour] == Square.Sunk)
+                        {
+                            // There is a sunk ship above and right of the current square
+                        }
+                        else if (column < colMax &&
+                            playFieldArray[row, column + Neighbour] == Square.Sunk)
+                        {
+                            // There is a sunk ship right the current square
+                        }
+                        else if (row < rowMax &&
+                            column < colMax &&
+                            playFieldArray[row + Neighbour, column + Neighbour] == Square.Sunk)
+                        {
+                            // There is a sunk ship below and right of the current square
+                        }
+                        else
                         {
                             // If it is a square with water or ship with no sunk ship next to it
                             // then add it to the allowed coordinates
-                            allowedCoordinates.Add(Tuple.Create(row, col));
+                            allowedCoordinates.Add(Tuple.Create(row, column));
                         }
                     }
                 }
@@ -163,12 +191,10 @@ namespace Battleship
             if (allowedCoordinates.Count != 0)
             {
                 // Randomly choose one of the allowed coordinates
-                // Remove the buffer from the coordinates so they point correctly on the 
-                // non-buffered array
-                // Then return the chosen coordinates
+                // and return the chosen coordinates
                 chosenRandom = randomizeCoord.Next(allowedCoordinates.Count);
-                rowCoord = allowedCoordinates[chosenRandom].Item1 - ArrayBuffer;
-                colCoord = allowedCoordinates[chosenRandom].Item2 - ArrayBuffer;
+                rowCoord = allowedCoordinates[chosenRandom].Item1;
+                colCoord = allowedCoordinates[chosenRandom].Item2;
                 return true;
             }
             else
