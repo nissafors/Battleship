@@ -12,26 +12,49 @@ namespace Battleship
 {
     public partial class BattleshipForm : Form
     {
+        enum Mode { SettingShips, Playing };
+
+        private const int SQUARESIZE = 25;
+        private const int GRIDPADDING_LEFT = 50;
+        private const int GRIDPADDING_TOP = 70;
+        private const int GRIDPADDING_CENTER = 50;
+
         private BattleshipPanel playerField;
         private BattleshipPanel computerField;
+        private Mode gameMode;
+        private int shipsSetCount;
 
+        // Public fields
         public static int rows = 10;
         public static int cols = 10;
-       
+        
+        // Properties
+        public Ship[] Ships { private get; set; }
+        public bool SoundOn { get; set; }
+
         public BattleshipForm()
         {
             InitializeComponent();
-            
 
-            // TODO: Must be accessible for settings form
-            const int squareSize = 25;
-            
+            // Default settings
+            this.SoundOn = true;
+            this.gameMode = Mode.SettingShips;
+            Ships = new Ship[4];
+            Ship temp = new Ship();
+            int[] shipLengths = new int[4];
+            for (int i = 0; i < 4; i++)
+            {
+                temp.length = i + 2;
+                temp.name = "Test" + i;
+                this.Ships[i] = temp;
+                shipLengths[i] = temp.length;
+            }
 
             this.playerField = new Battleship.BattleshipPanel(rows, cols, true);
 
-            this.playerField.Location = new System.Drawing.Point(50, 50);
+            this.playerField.Location = new System.Drawing.Point(GRIDPADDING_LEFT, GRIDPADDING_TOP);
             this.playerField.Name = "playerPanel";
-            this.playerField.Size = new System.Drawing.Size(rows * squareSize, cols * squareSize);
+            this.playerField.Size = new System.Drawing.Size(rows * SQUARESIZE, cols * SQUARESIZE);
             this.playerField.TabIndex = 0;
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(playerField);
@@ -45,13 +68,13 @@ namespace Battleship
                 {Square.Water, Square.Water, Square.Water, Square.Water, Square.Ship },
             };
             */
-            int[] shipLengths = new int[5] { 1, 2, 3, 4, 5 };
+            //int[] shipLengths = new int[5] { 1, 2, 3, 4, 5 };
 
             this.computerField = new Battleship.BattleshipPanel(rows, cols, false);
 
-            this.computerField.Location = new System.Drawing.Point(100 + cols * squareSize, 50);
+            this.computerField.Location = new System.Drawing.Point(GRIDPADDING_LEFT + GRIDPADDING_CENTER + cols * SQUARESIZE, GRIDPADDING_TOP);
             this.computerField.Name = "computerPanel";
-            this.computerField.Size = new System.Drawing.Size(rows * squareSize, cols * squareSize);
+            this.computerField.Size = new System.Drawing.Size(rows * SQUARESIZE, cols * SQUARESIZE);
             this.computerField.TabIndex = 0;
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(computerField);
@@ -64,19 +87,54 @@ namespace Battleship
             row = e.Location.Y / computerField.SquareHeight;
             col = e.Location.X / computerField.SquareWidth;
 
-
-
-            if (sender.Equals(computerField))
+            if (sender.Equals(computerField) && gameMode == Mode.Playing)
             {
-                computerField.PlayerShoot(col, row);
+                Square result = computerField.PlayerShoot(col, row);
                 playerField.ComputerShoot();
-                //AudioEffect player = new AudioEffect();
-                //player.Sound = 
-                //player.Play();
+                if (SoundOn)
+                {
+                    AudioEffect player = new AudioEffect(result);
+                    player.Play();
+                }
             }
-            else if (sender.Equals(playerField))
+            else if (sender.Equals(playerField) && gameMode == Mode.SettingShips)
             {
-                playerField.PlayerHandleShip(col, row, 3);
+                BattleshipPanel.ShipHandleReturn result;
+                int length = 0;
+                int shipArrayIndex;
+                for (shipArrayIndex = 0; shipArrayIndex < Ships.Length; shipArrayIndex++)
+                {
+                    if (Ships[shipArrayIndex].row == null)
+                    {
+                        length = Ships[shipArrayIndex].length;
+                        break;
+                    }
+                }
+
+                result = playerField.PlayerHandleShip(ref col, ref row, length);
+                if (result == BattleshipPanel.ShipHandleReturn.ShipSet)
+                {
+                    shipsSetCount++;
+                    if (shipsSetCount == Ships.Length)
+                    {
+                        btnStartGame.Enabled = true;
+                    }
+                    Ships[shipArrayIndex].row = row;
+                    Ships[shipArrayIndex].col = col;
+                }
+                else if (result == BattleshipPanel.ShipHandleReturn.ShipRemoved)
+                {
+                    shipsSetCount--;
+                    btnStartGame.Enabled = false;
+                    for (shipArrayIndex = 0; shipArrayIndex < Ships.Length; shipArrayIndex++)
+                    {
+                        if (Ships[shipArrayIndex].row == row && Ships[shipArrayIndex].col == col)
+                        {
+                            Ships[shipArrayIndex].row = null;
+                            Ships[shipArrayIndex].col = null;
+                        }
+                    }
+                }
             }
 
         }
@@ -102,6 +160,18 @@ namespace Battleship
             optionForm.Show();
         }
 
-       
+        public struct Ship
+        {
+            public int length;
+            public string name;
+            public int? row;
+            public int? col;
+        }
+
+        private void btnStartGame_Click(object sender, EventArgs e)
+        {
+            this.gameMode = Mode.Playing;
+            playerField.ClearForbiddenSquares();
+        }
     }
 }

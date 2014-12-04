@@ -8,6 +8,7 @@
 namespace Battleship
 {
     using System;
+    using System.Diagnostics;
     using System.Drawing;
     using System.Windows.Forms;
 
@@ -16,6 +17,8 @@ namespace Battleship
     /// </summary>
     public class BattleshipPanel : Panel
     {
+        public enum ShipHandleReturn { ShipSet, PointSet, ShipRemoved, Failed };
+
         /// <summary>
         /// Constants for the images that is drawn. TODO: Change the arrow images to correct ones once they exist.
         /// </summary>
@@ -182,9 +185,10 @@ namespace Battleship
         /// <param name="row">The row to place the ship.</param>
         /// <param name="shipLength">The length of the ship</param>
         /// <returns>Whether the method successfully placed a ship.</returns>
-        public bool PlayerHandleShip(int col, int row, int shipLength)
+        public ShipHandleReturn PlayerHandleShip(ref int col, ref int row, int shipLength = 0)
         {
             bool addingShip = false;
+            ShipHandleReturn returnValue = ShipHandleReturn.Failed;
 
             // Check if the player have started placing a ship.
             if (this.isPlacing)
@@ -195,6 +199,7 @@ namespace Battleship
                     // Player pressed the same square again to stop the placing
                     this.RemoveArrows();
                     addingShip = true;
+                    returnValue = ShipHandleReturn.Failed;
                 }
                 else if (this.playField[row, col] == Square.ArrowDown)
                 {
@@ -202,6 +207,9 @@ namespace Battleship
                     this.RemoveArrows();
                     this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Vertical, this.shipRow, this.shipCol);
                     addingShip = true;
+                    returnValue = ShipHandleReturn.ShipSet;
+                    row = shipRow;
+                    col = shipCol;
                 }
                 else if (this.playField[row, col] == Square.ArrowRight)
                 {
@@ -209,6 +217,9 @@ namespace Battleship
                     this.RemoveArrows();
                     this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Horizontal, this.shipRow, this.shipCol);
                     addingShip = true;
+                    returnValue = ShipHandleReturn.ShipSet;
+                    row = shipRow;
+                    col = shipCol;
                 }
                 else if (this.playField[row, col] == Square.ArrowUp)
                 {
@@ -216,8 +227,12 @@ namespace Battleship
                     this.RemoveArrows();
 
                     // The SetShip method can only place towards right or down so call it with coordinates on the top most side of the ship
-                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Vertical, this.shipRow - shipLength + 1, this.shipCol);
+                    this.shipRow = this.shipRow - shipLength + 1;
+                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Vertical, this.shipRow, this.shipCol);
                     addingShip = true;
+                    returnValue = ShipHandleReturn.ShipSet;
+                    row = shipRow;
+                    col = shipCol;
                 }
                 else if (this.playField[row, col] == Square.ArrowLeft)
                 {
@@ -225,26 +240,31 @@ namespace Battleship
                     this.RemoveArrows();
 
                     // The SetShip method can only place towards right or down so call it with coordinates on the left most side of the ship
-                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Horizontal, this.shipRow, this.shipCol - shipLength + 1);
+                    this.shipCol = this.shipCol - shipLength + 1;
+                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Horizontal, this.shipRow, this.shipCol);
                     addingShip = true;
+                    returnValue = ShipHandleReturn.ShipSet;
+                    row = shipRow;
+                    col = shipCol;
+
                 }
             }
             else if (this.playField[row, col] == Square.Ship)
             {
                 // The player clicked an already placed ship
                 // Find the top-left most square of the selected ship
-                int findRow = row, findCol = col;
+                
                 while (true)
                 {
-                    if (findRow > 0 &&
-                        this.playField[findRow - 1, findCol] == Square.Ship)
+                    if (row > 0 &&
+                        this.playField[row - 1, col] == Square.Ship)
                     {
-                        findRow--;
+                        row--;
                     }
-                    else if (findCol > 0 &&
-                        this.playField[findRow, findCol - 1] == Square.Ship)
+                    else if (col > 0 &&
+                        this.playField[row, col - 1] == Square.Ship)
                     {
-                        findCol--;
+                        col--;
                     }
                     else
                     {
@@ -254,9 +274,12 @@ namespace Battleship
                 }
 
                 // Remove the chosen ship
-                this.shipPlacer.RemoveShip(this.playField, findRow, findCol);
+                if(this.shipPlacer.RemoveShip(this.playField, row, col))
+                {
+                    returnValue = ShipHandleReturn.ShipRemoved;
+                }
             }
-            else
+            else if(shipLength != 0)
             {
                 // The player is choosing the initial position for the ship, 
                 // check for space to the right and below the chosen square
@@ -265,6 +288,7 @@ namespace Battleship
                     // The ship fits to the right of the chosen spot
                     this.playField[row, col + 1] = Square.ArrowRight;
                     addingShip = true;
+                    returnValue = ShipHandleReturn.PointSet;
                 }
 
                 if (this.shipPlacer.IsSettable(this.playField, shipLength, Orientation.Vertical, row, col))
@@ -272,6 +296,7 @@ namespace Battleship
                     // The ship fits below the chosen spot
                     this.playField[row + 1, col] = Square.ArrowDown;
                     addingShip = true;
+                    returnValue = ShipHandleReturn.PointSet;
                 }
 
                 // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
@@ -282,6 +307,7 @@ namespace Battleship
                     // The ship fits to the above of the chosen spot.
                     this.playField[row - 1, col] = Square.ArrowUp;
                     addingShip = true;
+                    returnValue = ShipHandleReturn.PointSet;
                 }
 
                 // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
@@ -292,6 +318,7 @@ namespace Battleship
                     // The ship fits to the left of the chosen spot.
                     this.playField[row, col - 1] = Square.ArrowLeft;
                     addingShip = true;
+                    returnValue = ShipHandleReturn.PointSet;
                 }
             }
             
@@ -314,7 +341,7 @@ namespace Battleship
 
             // Force a redraw of the panel to show the changed squares
             this.Refresh();
-            return addingShip;
+            return returnValue;
         }
 
         /// <summary>
@@ -323,6 +350,7 @@ namespace Battleship
         public void ClearForbiddenSquares()
         {
             this.shipPlacer.RemoveForbiddenSquares(this.playField);
+            this.Refresh();
             return;
         }
 

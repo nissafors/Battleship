@@ -31,6 +31,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.arkivToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inställningarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnStartGame = new System.Windows.Forms.Button();
+            this.lblSetShip = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,15 +57,37 @@
             // inställningarToolStripMenuItem
             // 
             this.inställningarToolStripMenuItem.Name = "inställningarToolStripMenuItem";
-            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.inställningarToolStripMenuItem.Text = "Inställningar";
             this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.inställningarToolStripMenuItem_Click);
+            // 
+            // btnStartGame
+            // 
+            this.btnStartGame.Enabled = false;
+            this.btnStartGame.Location = new System.Drawing.Point(13, 28);
+            this.btnStartGame.Name = "btnStartGame";
+            this.btnStartGame.Size = new System.Drawing.Size(155, 23);
+            this.btnStartGame.TabIndex = 1;
+            this.btnStartGame.Text = "Starta spelet";
+            this.btnStartGame.UseVisualStyleBackColor = true;
+            this.btnStartGame.Click += new System.EventHandler(this.btnStartGame_Click);
+            // 
+            // lblSetShip
+            // 
+            this.lblSetShip.AutoSize = true;
+            this.lblSetShip.Location = new System.Drawing.Point(190, 37);
+            this.lblSetShip.Name = "lblSetShip";
+            this.lblSetShip.Size = new System.Drawing.Size(75, 13);
+            this.lblSetShip.TabIndex = 2;
+            this.lblSetShip.Text = "Placera skepp";
             // 
             // BattleshipForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 361);
+            this.Controls.Add(this.lblSetShip);
+            this.Controls.Add(this.btnStartGame);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "BattleshipForm";
@@ -80,6 +104,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem arkivToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem inställningarToolStripMenuItem;
+        private System.Windows.Forms.Button btnStartGame;
+        private System.Windows.Forms.Label lblSetShip;
 
 
 
