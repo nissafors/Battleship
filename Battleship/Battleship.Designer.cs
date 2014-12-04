@@ -35,6 +35,7 @@
             this.lblSetShip = new System.Windows.Forms.Label();
             this.nyttSpelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblGameOver = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,7 +62,7 @@
             // inställningarToolStripMenuItem
             // 
             this.inställningarToolStripMenuItem.Name = "inställningarToolStripMenuItem";
-            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.inställningarToolStripMenuItem.Text = "Inställningar";
             this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.inställningarToolStripMenuItem_Click);
             // 
@@ -98,11 +99,27 @@
             this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.avslutaToolStripMenuItem.Text = "Avsluta";
             // 
+            // lblGameOver
+            // 
+            this.lblGameOver.AutoSize = true;
+            this.lblGameOver.BackColor = System.Drawing.Color.Silver;
+            this.lblGameOver.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblGameOver.Font = new System.Drawing.Font("Comic Sans MS", 44.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGameOver.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblGameOver.Location = new System.Drawing.Point(81, 149);
+            this.lblGameOver.Name = "lblGameOver";
+            this.lblGameOver.Size = new System.Drawing.Size(360, 84);
+            this.lblGameOver.TabIndex = 3;
+            this.lblGameOver.Text = "YOU WON!";
+            this.lblGameOver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblGameOver.Visible = false;
+            // 
             // BattleshipForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 361);
+            this.Controls.Add(this.lblGameOver);
             this.Controls.Add(this.lblSetShip);
             this.Controls.Add(this.btnStartGame);
             this.Controls.Add(this.menuStrip1);
@@ -125,6 +142,7 @@
         private System.Windows.Forms.Label lblSetShip;
         private System.Windows.Forms.ToolStripMenuItem nyttSpelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem avslutaToolStripMenuItem;
+        private System.Windows.Forms.Label lblGameOver;
 
 
 

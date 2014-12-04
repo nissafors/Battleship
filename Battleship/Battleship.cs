@@ -12,17 +12,21 @@ namespace Battleship
 {
     public partial class BattleshipForm : Form
     {
-        enum Mode { SettingShips, Playing };
+        enum Mode { SettingShips, Playing, PlayerWon, ComputerWon };
 
         private const int SQUARESIZE = 25;
         private const int GRIDPADDING_LEFT = 50;
         private const int GRIDPADDING_TOP = 70;
         private const int GRIDPADDING_CENTER = 50;
+        private const string PLAYERWON = "Grattis! Du vann!";
+        private const string COMPUTERWON = "Datorn vann!";
 
         private BattleshipPanel playerField;
         private BattleshipPanel computerField;
         private Mode gameMode;
         private int shipsSetCount;
+        private int shipsLostComputer;
+        private int shipsLostPlayer;
 
         // Public fields
         public static int rows = 10;
@@ -61,9 +65,12 @@ namespace Battleship
             this.playerField = null;
             this.computerField = null;
             this.shipsSetCount = 0;
+            this.shipsLostComputer = 0;
+            this.shipsLostPlayer = 0;
             this.gameMode = Mode.SettingShips;
-            ResetShips();
-            InitializeGameboard();
+            lblGameOver.Visible = false;
+            this.ResetShips();
+            this.InitializeGameboard();
         }
 
         private void InitializeGameboard()
@@ -93,38 +100,80 @@ namespace Battleship
             computerField.ComputerPlaceShip(shipLength);
         }
 
+        private void GameOver()
+        {
+            lblGameOver.Text = (gameMode == Mode.PlayerWon) ? PLAYERWON : COMPUTERWON;
+            lblGameOver.Left = (this.Size.Width / 2) - (lblGameOver.Size.Width / 2);
+            lblGameOver.Top = (this.Size.Height / 2) - (lblGameOver.Size.Height / 2);
+            System.Threading.Thread.Sleep(500);
+            lblGameOver.Visible = true;
+        }
+
         private void UpdateForm(object sender, MouseEventArgs e)
         {
             int col, row; 
             row = e.Location.Y / computerField.SquareHeight;
             col = e.Location.X / computerField.SquareWidth;
 
-            if (sender.Equals(computerField) && gameMode == Mode.Playing && !computerIsShooting)
+            if (sender.Equals(computerField) && gameMode == Mode.Playing)
             {
-                Square result;
-                result = computerField.PlayerShoot(col, row);
+                // We are here because the player fired off a torpedo. (S)he shouldn't be able
+                // to shoot more while handling the last shot or while the computer is shooting:
+                computerField.Enabled = false;
+
+                // Excecute torpedo impact and analyze the result.
+                Square result = computerField.PlayerShoot(col, row);
                 if (SoundOn)
                 {
                     AudioEffect player = new AudioEffect(result);
                     player.Play();
                 }
-                if (result != Square.Hit && result != Square.Sunk)
+                if (result == Square.Sunk)
+                {
+                    shipsLostComputer++;
+                    if (shipsLostComputer == Ships.Length)
+                    {
+                        gameMode = Mode.PlayerWon;
+                        GameOver();
+                        return;
+                    }
+                }
+                if (result != Square.Hit && result != Square.Sunk && result != Square.Forbidden)
                 {
                     // Computers turn as if player missed and as long as computer hits
+                    int msSleep = 700;
                     do
                     {
+                        System.Threading.Thread.Sleep(msSleep);
                         result = playerField.ComputerShoot();
+                        msSleep = (result == Square.Sunk) ? 2000 : 700;
                         if (SoundOn)
                         {
                             AudioEffect player = new AudioEffect(result);
                             player.Play();
                         }
+                        if (result == Square.Sunk)
+                        {
+                            shipsLostPlayer++;
+                            if (shipsLostPlayer == Ships.Length)
+                            {
+                                gameMode = Mode.ComputerWon;
+                                GameOver();
+                                return;
+                            }
+                        }
                     } while (result == Square.Hit || result == Square.Sunk);
                 }
+
+                // Both player and computer are done shooting for now.
+                computerField.Enabled = true;
             }
             else if (sender.Equals(playerField) && gameMode == Mode.SettingShips)
             {
-                BattleshipPanel.ShipHandleReturn result;
+                // We are here because the player tried to set a starting coordinate for a ship
+                // or he actually placed the ship.
+
+                // Loop through the ships to find the first one that is not already on the board
                 int length = 0;
                 int shipArrayIndex;
                 for (shipArrayIndex = 0; shipArrayIndex < Ships.Length; shipArrayIndex++)
@@ -136,9 +185,14 @@ namespace Battleship
                     }
                 }
 
-                result = playerField.PlayerHandleShip(ref col, ref row, length);
+                // Send the length of that ship, or 0 if none found. In return we'll get the result
+                // of the action (ship placed, point placed, ship removed or failure) and the
+                // coordinates of the ship or point affected.
+                BattleshipPanel.ShipHandleReturn result = playerField.PlayerHandleShip(ref col, ref row, length);
                 if (result == BattleshipPanel.ShipHandleReturn.ShipSet)
                 {
+                    // Save the coordinates of this ship and enable the start game-button if all
+                    // ships are on the board
                     shipsSetCount++;
                     if (shipsSetCount == Ships.Length)
                     {
@@ -149,6 +203,7 @@ namespace Battleship
                 }
                 else if (result == BattleshipPanel.ShipHandleReturn.ShipRemoved)
                 {
+                    // Disable start button and null the coordinates of the removed ship
                     shipsSetCount--;
                     btnStartGame.Enabled = false;
                     for (shipArrayIndex = 0; shipArrayIndex < Ships.Length; shipArrayIndex++)
@@ -161,7 +216,6 @@ namespace Battleship
                     }
                 }
             }
-
         }
        
         public void formSize()
