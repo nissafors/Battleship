@@ -174,11 +174,12 @@
             // 
             // optionsSpela
             // 
+            this.optionsSpela.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.optionsSpela.Location = new System.Drawing.Point(68, 225);
             this.optionsSpela.Name = "optionsSpela";
             this.optionsSpela.Size = new System.Drawing.Size(75, 23);
             this.optionsSpela.TabIndex = 12;
-            this.optionsSpela.Text = "Spela";
+            this.optionsSpela.Text = "Nytt spel";
             this.optionsSpela.UseVisualStyleBackColor = true;
             this.optionsSpela.Click += new System.EventHandler(this.optionsSpela_Click);
             // 
@@ -223,9 +224,12 @@
             this.Controls.Add(this.sizeComboBox);
             this.Controls.Add(this.optionsAvbryt);
             this.Controls.Add(this.optionsSpela);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Options";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Inställningar";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();

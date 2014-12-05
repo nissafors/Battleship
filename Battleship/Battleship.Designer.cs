@@ -30,11 +30,11 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.arkivToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nyttSpelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inställningarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnStartGame = new System.Windows.Forms.Button();
             this.lblSetShip = new System.Windows.Forms.Label();
-            this.nyttSpelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblGameOver = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -59,12 +59,26 @@
             this.arkivToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
             this.arkivToolStripMenuItem.Text = "Arkiv";
             // 
+            // nyttSpelToolStripMenuItem
+            // 
+            this.nyttSpelToolStripMenuItem.Name = "nyttSpelToolStripMenuItem";
+            this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.nyttSpelToolStripMenuItem.Text = "Nytt spel";
+            this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.nyttSpelToolStripMenuItem_Click);
+            // 
             // inställningarToolStripMenuItem
             // 
             this.inställningarToolStripMenuItem.Name = "inställningarToolStripMenuItem";
-            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.inställningarToolStripMenuItem.Text = "Inställningar";
             this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.inställningarToolStripMenuItem_Click);
+            // 
+            // avslutaToolStripMenuItem
+            // 
+            this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
+            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.avslutaToolStripMenuItem.Text = "Avsluta";
+            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.avslutaToolStripMenuItem_Click);
             // 
             // btnStartGame
             // 
@@ -80,24 +94,11 @@
             // lblSetShip
             // 
             this.lblSetShip.AutoSize = true;
-            this.lblSetShip.Location = new System.Drawing.Point(190, 37);
+            this.lblSetShip.Location = new System.Drawing.Point(190, 33);
             this.lblSetShip.Name = "lblSetShip";
             this.lblSetShip.Size = new System.Drawing.Size(75, 13);
             this.lblSetShip.TabIndex = 2;
             this.lblSetShip.Text = "Placera skepp";
-            // 
-            // nyttSpelToolStripMenuItem
-            // 
-            this.nyttSpelToolStripMenuItem.Name = "nyttSpelToolStripMenuItem";
-            this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.nyttSpelToolStripMenuItem.Text = "Nytt spel";
-            this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.nyttSpelToolStripMenuItem_Click);
-            // 
-            // avslutaToolStripMenuItem
-            // 
-            this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
-            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.avslutaToolStripMenuItem.Text = "Avsluta";
             // 
             // lblGameOver
             // 
@@ -124,6 +125,7 @@
             this.Controls.Add(this.btnStartGame);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "BattleshipForm";
             this.Text = "Sänka Skepp";
             this.menuStrip1.ResumeLayout(false);

@@ -28,6 +28,7 @@ namespace Battleship
             if (result == DialogResult.Yes)
             {
                 saveSettings();
+                
                 this.Close();
             }
             else if (result == DialogResult.No)
@@ -36,13 +37,14 @@ namespace Battleship
             }
             else if (result == DialogResult.Cancel)
             {
-          
+                
             }
         }
      
         private void optionsSpela_Click(object sender, EventArgs e)
         {
             saveSettings();
+            
         }
 
 
@@ -60,7 +62,7 @@ namespace Battleship
             {
                 this._BsForm.SoundOn = false;
             }
-
+            this._BsForm.RestartGame();
             this.Close();
         }
     }

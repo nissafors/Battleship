@@ -58,8 +58,9 @@ namespace Battleship
             }
         }
 
-        private void RestartGame()
+        public void RestartGame()
         {
+            lblSetShip.Visible = true;
             this.Controls.Remove(playerField);
             this.Controls.Remove(computerField);
             this.playerField = null;
@@ -197,6 +198,7 @@ namespace Battleship
                     if (shipsSetCount == Ships.Length)
                     {
                         btnStartGame.Enabled = true;
+                        lblSetShip.Visible = false;
                     }
                     Ships[shipArrayIndex].row = row;
                     Ships[shipArrayIndex].col = col;
@@ -206,6 +208,7 @@ namespace Battleship
                     // Disable start button and null the coordinates of the removed ship
                     shipsSetCount--;
                     btnStartGame.Enabled = false;
+                    lblSetShip.Visible = true;
                     for (shipArrayIndex = 0; shipArrayIndex < Ships.Length; shipArrayIndex++)
                     {
                         if (Ships[shipArrayIndex].row == row && Ships[shipArrayIndex].col == col)
@@ -236,7 +239,7 @@ namespace Battleship
         private void inställningarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Options optionForm = new Options(this);
-            optionForm.Show();
+            optionForm.ShowDialog();
         }
 
         private void btnStartGame_Click(object sender, EventArgs e)
@@ -257,6 +260,11 @@ namespace Battleship
             public string name;
             public int? row;
             public int? col;
+        }
+
+        private void avslutaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
