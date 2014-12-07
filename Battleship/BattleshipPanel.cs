@@ -45,6 +45,11 @@ namespace Battleship
         private bool isPlacing = false;
 
         /// <summary>
+        /// Whether to show ships in the playfield.
+        /// </summary>
+        private bool showShips = false;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BattleshipPanel"/> class.
         /// Defaults to a 10x10 grid.
         /// </summary>
@@ -64,7 +69,7 @@ namespace Battleship
 
             this.SquareHeight = this.ClientSize.Height / this.rows;
             this.SquareWidth = this.ClientSize.Width / this.columns;
-            this.IsPlayer = true;
+            this.showShips = true;
         }
 
         /// <summary>
@@ -72,8 +77,8 @@ namespace Battleship
         /// This constructor that can be used to load a preset playing field
         /// </summary>
         /// <param name="fieldArray">An array of Squares.</param>
-        /// <param name="playerOwner">Whether the player or the computer owns the field</param>
-        public BattleshipPanel(Square[,] fieldArray, bool playerOwner)
+        /// <param name="showingShips">Whether to show ships in the field or not</param>
+        public BattleshipPanel(Square[,] fieldArray, bool showingShips)
         {
             // Force it to redraw the field if the size of the panel changes
             this.ResizeRedraw = true;
@@ -91,7 +96,7 @@ namespace Battleship
 
             this.SquareHeight = this.ClientSize.Height / this.rows;
             this.SquareWidth = this.ClientSize.Width / this.columns;
-            this.IsPlayer = playerOwner;
+            this.showShips = showingShips;
         }
 
         /// <summary>
@@ -100,8 +105,8 @@ namespace Battleship
         /// </summary>
         /// <param name="numColumns">Number of columns</param>
         /// <param name="numRows">Number of rows</param>
-        /// <param name="playerOwner">Whether the player or the computer owns the field</param>
-        public BattleshipPanel(int numColumns, int numRows, bool playerOwner)
+        /// <param name="showingShips">Whether to show ships in the field or not</param>
+        public BattleshipPanel(int numColumns, int numRows, bool showingShips)
         {
             // Force it to redraw the field if the size of the panel changes
             this.ResizeRedraw = true;
@@ -119,7 +124,7 @@ namespace Battleship
 
             this.SquareHeight = this.ClientSize.Height / this.rows;
             this.SquareWidth = this.ClientSize.Width / this.columns;
-            this.IsPlayer = playerOwner;
+            this.showShips = showingShips;
         }
 
         /// <summary>
@@ -159,9 +164,21 @@ namespace Battleship
         public int SquareWidth { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether it is the players field.
+        /// Gets or sets a value indicating whether to show the placement of the ships.
         /// </summary>
-        public bool IsPlayer { get; set; }
+        public bool ShowShips 
+        {
+            get 
+            { 
+                return this.showShips;
+            }
+
+            set
+            {
+                this.showShips = value;
+                this.Refresh();
+            }
+        }
 
         /// <summary>
         /// Method used when manually choosing where to shoot in the grid. 
@@ -210,7 +227,7 @@ namespace Battleship
         /// <param name="row">The row to place the ship.</param>
         /// <param name="shipLength">The length of the ship</param>
         /// <returns>Whether the method successfully placed a ship.</returns>
-        public ShipHandleReturn PlayerHandleShip(ref int col, ref int row, int shipLength = 0)
+        public ShipHandleReturn ManualShipHandling(ref int col, ref int row, int shipLength = 0)
         {
             ShipHandleReturn methodOutcome = ShipHandleReturn.Failed;
 
@@ -358,7 +375,7 @@ namespace Battleship
         /// <paramref name="shipLengths"/> as lengths for the ships.
         /// </summary>
         /// <param name="shipLengths">An array containing the lengths of all the ships.</param>
-        public void ComputerPlaceShip(int[] shipLengths)
+        public void AutoShipPlacing(int[] shipLengths)
         {
             this.shipPlacer.AutoPosition(this.playField, shipLengths);
         }
@@ -438,10 +455,8 @@ namespace Battleship
                     {
                         paintEvent.Graphics.DrawImageUnscaled(Image.FromFile(IMAGEPATH + FORBIDDENIMAGE), columnPlace, rowPlace);
                     }
-                    else if (this.IsPlayer && this.playField[row, column] == Square.Ship)
+                    else if (this.showShips && this.playField[row, column] == Square.Ship)
                     {
-                        // Only paint the ships if the player owns the field to avoid showing the player where the computer
-                        // has placed its ships.
                         paintEvent.Graphics.DrawImageUnscaled(Image.FromFile(IMAGEPATH + SHIPIMAGE), columnPlace, rowPlace);
                     }
                     else
