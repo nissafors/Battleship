@@ -63,7 +63,8 @@ namespace Battleship
                             }
 
                             // Add the square below the last hit unless there is a miss
-                            if (playFieldArray[row, column] != Square.Miss)
+                            if (playFieldArray[row, column] != Square.Miss &&
+                                playFieldArray[row, column] != Square.Hit)
                             {
                                 allowedCoordinates.Add(Tuple.Create(row, column));
                             }
@@ -87,7 +88,8 @@ namespace Battleship
                             }
 
                             // Add the square to the right of the last hit unless there is a miss
-                            if (playFieldArray[row, column] != Square.Miss)
+                            if (playFieldArray[row, column] != Square.Miss &&
+                                playFieldArray[row, column] != Square.Hit)
                             {
                                 allowedCoordinates.Add(Tuple.Create(row, column));
                             }

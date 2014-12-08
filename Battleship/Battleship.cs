@@ -98,7 +98,7 @@ namespace Battleship
             this.computerField.TabIndex = 0;
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(computerField);
-            computerField.ComputerPlaceShip(shipLength);
+            computerField.AutoShipPlacing(shipLength);
         }
 
         private void GameOver()
@@ -106,6 +106,7 @@ namespace Battleship
             lblGameOver.Text = (gameMode == Mode.PlayerWon) ? PLAYERWON : COMPUTERWON;
             lblGameOver.Left = (this.Size.Width / 2) - (lblGameOver.Size.Width / 2);
             lblGameOver.Top = (this.Size.Height / 2) - (lblGameOver.Size.Height / 2);
+            this.computerField.ShowShips = true;
             System.Threading.Thread.Sleep(500);
             lblGameOver.Visible = true;
         }
@@ -189,7 +190,7 @@ namespace Battleship
                 // Send the length of that ship, or 0 if none found. In return we'll get the result
                 // of the action (ship placed, point placed, ship removed or failure) and the
                 // coordinates of the ship or point affected.
-                BattleshipPanel.ShipHandleReturn result = playerField.PlayerHandleShip(ref col, ref row, length);
+                BattleshipPanel.ShipHandleReturn result = playerField.ManualShipHandling(ref col, ref row, length);
                 if (result == BattleshipPanel.ShipHandleReturn.ShipSet)
                 {
                     // Save the coordinates of this ship and enable the start game-button if all

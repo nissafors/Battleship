@@ -247,14 +247,14 @@ namespace Battleship
                 {
                     // Remove the arrows and place the ship vertically below the chosen square
                     this.RemoveArrows();
-                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Vertical, this.shipRow, this.shipCol);
+                    this.shipPlacer.SetShip(this.playField, shipLength, ShipPositioner.Orientation.Vertical, this.shipRow, this.shipCol);
                     methodOutcome = ShipHandleReturn.ShipSet;
                 }
                 else if (this.playField[row, col] == Square.ArrowRight)
                 {
                     // Remove the arrows and place the ship horizontally to the right of the chosen square
                     this.RemoveArrows();
-                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Horizontal, this.shipRow, this.shipCol);
+                    this.shipPlacer.SetShip(this.playField, shipLength, ShipPositioner.Orientation.Horizontal, this.shipRow, this.shipCol);
                     methodOutcome = ShipHandleReturn.ShipSet;
                 }
                 else if (this.playField[row, col] == Square.ArrowUp)
@@ -264,7 +264,7 @@ namespace Battleship
 
                     // The SetShip method can only place towards right or down so call it with coordinates on the top most side of the ship
                     this.shipRow = this.shipRow - shipLength + 1;
-                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Vertical, this.shipRow, this.shipCol);
+                    this.shipPlacer.SetShip(this.playField, shipLength, ShipPositioner.Orientation.Vertical, this.shipRow, this.shipCol);
                     methodOutcome = ShipHandleReturn.ShipSet;
                 }
                 else if (this.playField[row, col] == Square.ArrowLeft)
@@ -274,7 +274,7 @@ namespace Battleship
 
                     // The SetShip method can only place towards right or down so call it with coordinates on the left most side of the ship
                     this.shipCol = this.shipCol - shipLength + 1;
-                    this.shipPlacer.SetShip(this.playField, shipLength, Orientation.Horizontal, this.shipRow, this.shipCol);
+                    this.shipPlacer.SetShip(this.playField, shipLength, ShipPositioner.Orientation.Horizontal, this.shipRow, this.shipCol);
                     methodOutcome = ShipHandleReturn.ShipSet;
                 }
             }
@@ -311,14 +311,14 @@ namespace Battleship
             {
                 // The player is choosing the initial position for the ship, 
                 // check for space to the right and below the chosen square
-                if (this.shipPlacer.IsSettable(this.playField, shipLength, Orientation.Horizontal, row, col))
+                if (this.shipPlacer.IsSettable(this.playField, shipLength, ShipPositioner.Orientation.Horizontal, row, col))
                 {
                     // The ship fits to the right of the chosen spot
                     this.playField[row, col + 1] = Square.ArrowRight;
                     methodOutcome = ShipHandleReturn.PointSet;
                 }
 
-                if (this.shipPlacer.IsSettable(this.playField, shipLength, Orientation.Vertical, row, col))
+                if (this.shipPlacer.IsSettable(this.playField, shipLength, ShipPositioner.Orientation.Vertical, row, col))
                 {
                     // The ship fits below the chosen spot
                     this.playField[row + 1, col] = Square.ArrowDown;
@@ -328,7 +328,7 @@ namespace Battleship
                 // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
                 // with regards to the size of the field and then check if it's settable from the far side of the ship
                 if (row - shipLength >= 0 &&
-                    this.shipPlacer.IsSettable(this.playField, shipLength, Orientation.Vertical, row - shipLength + 1, col))
+                    this.shipPlacer.IsSettable(this.playField, shipLength, ShipPositioner.Orientation.Vertical, row - shipLength + 1, col))
                 {
                     // The ship fits to the above of the chosen spot.
                     this.playField[row - 1, col] = Square.ArrowUp;
@@ -338,7 +338,7 @@ namespace Battleship
                 // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
                 // with regards to the size of the field and then check if it's settable from the far side of the ship
                 if (col - shipLength >= 0 &&
-                    this.shipPlacer.IsSettable(this.playField, shipLength, Orientation.Horizontal, row, col - shipLength + 1))
+                    this.shipPlacer.IsSettable(this.playField, shipLength, ShipPositioner.Orientation.Horizontal, row, col - shipLength + 1))
                 {
                     // The ship fits to the left of the chosen spot.
                     this.playField[row, col - 1] = Square.ArrowLeft;
