@@ -1,69 +1,152 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Battleship.cs" company="None">
+//     Copyright (c) Henrik Ottehall, Victor Ström Nilsson & Andreas Andersson 2014
+// </copyright>
+// <author>Henrik Ottehall</author>
+// <author>Victor Ström Nilsson</author>
+// <author>Andreas Andersson</author>
+//-----------------------------------------------------------------------
 
 namespace Battleship
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Threading;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// This is the main form including basic UI control and game logic.
+    /// </summary>
     public partial class BattleshipForm : Form
     {
-        enum Mode { SettingShips, Playing, PlayerWon, ComputerWon };
+        public static int rows = 10;
 
+        public static int cols = 10;
+
+        /// <summary>
+        /// The height of the squares making up the game board in pixels
+        /// </summary>
         private const int SQUARESIZE = 25;
-        private const int GRIDPADDING_LEFT = 50;
-        private const int GRIDPADDING_TOP = 70;
-        private const int GRIDPADDING_CENTER = 50;
+
+        /// <summary>
+        /// The distance from the left border of the form to the leftmost game board grid in pixels.
+        /// </summary>
+        private const int GRIDPADDINGLEFT = 50;
+
+        /// <summary>
+        /// The distance from the top border of the form to the game board grids in pixels.
+        /// </summary>
+        private const int GRIDPADDINGTOP = 70;
+
+        /// <summary>
+        /// The distance between the two game board grids in pixels.
+        /// </summary>
+        private const int GRIDPADDINGCENTER = 50;
+
+        /// <summary>
+        /// The text to display when the player has won.
+        /// </summary>
         private const string PLAYERWON = "Grattis! Du vann!";
+
+        /// <summary>
+        /// The text to display when the computer has won.
+        /// </summary>
         private const string COMPUTERWON = "Datorn vann!";
 
+        /// <summary>
+        /// The game board panel containing the players ships.
+        /// </summary>
         private BattleshipPanel playerField;
+
+        /// <summary>
+        /// The game board panel containing the computers ships.
+        /// </summary>
         private BattleshipPanel computerField;
+
+        /// <summary>
+        /// Indicating the current game mode. 
+        /// </summary>
         private Mode gameMode;
+
+        /// <summary>
+        /// Keeps track of how many of the players ships are currently on the board.
+        /// </summary>
         private int shipsSetCount;
+
+        /// <summary>
+        /// Keeps track of how many ships the computer has lost.
+        /// </summary>
         private int shipsLostComputer;
+
+        /// <summary>
+        /// Keeps track of how many ships the player has lost.
+        /// </summary>
         private int shipsLostPlayer;
+
+        /// <summary>
+        /// Used to DO the computer shooting in a separate thread.
+        /// </summary>
         private BackgroundWorker bgWorker;
 
-        // Public fields
-        public static int rows = 10;
-        public static int cols = 10;
-        
-        // Properties
-        public Ship[] Ships { private get; set; }
-        public bool SoundOn { get; set; }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BattleshipForm"/> class
+        /// </summary>
         public BattleshipForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
             // Default settings
             this.SoundOn = true;
             this.gameMode = Mode.SettingShips;
             this.ResetShips();
-            this.InitializeGameboard();
+            this.InitializeGameBoard();
         }
 
-        private void ResetShips()
+        /// <summary>
+        /// Values used to indicate the current game mode.
+        /// </summary>
+        private enum Mode
         {
-            Ships = new Ship[4];
-            Ship temp = new Ship();
-            for (int i = 0; i < 4; i++)
-            {
-                temp.length = i + 2;
-                this.Ships[i] = temp;
-            }
+            /// <summary>
+            /// Player is currently placing ships on the game board.
+            /// </summary>
+            SettingShips,
+
+            /// <summary>
+            /// We're in the middle of a game.
+            /// </summary>
+            Playing,
+
+            /// <summary>
+            /// The player has won the game.
+            /// </summary>
+            PlayerWon,
+
+            /// <summary>
+            /// The computer has won the game.
+            /// </summary>
+            ComputerWon
         }
 
+        /// <summary>
+        /// Gets or sets he list of ships used in this game.
+        /// </summary>
+        public Ship[] Ships { private get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether sounds are played or not.
+        /// </summary>
+        public bool SoundOn { get; set; }
+
+        /// <summary>
+        /// Resets all fields and properties needed to start over with a brand new game of glorious battleship.
+        /// </summary>
         public void RestartGame()
         {
             lblSetShip.Visible = true;
-            this.Controls.Remove(playerField);
-            this.Controls.Remove(computerField);
+            this.Controls.Remove(this.playerField);
+            this.Controls.Remove(this.computerField);
             this.playerField = null;
             this.computerField = null;
             this.shipsSetCount = 0;
@@ -72,39 +155,74 @@ namespace Battleship
             this.gameMode = Mode.SettingShips;
             lblGameOver.Visible = false;
             this.ResetShips();
-            this.InitializeGameboard();
+            this.InitializeGameBoard();
         }
 
-        private void InitializeGameboard()
+        public void FormSize()
         {
-            int[] shipLength = new int[Ships.Length];
-            int i = 0;
-            foreach (Ship ship in Ships)
+            this.playerField.ChangeSize(rows, cols);
+            this.computerField.ChangeSize(rows, cols);
+
+            this.Width = SQUARESIZE * cols * 2 + 168;
+            this.Height = SQUARESIZE * rows + 158;
+            this.Padding = new Padding(0, 0, 50, 50);
+
+            this.computerField.Location = new Point((25 * cols) + 100, 70);
+
+            this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
+            this.playerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
+        }
+
+        private void ResetShips()
+        {
+            this.Ships = new Ship[4];
+            Ship temp = new Ship();
+            for (int i = 0; i < 4; i++)
             {
-                shipLength[i++] = ship.length;
+                temp.Length = i + 2;
+                this.Ships[i] = temp;
+            }
+        }
+
+        /// <summary>
+        /// Creates one game board panel with auto-placed ships for the computer, and one empty game board panel for the player.
+        /// </summary>
+        private void InitializeGameBoard()
+        {
+            // From the list of ships, create an array with only the lengths of the ships for the AutoShipPlacing method.
+            int[] shipLength = new int[this.Ships.Length];
+            int i = 0;
+            foreach (Ship ship in this.Ships)
+            {
+                shipLength[i++] = ship.Length;
             }
 
+            // Create players panel
             this.playerField = new Battleship.BattleshipPanel(rows, cols, true);
-            this.playerField.Location = new System.Drawing.Point(GRIDPADDING_LEFT, GRIDPADDING_TOP);
+            this.playerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT, GRIDPADDINGTOP);
             this.playerField.Name = "playerPanel";
             this.playerField.Size = new System.Drawing.Size(rows * SQUARESIZE, cols * SQUARESIZE);
             this.playerField.TabIndex = 0;
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
-            this.Controls.Add(playerField);
+            this.Controls.Add(this.playerField);
 
+            // Create computers panel and autoplace the ships.
             this.computerField = new Battleship.BattleshipPanel(rows, cols, false);
-            this.computerField.Location = new System.Drawing.Point(GRIDPADDING_LEFT + GRIDPADDING_CENTER + cols * SQUARESIZE, GRIDPADDING_TOP);
+            this.computerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT + GRIDPADDINGCENTER + (cols * SQUARESIZE), GRIDPADDINGTOP);
             this.computerField.Name = "computerPanel";
             this.computerField.Size = new System.Drawing.Size(rows * SQUARESIZE, cols * SQUARESIZE);
             this.computerField.TabIndex = 0;
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
-            this.Controls.Add(computerField);
-            computerField.AutoShipPlacing(shipLength);
+            this.Controls.Add(this.computerField);
+            this.computerField.AutoShipPlacing(shipLength);
         }
 
+        /// <summary>
+        /// Display a label telling who won and set gameMode accordingly.
+        /// </summary>
         private void GameOver()
         {
-            lblGameOver.Text = (gameMode == Mode.PlayerWon) ? PLAYERWON : COMPUTERWON;
+            lblGameOver.Text = (this.gameMode == Mode.PlayerWon) ? PLAYERWON : COMPUTERWON;
             lblGameOver.Left = (this.Size.Width / 2) - (lblGameOver.Size.Width / 2);
             lblGameOver.Top = (this.Size.Height / 2) - (lblGameOver.Size.Height / 2);
             this.computerField.ShowShips = true;
@@ -115,44 +233,46 @@ namespace Battleship
         private void UpdateForm(object sender, MouseEventArgs e)
         {
             int col, row; 
-            row = e.Location.Y / computerField.SquareHeight;
-            col = e.Location.X / computerField.SquareWidth;
+            row = e.Location.Y / this.computerField.SquareHeight;
+            col = e.Location.X / this.computerField.SquareWidth;
 
-            if (sender.Equals(computerField) && gameMode == Mode.Playing)
+            if (sender.Equals(this.computerField) && this.gameMode == Mode.Playing)
             {
-                // We are here because the player fired off a torpedo. (S)he shouldn't be able
-                // to shoot more while handling the last shot or while the computer is shooting:
-                ////computerField.Enabled = false;
-
-                // Excecute torpedo impact and analyze the result.
-                Square result = computerField.PlayerShoot(col, row);
-                if (SoundOn)
+                // We are here because the player fired off a torpedo.
+                // Excecute torpedo launch and analyze the result.
+                Square result = this.computerField.PlayerShoot(col, row);
+                if (this.SoundOn)
                 {
                     AudioEffect player = new AudioEffect(result);
                     player.Play();
                 }
+
                 if (result == Square.Sunk)
                 {
-                    shipsLostComputer++;
-                    if (shipsLostComputer == Ships.Length)
+                    this.shipsLostComputer++;
+                    if (this.shipsLostComputer == this.Ships.Length)
                     {
-                        gameMode = Mode.PlayerWon;
-                        GameOver();
+                        // Computer has lost all her ships.
+                        this.gameMode = Mode.PlayerWon;
+                        this.GameOver();
                         return;
                     }
                 }
-                if (result != Square.Hit && result != Square.Sunk && result != Square.Forbidden)
+                else if (result != Square.Hit && result != Square.Forbidden)
                 {
-                    computerField.Enabled = false;
+                    // Player missed and it's the computers turn.
+                    // Disable the control so player can't shoot while computer is shooting. (The control is
+                    // enabled again in the bgWorker_RunWorkerCompleted method below.)
+                    this.computerField.Enabled = false;
 
-                    // Call bgWorker_DoWork
-                    bgWorker = new BackgroundWorker();
-                    bgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
-                    bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
-                    bgWorker.RunWorkerAsync();
+                    // Computer shooting may take some time so it has to be done in a separate thread.
+                    this.bgWorker = new BackgroundWorker();
+                    this.bgWorker.DoWork += new DoWorkEventHandler(this.bgWorker_DoWork);
+                    this.bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(this.bgWorker_RunWorkerCompleted);
+                    this.bgWorker.RunWorkerAsync();
                 }
             }
-            else if (sender.Equals(playerField) && gameMode == Mode.SettingShips)
+            else if (sender.Equals(this.playerField) && this.gameMode == Mode.SettingShips)
             {
                 // We are here because the player tried to set a starting coordinate for a ship
                 // or he actually placed the ship.
@@ -160,11 +280,11 @@ namespace Battleship
                 // Loop through the ships to find the first one that is not already on the board
                 int length = 0;
                 int shipArrayIndex;
-                for (shipArrayIndex = 0; shipArrayIndex < Ships.Length; shipArrayIndex++)
+                for (shipArrayIndex = 0; shipArrayIndex < this.Ships.Length; shipArrayIndex++)
                 {
-                    if (Ships[shipArrayIndex].row == null)
+                    if (this.Ships[shipArrayIndex].Row == null)
                     {
-                        length = Ships[shipArrayIndex].length;
+                        length = this.Ships[shipArrayIndex].Length;
                         break;
                     }
                 }
@@ -172,77 +292,66 @@ namespace Battleship
                 // Send the length of that ship, or 0 if none found. In return we'll get the result
                 // of the action (ship placed, point placed, ship removed or failure) and the
                 // coordinates of the ship or point affected.
-                BattleshipPanel.ShipHandleReturn result = playerField.ManualShipHandling(ref col, ref row, length);
+                BattleshipPanel.ShipHandleReturn result = this.playerField.ManualShipHandling(ref col, ref row, length);
                 if (result == BattleshipPanel.ShipHandleReturn.ShipSet)
                 {
                     // Save the coordinates of this ship and enable the start game-button if all
                     // ships are on the board
-                    shipsSetCount++;
-                    if (shipsSetCount == Ships.Length)
+                    this.shipsSetCount++;
+                    if (this.shipsSetCount == this.Ships.Length)
                     {
                         btnStartGame.Enabled = true;
                         lblSetShip.Visible = false;
                     }
-                    Ships[shipArrayIndex].row = row;
-                    Ships[shipArrayIndex].col = col;
+
+                    this.Ships[shipArrayIndex].Row = row;
+                    this.Ships[shipArrayIndex].Col = col;
                 }
                 else if (result == BattleshipPanel.ShipHandleReturn.ShipRemoved)
                 {
                     // Disable start button and null the coordinates of the removed ship
-                    shipsSetCount--;
+                    this.shipsSetCount--;
                     btnStartGame.Enabled = false;
                     lblSetShip.Visible = true;
-                    for (shipArrayIndex = 0; shipArrayIndex < Ships.Length; shipArrayIndex++)
+                    for (shipArrayIndex = 0; shipArrayIndex < this.Ships.Length; shipArrayIndex++)
                     {
-                        if (Ships[shipArrayIndex].row == row && Ships[shipArrayIndex].col == col)
+                        if (this.Ships[shipArrayIndex].Row == row && this.Ships[shipArrayIndex].Col == col)
                         {
-                            Ships[shipArrayIndex].row = null;
-                            Ships[shipArrayIndex].col = null;
+                            this.Ships[shipArrayIndex].Row = null;
+                            this.Ships[shipArrayIndex].Col = null;
                         }
                     }
                 }
             }
         }
        
-        public void formSize()
-        {
-            this.playerField.ChangeSize(rows, cols);
-            this.computerField.ChangeSize(rows, cols);
-
-            this.Width = (SQUARESIZE * cols * 2 + 168);
-            this.Height = (SQUARESIZE * rows + 158);
-            this.Padding = new Padding(0, 0, 50, 50);
-
-            computerField.Location = new Point((25 * cols) + 100, 70);
-
-            this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);       
-            this.playerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
-        }
-
         private void inställningarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Options optionForm = new Options(this);
             optionForm.ShowDialog();
         }
 
+        /// <summary>
+        /// This button gets enabled when all ships in <see cref="Ships"/> list have been placed.
+        /// Clicking it starts the game by changing the <see cref="gameMode"/>gameMode.
+        /// </summary>
+        /// <param name="sender">The sender object.</param>
+        /// <param name="e">Arguments passed.</param>
         private void btnStartGame_Click(object sender, EventArgs e)
         {
             this.gameMode = Mode.Playing;
             btnStartGame.Enabled = false;
-            playerField.ClearForbiddenSquares();
+            this.playerField.ClearForbiddenSquares();
         }
 
+        /// <summary>
+        /// A menu choice that resets and restarts the game.
+        /// </summary>
+        /// <param name="sender">The sender object.</param>
+        /// <param name="e">Arguments passed.</param>
         private void nyttSpelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            RestartGame();
-        }
-
-        public struct Ship
-        {
-            public int length;
-            public string name;
-            public int? row;
-            public int? col;
+            this.RestartGame();
         }
 
         private void avslutaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -250,47 +359,93 @@ namespace Battleship
             this.Close();
         }
 
+        /// <summary>
+        /// Executes computers playing round, doing some shooting and resting some. This is done by a
+        /// BackgroundWorker so the UI doesn't freeze up.
+        /// </summary>
+        /// <param name="sender">Calling object.</param>
+        /// <param name="e">Arguments passed.</param>
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Computers turn as if player missed and as long as computer hits
-            int msSleep = 700;
+            // Computer shoots as long as it doesn't miss
+            int sleepMS = 700;
             Square result;
             do
             {
-                System.Threading.Thread.Sleep(msSleep);
-                result = (Square)this.Invoke((Func<Square>)delegate()
+                // Don't shoot too fast
+                Thread.Sleep(sleepMS);
+
+                // We need to call ComputerShoot() from the UI thread as it changes the GUI
+                result = (Square)this.Invoke((Func<Square>)delegate
                 {
-                    return playerField.ComputerShoot();
+                    return this.playerField.ComputerShoot();
                 });
-                msSleep = (result == Square.Sunk) ? 2200 : 700;
-                if (SoundOn)
+
+                // Prolong the next sleep if ship was sunk because sinking sound takes longer to play
+                sleepMS = (result == Square.Sunk) ? 2200 : 700;
+                if (this.SoundOn)
                 {
                     AudioEffect player = new AudioEffect(result);
                     player.Play();
                 }
+
                 if (result == Square.Sunk)
                 {
-                    shipsLostPlayer++;
-                    if (shipsLostPlayer == Ships.Length)
+                    this.shipsLostPlayer++;
+                    if (this.shipsLostPlayer == this.Ships.Length)
                     {
+                        // Player has lost all her ships. This triggers a GameOver() call in bgWorker_RunWorkerCompleted.
                         e.Result = Mode.ComputerWon;
                         return;
                     }
                 }
-            } while (result == Square.Hit || result == Square.Sunk);
+            }
+            while (result == Square.Hit || result == Square.Sunk);
         }
 
+        /// <summary>
+        /// Fires when computer is done shooting. Evaluates if computer won and enables computerField so
+        /// player can shoot again.
+        /// </summary>
+        /// <param name="sender">Calling object.</param>
+        /// <param name="e">Arguments passed.</param>
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Both player and computer are done shooting for now.
-            computerField.Enabled = true;
+            this.computerField.Enabled = true;
 
-            // Check if computer won
+            // bgWorker_DoWork sets e.Result if computer won
             if (e.Result != null && (Mode)e.Result == Mode.ComputerWon)
             {
-                gameMode = Mode.ComputerWon;
-                GameOver();
+                this.gameMode = Mode.ComputerWon;
+                this.GameOver();
             }
+        }
+
+        /// <summary>
+        /// Used by the <see cref="Ships"/> property to hold data about the ships available to this game.
+        /// </summary>
+        public struct Ship
+        {
+            /// <summary>
+            /// The length of the ship in game board squares.
+            /// </summary>
+            public int Length;
+
+            /// <summary>
+            /// The name of the ship.
+            /// </summary>
+            public string Name;
+
+            /// <summary>
+            /// The starting row for this ship if set. Null if not yet placed.
+            /// </summary>
+            public int? Row;
+
+            /// <summary>
+            /// The starting column for this ship if set. Null if not yet placed.
+            /// </summary>
+            public int? Col;
         }
     }
 }

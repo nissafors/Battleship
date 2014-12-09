@@ -47,6 +47,7 @@
     <Compile Include="AI.cs" />
     <Compile Include="Battleship.cs">
       <SubType>Form</SubType>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Battleship.Designer.cs">
       <DependentUpon>Battleship.cs</DependentUpon>

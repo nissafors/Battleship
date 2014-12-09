@@ -52,7 +52,7 @@ namespace Battleship
         {
             BattleshipForm.cols = Convert.ToInt32(sizeComboBox.SelectedItem);
             BattleshipForm.rows = Convert.ToInt32(sizeComboBox.SelectedItem);
-            this._BsForm.formSize();
+            this._BsForm.FormSize();
 
             if (soundCheckBox.Checked == true)
             {
