@@ -27,6 +27,7 @@ namespace Battleship
         private int shipsSetCount;
         private int shipsLostComputer;
         private int shipsLostPlayer;
+        private BackgroundWorker bgWorker;
 
         // Public fields
         public static int rows = 10;
@@ -121,7 +122,7 @@ namespace Battleship
             {
                 // We are here because the player fired off a torpedo. (S)he shouldn't be able
                 // to shoot more while handling the last shot or while the computer is shooting:
-                computerField.Enabled = false;
+                ////computerField.Enabled = false;
 
                 // Excecute torpedo impact and analyze the result.
                 Square result = computerField.PlayerShoot(col, row);
@@ -142,33 +143,14 @@ namespace Battleship
                 }
                 if (result != Square.Hit && result != Square.Sunk && result != Square.Forbidden)
                 {
-                    // Computers turn as if player missed and as long as computer hits
-                    int msSleep = 700;
-                    do
-                    {
-                        System.Threading.Thread.Sleep(msSleep);
-                        result = playerField.ComputerShoot();
-                        msSleep = (result == Square.Sunk) ? 2000 : 700;
-                        if (SoundOn)
-                        {
-                            AudioEffect player = new AudioEffect(result);
-                            player.Play();
-                        }
-                        if (result == Square.Sunk)
-                        {
-                            shipsLostPlayer++;
-                            if (shipsLostPlayer == Ships.Length)
-                            {
-                                gameMode = Mode.ComputerWon;
-                                GameOver();
-                                return;
-                            }
-                        }
-                    } while (result == Square.Hit || result == Square.Sunk);
-                }
+                    computerField.Enabled = false;
 
-                // Both player and computer are done shooting for now.
-                computerField.Enabled = true;
+                    // Call bgWorker_DoWork
+                    bgWorker = new BackgroundWorker();
+                    bgWorker.DoWork += new DoWorkEventHandler(bgWorker_DoWork);
+                    bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bgWorker_RunWorkerCompleted);
+                    bgWorker.RunWorkerAsync();
+                }
             }
             else if (sender.Equals(playerField) && gameMode == Mode.SettingShips)
             {
@@ -266,6 +248,49 @@ namespace Battleship
         private void avslutaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Computers turn as if player missed and as long as computer hits
+            int msSleep = 700;
+            Square result;
+            do
+            {
+                System.Threading.Thread.Sleep(msSleep);
+                result = (Square)this.Invoke((Func<Square>)delegate()
+                {
+                    return playerField.ComputerShoot();
+                });
+                msSleep = (result == Square.Sunk) ? 2200 : 700;
+                if (SoundOn)
+                {
+                    AudioEffect player = new AudioEffect(result);
+                    player.Play();
+                }
+                if (result == Square.Sunk)
+                {
+                    shipsLostPlayer++;
+                    if (shipsLostPlayer == Ships.Length)
+                    {
+                        e.Result = Mode.ComputerWon;
+                        return;
+                    }
+                }
+            } while (result == Square.Hit || result == Square.Sunk);
+        }
+
+        private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // Both player and computer are done shooting for now.
+            computerField.Enabled = true;
+
+            // Check if computer won
+            if (e.Result != null && (Mode)e.Result == Mode.ComputerWon)
+            {
+                gameMode = Mode.ComputerWon;
+                GameOver();
+            }
         }
     }
 }
