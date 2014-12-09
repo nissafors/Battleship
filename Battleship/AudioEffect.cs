@@ -42,6 +42,7 @@ namespace Battleship
         public AudioEffect(Square effect)
         {
             const string PATH = @"audio\";
+
             // Initialize filenames and the Effect property
             this.soundFile[(int)Square.Hit] = PATH + "hit.wav";
             this.soundFile[(int)Square.Miss] = PATH + "miss.wav";

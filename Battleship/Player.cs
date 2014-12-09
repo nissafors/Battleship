@@ -14,7 +14,7 @@ namespace Battleship
     /// This class provides methods for shooting at given coordinate on the game board and get
     /// the result of the shot.
     /// </summary>
-    public class Player
+    public static class Player
     {
         /// <summary>
         /// Tests if shot is a hit, miss, sunk or forbidden.
@@ -94,6 +94,7 @@ namespace Battleship
                         {
                             case Square.Hit:
                                 testDir[dir] = true;
+
                                 // Save coordinates so we can easily rewrite the grid if the ship is sunk
                                 hitList.Add(new Point(newCol, newRow));
                                 break;
@@ -122,6 +123,7 @@ namespace Battleship
             {
                 grid[hit.Y, hit.X] = Square.Sunk;
             }
+
             return true;
         }
 
