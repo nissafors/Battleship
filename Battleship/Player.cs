@@ -1,9 +1,10 @@
-﻿//-----------------------------------------------------
+﻿//-----------------------------------------------------------------------------------------------------
 // <copyright file="Player.cs" company="none">
-//      Copyright (c) Torbjörn Widström & Andreas Andersson 2014
+//      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
 // </copyright>
-// <author>Torbjörn Widström & Andreas Andersson</author>
-//-----------------------------------------------------
+// <author>Torbjörn Widström</author>
+// <author>Andreas Andersson</author>
+//-----------------------------------------------------------------------------------------------------
 
 namespace Battleship
 {

@@ -1,9 +1,9 @@
-﻿//-----------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------------------------------
 // <copyright file="BattleshipPanel.cs" company="None">
-//     Copyright (c) Henrik Ottehall 2014
+//      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
 // </copyright>
 // <author>Henrik Ottehall</author>
-//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
 
 namespace Battleship
 {

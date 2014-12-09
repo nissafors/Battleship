@@ -1,4 +1,11 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------------------------------------
+// <copyright file="Options.cs" company="none">
+//      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
+// </copyright>
+// <author>Victor Ström Nilsson</author>
+//-----------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;

@@ -1,9 +1,9 @@
-﻿//-----------------------------------------------------
+﻿//-----------------------------------------------------------------------------------------------------
 // <copyright file="AudioEffect.cs" company="none">
-//    Copyright (c) Andreas Andersson 2014
+//      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
 // </copyright>
 // <author>Andreas Andersson</author>
-//-----------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
 
 namespace Battleship
 {
