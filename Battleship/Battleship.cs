@@ -20,10 +20,6 @@ namespace Battleship
     /// </summary>
     public partial class BattleshipForm : Form
     {
-        public static int rows = 10;
-
-        public static int cols = 10;
-
         /// <summary>
         /// The height of the squares making up the game board in pixels
         /// </summary>
@@ -97,6 +93,7 @@ namespace Battleship
             this.InitializeComponent();
 
             // Default settings
+            this.Rows = this.Cols = 10;
             this.SoundOn = true;
             this.gameMode = Mode.SettingShips;
             this.ResetShips();
@@ -130,6 +127,16 @@ namespace Battleship
         }
 
         /// <summary>
+        /// Gets or sets the number of rows on the game board.
+        /// </summary>
+        public int Rows { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of columns on the game board.
+        /// </summary>
+        public int Cols { get; set; }
+
+        /// <summary>
         /// Gets or sets he list of ships used in this game.
         /// </summary>
         public Ship[] Ships { private get; set; }
@@ -160,17 +167,17 @@ namespace Battleship
 
         public void FormSize()
         {
-            this.playerField.ChangeSize(rows, cols);
-            this.computerField.ChangeSize(rows, cols);
+            this.playerField.ChangeSize(this.Rows, this.Cols);
+            this.computerField.ChangeSize(this.Rows, this.Cols);
 
-            this.Width = SQUARESIZE * cols * 2 + 168;
-            this.Height = SQUARESIZE * rows + 158;
+            this.Width = (SQUARESIZE * this.Cols * 2) + 168;
+            this.Height = (SQUARESIZE * this.Rows) + 158;
             this.Padding = new Padding(0, 0, 50, 50);
 
-            this.computerField.Location = new Point((25 * cols) + 100, 70);
+            this.computerField.Location = new Point((25 * this.Cols) + 100, 70);
 
-            this.computerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
-            this.playerField.Size = new System.Drawing.Size(rows * 25, cols * 25);
+            this.computerField.Size = new System.Drawing.Size(this.Rows * 25, this.Cols * 25);
+            this.playerField.Size = new System.Drawing.Size(this.Rows * 25, this.Cols * 25);
         }
 
         private void ResetShips()
@@ -198,19 +205,19 @@ namespace Battleship
             }
 
             // Create players panel
-            this.playerField = new Battleship.BattleshipPanel(rows, cols, true);
+            this.playerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, true);
             this.playerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT, GRIDPADDINGTOP);
             this.playerField.Name = "playerPanel";
-            this.playerField.Size = new System.Drawing.Size(rows * SQUARESIZE, cols * SQUARESIZE);
+            this.playerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.playerField.TabIndex = 0;
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.playerField);
 
             // Create computers panel and autoplace the ships.
-            this.computerField = new Battleship.BattleshipPanel(rows, cols, false);
-            this.computerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT + GRIDPADDINGCENTER + (cols * SQUARESIZE), GRIDPADDINGTOP);
+            this.computerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, false);
+            this.computerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
             this.computerField.Name = "computerPanel";
-            this.computerField.Size = new System.Drawing.Size(rows * SQUARESIZE, cols * SQUARESIZE);
+            this.computerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.computerField.TabIndex = 0;
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.computerField);

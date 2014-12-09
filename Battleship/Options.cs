@@ -50,8 +50,8 @@ namespace Battleship
 
         private void saveSettings()
         {
-            BattleshipForm.cols = Convert.ToInt32(sizeComboBox.SelectedItem);
-            BattleshipForm.rows = Convert.ToInt32(sizeComboBox.SelectedItem);
+            this._BsForm.Cols = Convert.ToInt32(sizeComboBox.SelectedItem);
+            this._BsForm.Rows = Convert.ToInt32(sizeComboBox.SelectedItem);
             this._BsForm.FormSize();
 
             if (soundCheckBox.Checked == true)
