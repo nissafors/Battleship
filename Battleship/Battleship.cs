@@ -14,6 +14,9 @@ namespace Battleship
     using System.Drawing;
     using System.Threading;
     using System.Windows.Forms;
+    using System.Xml;
+    using System.IO;
+    using System.Collections.Generic;
 
     /// <summary>
     /// This is the main form including basic UI control and game logic.
@@ -49,6 +52,11 @@ namespace Battleship
         /// The text to display when the computer has won.
         /// </summary>
         private const string COMPUTERWON = "Datorn vann!";
+
+        /// <summary>
+        /// The path to the gamestate xml-file
+        /// </summary>
+        private const string GAMESTATEPATH = "gamestate.xml";
 
         /// <summary>
         /// The game board panel containing the players ships.
@@ -92,13 +100,20 @@ namespace Battleship
         {
             this.InitializeComponent();
 
-            // Default settings
-            this.Rows = this.Cols = 10;
-            numberOfShips = 4;
-            this.SoundOn = true;
-            this.gameMode = Mode.SettingShips;
-            this.ResetShips();
-            this.InitializeGameBoard();
+            if (ReadGameState())
+            {
+                this.InitializeGameBoard();
+            }
+            else 
+            {
+                // Default settings
+                this.Rows = this.Cols = 10;
+                numberOfShips = 4;
+                this.SoundOn = true;
+
+                this.RestartGame();
+            }
+
         }
 
         /// <summary>
@@ -155,14 +170,25 @@ namespace Battleship
             lblSetShip.Visible = true;
             this.Controls.Remove(this.playerField);
             this.Controls.Remove(this.computerField);
-            this.playerField = null;
-            this.computerField = null;
+            this.ResetShips();
+
+            int[] shipLength = new int[this.Ships.Length];
+            int i = 0;
+
+            foreach (Ship ship in this.Ships)
+            {
+                shipLength[i++] = ship.Length;
+            }
+
+            this.computerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, false);
+            this.playerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, true);
+            this.computerField.AutoShipPlacing(shipLength);
             this.shipsSetCount = 0;
             this.shipsLostComputer = 0;
             this.shipsLostPlayer = 0;
             this.gameMode = Mode.SettingShips;
             lblGameOver.Visible = false;
-            this.ResetShips();
+
             this.InitializeGameBoard();
         }
 
@@ -227,31 +253,21 @@ namespace Battleship
         private void InitializeGameBoard()
         {
             // From the list of ships, create an array with only the lengths of the ships for the AutoShipPlacing method.
-            int[] shipLength = new int[this.Ships.Length];
-            int i = 0;
-            foreach (Ship ship in this.Ships)
-            {
-                shipLength[i++] = ship.Length;
-            }
+
 
             // Create players panel
-            this.playerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, true);
+            
             this.playerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT, GRIDPADDINGTOP);
-            this.playerField.Name = "playerPanel";
             this.playerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
-            this.playerField.TabIndex = 0;
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.playerField);
 
             // Create computers panel and autoplace the ships.
-            this.computerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, false);
+
             this.computerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
-            this.computerField.Name = "computerPanel";
             this.computerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
-            this.computerField.TabIndex = 0;
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.computerField);
-            this.computerField.AutoShipPlacing(shipLength);
         }
 
         /// <summary>
@@ -457,6 +473,102 @@ namespace Battleship
                 this.gameMode = Mode.ComputerWon;
                 this.GameOver();
             }
+        }
+
+        /// <summary>
+        /// Tries to read the saved gamestate and settings in <paramref name="GAMESTATEPATH"/>.
+        /// <para>Returns true if succesfull.</para>
+        /// </summary>
+        /// <returns></returns>
+        private bool ReadGameState()
+        {
+            List<Ship> shipList = new List<Ship>();
+            this.lblSetShip.Visible = false;
+
+            try
+            {
+                using (FileStream sourceFile = File.Open(GAMESTATEPATH, FileMode.Open))
+                {
+                    XmlReaderSettings readerSettings = new XmlReaderSettings();
+                    using (XmlReader reader = XmlReader.Create(sourceFile, readerSettings))
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader.Name == "GameMode")
+                            {
+                                gameMode = (Mode)reader.ReadElementContentAsInt();
+                            }
+                            else if (reader.Name == "SoundOn")
+                            {
+                                SoundOn = reader.ReadElementContentAsBoolean();
+                            }
+                            else if (reader.Name == "ShipLength")
+                            {
+                                shipList.Add(new Ship() { Name = "Ship", Length = reader.ReadElementContentAsInt() });
+                                Ships = shipList.ToArray();
+                            }
+                            else if (reader.Name == "GridHeight")
+                            {
+                                this.Rows = reader.ReadElementContentAsInt();
+                            }
+                            else if (reader.Name == "GridWidth")
+                            {
+                                this.Cols = reader.ReadElementContentAsInt();
+                            }
+                            else if (reader.Name == "ComputerGrid")
+                            {
+                                computerField = new BattleshipPanel(ReadArrayFromXML(reader.ReadSubtree()), false);
+                            }
+                            else if (reader.Name == "PlayerGrid")
+                            {
+                                playerField = new BattleshipPanel(ReadArrayFromXML(reader.ReadSubtree()), true);
+                            }
+                        }
+                    }
+                }
+
+                if (gameMode != Mode.Playing)
+                {
+                    this.lblSetShip.Visible = true;
+                    gameMode = Mode.SettingShips;
+                    playerField = new BattleshipPanel(this.Cols, this.Rows, true);
+                    computerField = new BattleshipPanel(this.Cols, this.Rows, false);
+                }
+
+                return true;
+            }
+            catch(Exception)
+            {
+                // An exception occured when trying to read the gamestate file
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Parses the playing field from an XML file to an array.
+        /// </summary>
+        /// <param name="reader">An XmlReader with the rows of the array</param>
+        /// <returns>A two dimensional Square array</returns>
+        private Square[,] ReadArrayFromXML(XmlReader reader)
+        {
+            Square[,] playField = new Square[this.Rows, this.Cols];
+            string row;
+            int rowCount = 0;
+
+            // Finds the Row XML elements to parse each row
+            while (reader.ReadToFollowing("Row") && rowCount < this.Rows)
+            {
+                row = reader.ReadElementContentAsString();
+
+                // Parse each element in the row to a Square for the array
+                for (int i = 0; i < row.Length && i < this.Cols; i++)
+                {
+                    playField[rowCount, i] = (Square)int.Parse(row[i].ToString());
+                }
+                rowCount++;
+            }
+
+            return playField;
         }
 
         /// <summary>
