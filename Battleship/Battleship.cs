@@ -663,6 +663,10 @@ namespace Battleship
                     writer.WriteElementString("ShipLength", ship.Length.ToString().ToLower());
                 }
 
+                writer.WriteComment("Game state");
+                writer.WriteElementString("ShipsLostPlayer", Convert.ToString(shipsLostPlayer));
+                writer.WriteElementString("ShipsLostComputer", Convert.ToString(shipsLostComputer));
+
                 writer.WriteComment("Game board");
                 writer.WriteElementString("GridHeight", Convert.ToString(computerGrid.Length));
                 writer.WriteElementString("GridWidth", Convert.ToString(computerGrid[0].Length));
