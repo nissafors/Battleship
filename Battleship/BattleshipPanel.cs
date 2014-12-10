@@ -406,6 +406,24 @@ namespace Battleship
         }
 
         /// <summary>
+        /// Return the playfield as a string array with where every element is a row represented as a string
+        /// consisting of the numbers that correspond to each Square.
+        /// </summary>
+        /// <returns>Returns a string array.</returns>
+        public string[] PlayFieldToStringArray()
+        {
+            string[] stringArray = new string[playField.GetLength(0)];
+            for (int row = 0; row < playField.GetLength(0); row++)
+            {
+                for (int col = 0; col < playField.GetLength(1); col++)
+                {
+                    stringArray[row] += Convert.ToString((int)playField[row, col]);
+                }
+            }
+            return stringArray;
+        }
+
+        /// <summary>
         /// An event that fires when the panel is painted.
         /// </summary>
         /// <param name="paintEvent">A System.Windows.Form.PaintEventArgs that contain the event data.</param>
