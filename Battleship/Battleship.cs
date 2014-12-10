@@ -97,7 +97,8 @@ namespace Battleship
 
             // Default settings
             this.Rows = this.Cols = 10;
-            numberOfShips = 4;
+            this.NumberOfPatrolboats = NumberOfCruisers = NumberOfSubmarines = NumberOfCarriers = 1;
+            this.NumberOfShips = NumberOfPatrolboats + NumberOfCruisers + NumberOfSubmarines + NumberOfCarriers;
             this.SoundOn = true;
             this.gameMode = Mode.SettingShips;
             this.ResetShips();
@@ -146,6 +147,19 @@ namespace Battleship
         public Ship[] Ships { private get; set; }
 
         /// <summary>
+        /// Gets or sets the total number of ships used in this game.
+        /// </summary>
+        public int NumberOfShips { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of each boat type used in this game.
+        /// </summary>
+        public int NumberOfPatrolboats { get; set; }
+        public int NumberOfCruisers { get; set; }
+        public int NumberOfSubmarines { get; set; }
+        public int NumberOfCarriers { get; set; }
+       
+        /// <summary>
         /// Gets or sets a value indicating whether sounds are played or not.
         /// </summary>
         public bool SoundOn { get; set; }
@@ -169,6 +183,9 @@ namespace Battleship
             this.InitializeGameBoard();
         }
 
+        /// <summary>
+        /// Calculates and sets the size of the game fields and window.
+        /// </summary>
         public void FormSize()
         {
             this.playerField.ChangeSize(this.Rows, this.Cols);
@@ -184,12 +201,12 @@ namespace Battleship
             this.playerField.Size = new System.Drawing.Size(this.Rows * 25, this.Cols * 25);
         }
 
-        public int numberOfShips;
-        public int numberOfPatrolboats = 1, numberOfCruisers = 1, numberOfSubmarines = 1, numberOfCarriers = 1;
-
+        /// <summary>
+        /// Sets the length and amount of each ship in the game.
+        /// </summary>
         private void ResetShips()
         {
-            Ships = new Ship[numberOfShips];
+            Ships = new Ship[NumberOfShips];
             Ship patrolboats = new Ship();
             Ship cruisers = new Ship();
             Ship submarines = new Ship();
@@ -202,22 +219,22 @@ namespace Battleship
 
             int tempShips = 0;
 
-            for (int i = 0; i < numberOfPatrolboats; i++)
+            for (int i = 0; i < NumberOfPatrolboats; i++)
             {
                 this.Ships[tempShips] = patrolboats;
                 tempShips++;
             }
-            for (int i = 0; i < numberOfCruisers; i++)
+            for (int i = 0; i < NumberOfCruisers; i++)
             {
                 this.Ships[tempShips] = cruisers;
                 tempShips++;
             }
-            for (int i = 0; i < numberOfSubmarines; i++)
+            for (int i = 0; i < NumberOfSubmarines; i++)
             {
                 this.Ships[tempShips] = submarines;
                 tempShips++;
             }
-            for (int i = 0; i < numberOfCarriers; i++)
+            for (int i = 0; i < NumberOfCarriers; i++)
             {
                 this.Ships[tempShips] = carriers;
                 tempShips++;

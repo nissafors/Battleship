@@ -62,7 +62,7 @@ namespace Battleship
                                 row++;
                             }
 
-                            // Add the square below the last hit unless there is a miss
+                            // Add the square below the last hit unless there is a hit or miss already
                             if (playFieldArray[row, column] != Square.Miss &&
                                 playFieldArray[row, column] != Square.Hit)
                             {
@@ -87,7 +87,7 @@ namespace Battleship
                                 column++;
                             }
 
-                            // Add the square to the right of the last hit unless there is a miss
+                            // Add the square to the right of the last hit unless there is a hit or miss already
                             if (playFieldArray[row, column] != Square.Miss &&
                                 playFieldArray[row, column] != Square.Hit)
                             {
