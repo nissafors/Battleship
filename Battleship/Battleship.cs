@@ -106,15 +106,14 @@ namespace Battleship
             }
             else 
             {
-            // Default settings
-            this.Rows = this.Cols = 10;
-            this.NumberOfPatrolboats = NumberOfCruisers = NumberOfSubmarines = NumberOfCarriers = 1;
-            this.NumberOfShips = NumberOfPatrolboats + NumberOfCruisers + NumberOfSubmarines + NumberOfCarriers;
-            this.SoundOn = true;
+                // Default settings
+                this.Rows = this.Cols = 10;
+                this.NumberOfPatrolboats = NumberOfCruisers = NumberOfSubmarines = NumberOfCarriers = 1;
+                this.NumberOfShips = NumberOfPatrolboats + NumberOfCruisers + NumberOfSubmarines + NumberOfCarriers;
+                this.SoundOn = true;
 
                 this.RestartGame();
-        }
-
+            }
         }
 
         /// <summary>
