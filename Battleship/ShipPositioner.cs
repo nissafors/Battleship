@@ -1,9 +1,9 @@
-﻿//-----------------------------------------------------
+﻿//-----------------------------------------------------------------------------------------------------
 // <copyright file="ShipPositioner.cs" company="none">
-//    Copyright (c) Andreas Andersson 2014
+//      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
 // </copyright>
 // <author>Andreas Andersson</author>
-//-----------------------------------------------------
+//-----------------------------------------------------------------------------------------------------
 
 namespace Battleship
 {
@@ -26,6 +26,22 @@ namespace Battleship
         public ShipPositioner()
         {
             this.channels = null;
+        }
+
+        /// <summary>
+        /// Describes the orientation of the ship.
+        /// </summary>
+        public enum Orientation
+        {
+            /// <summary>
+            /// Vertical orientation.
+            /// </summary>
+            Vertical,
+
+            /// <summary>
+            /// Horizontal orientation.
+            /// </summary>
+            Horizontal
         }
 
         /// <summary>
@@ -100,7 +116,7 @@ namespace Battleship
         public bool SetShip(Square[,] grid, int shipLength, Orientation orientation, int row, int col)
         {
             // Is there a channel where caller wants to place the ship?
-            if (!IsSettable(grid, shipLength, orientation, row, col))
+            if (!this.IsSettable(grid, shipLength, orientation, row, col))
             {
                 return false;
             }
@@ -233,51 +249,6 @@ namespace Battleship
         }
 
         /// <summary>
-        /// Determines if playing field is large enough for all ships.
-        /// <para>
-        /// If very few possible ship combinations exists on a large grid, GridTooSmall() may
-        /// sometimes report true even if the ships can actually fit in the grid. If GridTooSmall()
-        /// reports false, however, rest assured that a valid ship configuration exists.</para>
-        /// <para>
-        /// GridTooSmall() will set all squares in <paramref name="grid"/> to Square.Water!</para>
-        /// </summary>
-        /// <param name="grid">The playing field grid.</param>
-        /// <param name="shipLengths">One length for each ship to add.</param>
-        /// <returns>Returns true if the grid is likely to be too small to fit all ships.</returns>
-        public bool GridTooSmall(Square[,] grid, int[] shipLengths)
-        {
-            try
-            {
-                // If AutoPosition() succeeds, there is definitely at least four ways to
-                // place the ships.
-                this.AutoPosition(grid, shipLengths);
-                this.ResetGrid(grid);
-                return false;
-            }
-            catch (InsufficientGridSpaceException)
-            {
-                // If AutoPosition() fails, the grid is probably too small.
-                this.ResetGrid(grid);
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Set all squares in grid to Square.Water.
-        /// </summary>
-        /// <param name="grid">The playing field grid.</param>
-        private void ResetGrid(Square[,] grid)
-        {
-            for (int row = 0; row < grid.GetLength(0); row++)
-            {
-                for (int col = 0; col < grid.GetLength(1); col++)
-                {
-                    grid[row, col] = Square.Water;
-                }
-            }
-        }
-
-        /// <summary>
         /// Set squares surrounding ships to Square.Forbidden.
         /// </summary>
         /// <param name="grid">The playing field grid.</param>
@@ -337,6 +308,51 @@ namespace Battleship
                     {
                         grid[row, col] = Square.Water;
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determines if playing field is large enough for all ships.
+        /// <para>
+        /// If very few possible ship combinations exists on a large grid, GridTooSmall() may
+        /// sometimes report true even if the ships can actually fit in the grid. If GridTooSmall()
+        /// reports false, however, rest assured that a valid ship configuration exists.</para>
+        /// <para>
+        /// GridTooSmall() will set all squares in <paramref name="grid"/> to Square.Water!</para>
+        /// </summary>
+        /// <param name="grid">The playing field grid.</param>
+        /// <param name="shipLengths">One length for each ship to add.</param>
+        /// <returns>Returns true if the grid is likely to be too small to fit all ships.</returns>
+        public bool GridTooSmall(Square[,] grid, int[] shipLengths)
+        {
+            try
+            {
+                // If AutoPosition() succeeds, there is definitely at least four ways to
+                // place the ships.
+                this.AutoPosition(grid, shipLengths);
+                this.ResetGrid(grid);
+                return false;
+            }
+            catch (InsufficientGridSpaceException)
+            {
+                // If AutoPosition() fails, the grid is probably too small.
+                this.ResetGrid(grid);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Set all squares in grid to Square.Water.
+        /// </summary>
+        /// <param name="grid">The playing field grid.</param>
+        private void ResetGrid(Square[,] grid)
+        {
+            for (int row = 0; row < grid.GetLength(0); row++)
+            {
+                for (int col = 0; col < grid.GetLength(1); col++)
+                {
+                    grid[row, col] = Square.Water;
                 }
             }
         }

@@ -1,9 +1,10 @@
-﻿//-----------------------------------------------------
+﻿//-----------------------------------------------------------------------------------------------------
 // <copyright file="Player.cs" company="none">
-//      Copyright (c) Torbjörn Widström & Andreas Andersson 2014
+//      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
 // </copyright>
-// <author>Torbjörn Widström & Andreas Andersson</author>
-//-----------------------------------------------------
+// <author>Torbjörn Widström</author>
+// <author>Andreas Andersson</author>
+//-----------------------------------------------------------------------------------------------------
 
 namespace Battleship
 {
@@ -14,7 +15,7 @@ namespace Battleship
     /// This class provides methods for shooting at given coordinate on the game board and get
     /// the result of the shot.
     /// </summary>
-    public class Player
+    public static class Player
     {
         /// <summary>
         /// Tests if shot is a hit, miss, sunk or forbidden.
@@ -94,6 +95,7 @@ namespace Battleship
                         {
                             case Square.Hit:
                                 testDir[dir] = true;
+
                                 // Save coordinates so we can easily rewrite the grid if the ship is sunk
                                 hitList.Add(new Point(newCol, newRow));
                                 break;
@@ -122,6 +124,7 @@ namespace Battleship
             {
                 grid[hit.Y, hit.X] = Square.Sunk;
             }
+
             return true;
         }
 

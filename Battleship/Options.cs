@@ -1,4 +1,11 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------------------------------------
+// <copyright file="Options.cs" company="none">
+//      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
+// </copyright>
+// <author>Victor Ström Nilsson</author>
+//-----------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,7 +30,7 @@ namespace Battleship
 
         private void optionsAvbryt_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNoCancel);
+            var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
@@ -35,10 +42,7 @@ namespace Battleship
             {
                 this.Close();
             }
-            else if (result == DialogResult.Cancel)
-            {
-                
-            }
+          
         }
      
         private void optionsSpela_Click(object sender, EventArgs e)
@@ -50,9 +54,9 @@ namespace Battleship
 
         private void saveSettings()
         {
-            BattleshipForm.cols = Convert.ToInt32(sizeComboBox.SelectedItem);
-            BattleshipForm.rows = Convert.ToInt32(sizeComboBox.SelectedItem);
-            this._BsForm.formSize();
+            this._BsForm.Cols = Convert.ToInt32(sizeComboBox.SelectedItem);
+            this._BsForm.Rows = Convert.ToInt32(sizeComboBox.SelectedItem);
+            this._BsForm.FormSize();
 
             if (soundCheckBox.Checked == true)
             {
@@ -62,6 +66,13 @@ namespace Battleship
             {
                 this._BsForm.SoundOn = false;
             }
+
+            this._BsForm.numberOfShips = (Convert.ToInt32(numericPatrolboats.Value) + Convert.ToInt32(numericCruisers.Value) + Convert.ToInt32(numericSubmarines.Value) + Convert.ToInt32(numericCarriers.Value));
+            this._BsForm.numberOfPatrolboats = Convert.ToInt32(numericPatrolboats.Value);
+            this._BsForm.numberOfCruisers = Convert.ToInt32(numericCruisers.Value);
+            this._BsForm.numberOfSubmarines = Convert.ToInt32(numericSubmarines.Value);
+            this._BsForm.numberOfCarriers = Convert.ToInt32(numericCarriers.Value);
+
             this._BsForm.RestartGame();
             this.Close();
         }
