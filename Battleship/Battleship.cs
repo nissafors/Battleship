@@ -43,6 +43,8 @@ namespace Battleship
         /// </summary>
         private const int GRIDPADDINGCENTER = 50;
 
+        public const int CARRIERLENGTH = 5, SUBMARINELENGTH = 4, CRUISERLENGTH = 3, PATROLBOATLENGTH = 2;
+
         /// <summary>
         /// The text to display when the player has won.
         /// </summary>
@@ -234,10 +236,10 @@ namespace Battleship
             Ship submarines = new Ship();
             Ship carriers = new Ship();
 
-            patrolboats.Length = 2;
-            cruisers.Length = 3;
-            submarines.Length = 4;
-            carriers.Length = 5;
+            patrolboats.Length = PATROLBOATLENGTH;
+            cruisers.Length = CRUISERLENGTH;
+            submarines.Length = SUBMARINELENGTH;
+            carriers.Length = CARRIERLENGTH;
 
             int tempShips = 0;
 
@@ -500,6 +502,7 @@ namespace Battleship
         {
             List<Ship> shipList = new List<Ship>();
             this.lblSetShip.Visible = false;
+            int shipLength;
 
             try
             {
@@ -520,8 +523,24 @@ namespace Battleship
                             }
                             else if (reader.Name == "ShipLength")
                             {
-                                shipList.Add(new Ship() { Name = "Ship", Length = reader.ReadElementContentAsInt() });
-                                Ships = shipList.ToArray();
+                                shipLength = reader.ReadElementContentAsInt();
+                                shipList.Add(new Ship() { Name = "Ship", Length = shipLength });
+                                if (shipLength == CARRIERLENGTH)
+                                {
+                                    this.NumberOfCarriers++;
+                                }
+                                else if (shipLength == SUBMARINELENGTH)
+                                {
+                                    this.NumberOfSubmarines++;
+                                }
+                                else if (shipLength == CRUISERLENGTH)
+                                {
+                                    this.NumberOfCruisers++;
+                                }
+                                else if (shipLength == PATROLBOATLENGTH)
+                                {
+                                    this.NumberOfPatrolboats++;
+                                }
                             }
                             else if (reader.Name == "GridHeight")
                             {
@@ -542,6 +561,9 @@ namespace Battleship
                         }
                     }
                 }
+
+                Ships = shipList.ToArray();
+                NumberOfShips = NumberOfCarriers + NumberOfSubmarines + NumberOfCruisers + NumberOfPatrolboats;
 
                 if (gameMode != Mode.Playing)
                 {
