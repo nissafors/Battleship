@@ -128,6 +128,7 @@
             this.MaximizeBox = false;
             this.Name = "BattleshipForm";
             this.Text = "Sänka Skepp";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BattleshipForm_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
