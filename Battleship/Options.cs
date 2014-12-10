@@ -23,11 +23,14 @@ namespace Battleship
         {
             InitializeComponent();
             this._BsForm = BattleshipForm;
-            sizeComboBox.SelectedIndex = 0;
+            sizeComboBox.SelectedIndex = 1;
         }
 
         private readonly BattleshipForm _BsForm;
 
+        /// <summary>
+        /// Displays a message asking the user to either save the settings and start a new game or to discard the changes.
+        /// </summary>       
         private void optionsAvbryt_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNo);
@@ -51,7 +54,9 @@ namespace Battleship
             
         }
 
-
+        /// <summary>
+        /// Applies the chosen settings and restarts the game.
+        /// </summary>
         private void saveSettings()
         {
             this._BsForm.Cols = Convert.ToInt32(sizeComboBox.SelectedItem);
@@ -67,11 +72,11 @@ namespace Battleship
                 this._BsForm.SoundOn = false;
             }
 
-            this._BsForm.numberOfShips = (Convert.ToInt32(numericPatrolboats.Value) + Convert.ToInt32(numericCruisers.Value) + Convert.ToInt32(numericSubmarines.Value) + Convert.ToInt32(numericCarriers.Value));
-            this._BsForm.numberOfPatrolboats = Convert.ToInt32(numericPatrolboats.Value);
-            this._BsForm.numberOfCruisers = Convert.ToInt32(numericCruisers.Value);
-            this._BsForm.numberOfSubmarines = Convert.ToInt32(numericSubmarines.Value);
-            this._BsForm.numberOfCarriers = Convert.ToInt32(numericCarriers.Value);
+            this._BsForm.NumberOfShips = (Convert.ToInt32(numericPatrolboats.Value) + Convert.ToInt32(numericCruisers.Value) + Convert.ToInt32(numericSubmarines.Value) + Convert.ToInt32(numericCarriers.Value));
+            this._BsForm.NumberOfPatrolboats = Convert.ToInt32(numericPatrolboats.Value);
+            this._BsForm.NumberOfCruisers = Convert.ToInt32(numericCruisers.Value);
+            this._BsForm.NumberOfSubmarines = Convert.ToInt32(numericSubmarines.Value);
+            this._BsForm.NumberOfCarriers = Convert.ToInt32(numericCarriers.Value);
 
             this._BsForm.RestartGame();
             this.Close();
