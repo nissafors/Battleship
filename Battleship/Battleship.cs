@@ -102,7 +102,7 @@ namespace Battleship
         {
             this.InitializeComponent();
 
-            if (ReadGameState())
+            if (ReadGameStateFromXML())
             {
                 this.InitializeGameBoard();
             }
@@ -498,7 +498,7 @@ namespace Battleship
         /// <para>Returns true if succesfull.</para>
         /// </summary>
         /// <returns></returns>
-        private bool ReadGameState()
+        private bool ReadGameStateFromXML()
         {
             List<Ship> shipList = new List<Ship>();
             this.lblSetShip.Visible = false;
@@ -520,6 +520,14 @@ namespace Battleship
                             else if (reader.Name == "SoundOn")
                             {
                                 SoundOn = reader.ReadElementContentAsBoolean();
+                            }
+                            else if (reader.Name == "ShipsLostPlayer")
+                            {
+                                this.shipsLostPlayer = reader.ReadElementContentAsInt();
+                            }
+                            else if (reader.Name == "ShipsLostComputer")
+                            {
+                                this.shipsLostComputer = reader.ReadElementContentAsInt();
                             }
                             else if (reader.Name == "ShipLength")
                             {
