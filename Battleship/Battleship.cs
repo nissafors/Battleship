@@ -94,6 +94,7 @@ namespace Battleship
 
             // Default settings
             this.Rows = this.Cols = 10;
+            numberOfShips = 4;
             this.SoundOn = true;
             this.gameMode = Mode.SettingShips;
             this.ResetShips();
@@ -180,14 +181,43 @@ namespace Battleship
             this.playerField.Size = new System.Drawing.Size(this.Rows * 25, this.Cols * 25);
         }
 
+        public int numberOfShips;
+        public int numberOfPatrolboats = 1, numberOfCruisers = 1, numberOfSubmarines = 1, numberOfCarriers = 1;
+
         private void ResetShips()
         {
-            this.Ships = new Ship[4];
-            Ship temp = new Ship();
-            for (int i = 0; i < 4; i++)
+            Ships = new Ship[numberOfShips];
+            Ship patrolboats = new Ship();
+            Ship cruisers = new Ship();
+            Ship submarines = new Ship();
+            Ship carriers = new Ship();
+
+            patrolboats.Length = 2;
+            cruisers.Length = 3;
+            submarines.Length = 4;
+            carriers.Length = 5;
+
+            int tempShips = 0;
+
+            for (int i = 0; i < numberOfPatrolboats; i++)
             {
-                temp.Length = i + 2;
-                this.Ships[i] = temp;
+                this.Ships[tempShips] = patrolboats;
+                tempShips++;
+            }
+            for (int i = 0; i < numberOfCruisers; i++)
+            {
+                this.Ships[tempShips] = cruisers;
+                tempShips++;
+            }
+            for (int i = 0; i < numberOfSubmarines; i++)
+            {
+                this.Ships[tempShips] = submarines;
+                tempShips++;
+            }
+            for (int i = 0; i < numberOfCarriers; i++)
+            {
+                this.Ships[tempShips] = carriers;
+                tempShips++;
             }
         }
 

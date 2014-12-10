@@ -30,7 +30,7 @@ namespace Battleship
 
         private void optionsAvbryt_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNoCancel);
+            var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
@@ -42,10 +42,7 @@ namespace Battleship
             {
                 this.Close();
             }
-            else if (result == DialogResult.Cancel)
-            {
-                
-            }
+          
         }
      
         private void optionsSpela_Click(object sender, EventArgs e)
@@ -69,6 +66,13 @@ namespace Battleship
             {
                 this._BsForm.SoundOn = false;
             }
+
+            this._BsForm.numberOfShips = (Convert.ToInt32(numericPatrolboats.Value) + Convert.ToInt32(numericCruisers.Value) + Convert.ToInt32(numericSubmarines.Value) + Convert.ToInt32(numericCarriers.Value));
+            this._BsForm.numberOfPatrolboats = Convert.ToInt32(numericPatrolboats.Value);
+            this._BsForm.numberOfCruisers = Convert.ToInt32(numericCruisers.Value);
+            this._BsForm.numberOfSubmarines = Convert.ToInt32(numericSubmarines.Value);
+            this._BsForm.numberOfCarriers = Convert.ToInt32(numericCarriers.Value);
+
             this._BsForm.RestartGame();
             this.Close();
         }
