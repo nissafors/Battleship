@@ -639,7 +639,7 @@ namespace Battleship
                 writer.WriteElementString("SoundOn", SoundOn.ToString().ToLower());
                 foreach (Ship ship in Ships)
                 {
-                    writer.WriteElementString("ShipLength", ship.Length.ToString());
+                    writer.WriteElementString("ShipLength", ship.Length.ToString().ToLower());
                 }
 
                 writer.WriteComment("Game board");
