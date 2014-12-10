@@ -540,7 +540,7 @@ namespace Battleship
                             {
                                 playerField = new BattleshipPanel(ReadArrayFromXML(reader.ReadSubtree()), true);
                             }
-        }
+                        }
                     }
                 }
 
@@ -636,7 +636,7 @@ namespace Battleship
 
                 writer.WriteComment("Settings");
                 writer.WriteElementString("GameMode", Convert.ToString((int)gameMode));
-                writer.WriteElementString("SoundOn", SoundOn.ToString());
+                writer.WriteElementString("SoundOn", SoundOn.ToString().ToLower());
                 foreach (Ship ship in Ships)
                 {
                     writer.WriteElementString("ShipLength", ship.Length.ToString());
