@@ -62,21 +62,24 @@
             // nyttSpelToolStripMenuItem
             // 
             this.nyttSpelToolStripMenuItem.Name = "nyttSpelToolStripMenuItem";
-            this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.nyttSpelToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.nyttSpelToolStripMenuItem.Text = "Nytt spel";
             this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.nyttSpelToolStripMenuItem_Click);
             // 
             // inställningarToolStripMenuItem
             // 
             this.inställningarToolStripMenuItem.Name = "inställningarToolStripMenuItem";
-            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.inställningarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.inställningarToolStripMenuItem.Text = "Inställningar";
             this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.inställningarToolStripMenuItem_Click);
             // 
             // avslutaToolStripMenuItem
             // 
             this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
-            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.avslutaToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.avslutaToolStripMenuItem.Text = "Avsluta";
             this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.avslutaToolStripMenuItem_Click);
             // 

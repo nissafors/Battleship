@@ -176,10 +176,10 @@
             this.sizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sizeComboBox.FormattingEnabled = true;
             this.sizeComboBox.Items.AddRange(new object[] {
-            "7",
+            "8",
             "10",
-            "15",
-            "20"});
+            "12",
+            "14"});
             this.sizeComboBox.Location = new System.Drawing.Point(95, 27);
             this.sizeComboBox.Name = "sizeComboBox";
             this.sizeComboBox.Size = new System.Drawing.Size(121, 21);
@@ -269,7 +269,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.optionsAvbryt;
-            this.ClientSize = new System.Drawing.Size(228, 252);
+            this.ClientSize = new System.Drawing.Size(224, 248);
             this.ControlBox = false;
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);

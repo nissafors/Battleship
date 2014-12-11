@@ -272,16 +272,13 @@ namespace Battleship
         {
             // From the list of ships, create an array with only the lengths of the ships for the AutoShipPlacing method.
 
-
             // Create players panel
-            
             this.playerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT, GRIDPADDINGTOP);
             this.playerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.playerField);
 
             // Create computers panel and autoplace the ships.
-
             this.computerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
             this.computerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
@@ -581,6 +578,9 @@ namespace Battleship
                     computerField = new BattleshipPanel(this.Cols, this.Rows, false);
                 }
 
+                this.Width = (SQUARESIZE * this.Cols * 2) + 168;
+                this.Height = (SQUARESIZE * this.Rows) + 158;
+
                 return true;
             }
             catch(Exception)
@@ -693,6 +693,8 @@ namespace Battleship
 
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
+
+                this.Dispose();
             }
         }
     }
