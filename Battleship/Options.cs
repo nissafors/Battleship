@@ -23,7 +23,13 @@ namespace Battleship
         {
             InitializeComponent();
             this._BsForm = BattleshipForm;
-            sizeComboBox.SelectedIndex = 1;
+            
+            sizeComboBox.SelectedIndex = sizeComboBox.FindString(_BsForm.Rows.ToString());
+            soundCheckBox.Checked = _BsForm.SoundOn;
+            numericPatrolboats.Value = _BsForm.NumberOfPatrolboats;
+            numericCruisers.Value = _BsForm.NumberOfCruisers;
+            numericSubmarines.Value = _BsForm.NumberOfSubmarines;
+            numericCarriers.Value = _BsForm.NumberOfCarriers;
         }
 
         private readonly BattleshipForm _BsForm;
@@ -45,13 +51,11 @@ namespace Battleship
             {
                 this.Close();
             }
-          
         }
      
         private void optionsSpela_Click(object sender, EventArgs e)
         {
             saveSettings();
-            
         }
 
         /// <summary>

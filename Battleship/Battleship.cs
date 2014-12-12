@@ -30,7 +30,7 @@ namespace Battleship
         /// <summary>
         /// The distance from the left border of the form to the leftmost game board grid in pixels.
         /// </summary>
-        private const int GRIDPADDINGLEFT = 50;
+        private const int GRIDPADDINGSIDE = 50;
 
         /// <summary>
         /// The distance from the top border of the form to the game board grids in pixels.
@@ -129,6 +129,7 @@ namespace Battleship
 
                 this.RestartGame();
             }
+            lblSetShip.Text = "Placera skepp " + (shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
         }
 
         /// <summary>
@@ -207,31 +208,33 @@ namespace Battleship
         /// </summary>
         public void RestartGame()
         {
-            lblSetShip.Visible = true;
-            this.Controls.Remove(this.playerField);
-            this.Controls.Remove(this.computerField);
-            this.ResetShips();
+            int[] shipLength; 
 
-            int[] shipLength = new int[this.Ships.Length];
-            int i = 0;
-
-            foreach (Ship ship in this.Ships)
-            {
-                shipLength[i++] = ship.Length;
-            }
-
-            this.playerField = new BattleshipPanel(this.Cols, this.Rows, true);
-            this.computerField = new BattleshipPanel(this.Cols, this.Rows, false);
-            
             this.shipsSetCount = 0;
             this.shipsLostComputer = 0;
             this.shipsLostPlayer = 0;
             this.gameMode = Mode.SettingShips;
-            lblGameOver.Visible = false;
 
-            this.InitializeGameBoard();
-            this.computerField.AutoShipPlacing(shipLength);
+            lblSetShip.Visible = true;
+            lblGameOver.Visible = false;
+            
+            this.Controls.Remove(this.playerField);
+            this.Controls.Remove(this.computerField);
+            this.playerField = new BattleshipPanel(this.Cols, this.Rows, true);
+            this.computerField = new BattleshipPanel(this.Cols, this.Rows, false);
             this.FormSize();
+            this.InitializeGameBoard();
+
+            this.ResetShips();
+            shipLength = new int[this.Ships.Length];
+
+            // Compile an int array containing the lengths of all the ships.
+            for (int i = 0; i < this.Ships.Length; i++)
+            {
+                shipLength[i] = this.Ships[i].Length;
+            }
+
+            this.computerField.AutoShipPlacing(shipLength);
         }
 
         /// <summary>
@@ -239,8 +242,8 @@ namespace Battleship
         /// </summary>
         public void FormSize()
         {
-            this.Width = (SQUARESIZE * this.Cols * 2) + 168;
-            this.Height = (SQUARESIZE * this.Rows) + 158;
+            this.MaximumSize = new Size((SQUARESIZE * this.Cols * 2) + (GRIDPADDINGSIDE * 2) + GRIDPADDINGCENTER, (SQUARESIZE * this.Rows) + (GRIDPADDINGTOP * 2));
+            this.MinimumSize = new Size((SQUARESIZE * this.Cols * 2) + (GRIDPADDINGSIDE * 2) + GRIDPADDINGCENTER, (SQUARESIZE * this.Rows) + (GRIDPADDINGTOP * 2));
             this.Padding = new Padding(0, 0, 50, 50);
         }
 
@@ -293,13 +296,13 @@ namespace Battleship
         private void InitializeGameBoard()
         {
             // Create players panel
-            this.playerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT, GRIDPADDINGTOP);
+            this.playerField.Location = new System.Drawing.Point(GRIDPADDINGSIDE, GRIDPADDINGTOP);
             this.playerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.playerField);
 
             // Create computers panel
-            this.computerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
+            this.computerField.Location = new System.Drawing.Point(GRIDPADDINGSIDE + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
             this.computerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.computerField);
@@ -415,6 +418,8 @@ namespace Battleship
                         }
                     }
                 }
+
+                lblSetShip.Text = "Placera skepp " + (shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
             }
         }
        
