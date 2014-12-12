@@ -63,6 +63,13 @@ namespace Battleship
         private const int CARRIERLENGTH = 5, SUBMARINELENGTH = 4, CRUISERLENGTH = 3, PATROLBOATLENGTH = 2;
 
         /// <summary>
+        /// The XML tag names
+        /// </summary>
+        private const string GAMEMODEXML = "GameMode", SOUNDONXML = "SoundOn", SHIPLENGTHXML = "ShipLength", SHIPSLOSTPLAYERXML = "ShipsLostPlayer",
+            SHIPSLOSTCOMPUTERXML = "ShipsLostComputer", GRIDHEIGHTXML = "GridHeight", GRIDWIDTHXML = "GridWidth", COMPUTERGRIDXML = "ComputerGrid", 
+            PLAYERGRIDXML = "PlayerGrid", ROWXML = "Row";
+
+        /// <summary>
         /// The game board panel containing the players ships.
         /// </summary>
         private BattleshipPanel playerField;
@@ -129,7 +136,8 @@ namespace Battleship
 
                 this.RestartGame();
             }
-            lblSetShip.Text = "Placera skepp " + (shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
+
+            lblSetShip.Text = "Placera skepp " + (this.shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
         }
 
         /// <summary>
@@ -296,15 +304,15 @@ namespace Battleship
         private void InitializeGameBoard()
         {
             // Create players panel
-            this.playerField.Location = new System.Drawing.Point(GRIDPADDINGSIDE, GRIDPADDINGTOP);
-            this.playerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
-            this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
+            this.playerField.Location = new Point(GRIDPADDINGSIDE, GRIDPADDINGTOP);
+            this.playerField.Size = new Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
+            this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMouseClick);
             this.Controls.Add(this.playerField);
 
             // Create computers panel
-            this.computerField.Location = new System.Drawing.Point(GRIDPADDINGSIDE + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
-            this.computerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
-            this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
+            this.computerField.Location = new Point(GRIDPADDINGSIDE + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
+            this.computerField.Size = new Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
+            this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMouseClick);
             this.Controls.Add(this.computerField);
         }
 
@@ -326,7 +334,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">A System.Object containing the sender date</param>
         /// <param name="e">A System.Windows.Forms.MouseEventArgs that contain the event data.</param>
-        private void UpdateForm(object sender, MouseEventArgs e)
+        private void OnMouseClick(object sender, MouseEventArgs e)
         {
             int col, row; 
             row = e.Location.Y / this.computerField.SquareHeight;
@@ -419,7 +427,7 @@ namespace Battleship
                     }
                 }
 
-                lblSetShip.Text = "Placera skepp " + (shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
+                lblSetShip.Text = "Placera skepp " + (this.shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
             }
         }
        
@@ -428,7 +436,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">A System.Object containing the sender data.</param>
         /// <param name="e">A System.EventArgs that contain the event data.</param>
-        private void InställningarToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenOptions(object sender, EventArgs e)
         {
             Options optionForm = new Options(this);
             optionForm.ShowDialog();
@@ -440,7 +448,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">Arguments passed.</param>
-        private void BtnStartGame_Click(object sender, EventArgs e)
+        private void StartGame(object sender, EventArgs e)
         {
             this.gameMode = Mode.Playing;
             btnStartGame.Enabled = false;
@@ -452,7 +460,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">Arguments passed.</param>
-        private void NyttSpelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewGame(object sender, EventArgs e)
         {
             this.RestartGame();
         }
@@ -462,8 +470,9 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">A System.Object containing the sender data.</param>
         /// <param name="e">An System.EventArgs that contain the event data.</param>
-        private void AvslutaToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Quit(object sender, EventArgs e)
         {
+            this.Dispose();
             this.Close();
         }
 
@@ -550,23 +559,23 @@ namespace Battleship
                         // Handle the contents of the XML-file depending on the name of the tag
                         switch (reader.Name)
                         {
-                            case "GameMode":
+                            case GAMEMODEXML:
                                 this.gameMode = (Mode)reader.ReadElementContentAsInt();
                                 break;
 
-                            case "SoundOn":
+                            case SOUNDONXML:
                                 this.SoundOn = reader.ReadElementContentAsBoolean();
                                 break;
 
-                            case "ShipsLostPlayer":
+                            case SHIPSLOSTPLAYERXML:
                                 this.shipsLostPlayer = reader.ReadElementContentAsInt();
                                 break;
 
-                            case "ShipsLostComputer":
+                            case SHIPSLOSTCOMPUTERXML:
                                 this.shipsLostComputer = reader.ReadElementContentAsInt();
                                 break;
 
-                            case "ShipLength":
+                            case SHIPLENGTHXML:
                                 // Add the ship to the list of ships then count up the correct kind of ship
                                 // depending on the length of the added ship.
                                 shipLength = reader.ReadElementContentAsInt();
@@ -590,20 +599,20 @@ namespace Battleship
 
                                 break;
 
-                            case "GridHeight":
+                            case GRIDHEIGHTXML:
                                 this.Rows = reader.ReadElementContentAsInt();
                                 break;
 
-                            case "GridWidth":
+                            case GRIDWIDTHXML:
                                 this.Cols = reader.ReadElementContentAsInt();
                                 break;
 
-                            case "ComputerGrid":
+                            case COMPUTERGRIDXML:
                                 // Send the computerGrid XML subtree to ReadArrayFromXML to parse the array
                                 this.computerField = new BattleshipPanel(this.ReadArrayFromXML(reader.ReadSubtree()), false);
                                 break;
 
-                            case "PlayerGrid":
+                            case PLAYERGRIDXML:
                                 // Send the computerGrid XML subtree to ReadArrayFromXML to parse the array
                                 this.playerField = new BattleshipPanel(this.ReadArrayFromXML(reader.ReadSubtree()), true);
                                 break;
@@ -635,7 +644,7 @@ namespace Battleship
             int rowCount = 0;
 
             // Finds the Row XML elements to parse each row
-            while (reader.ReadToFollowing("Row") && rowCount < this.Rows)
+            while (reader.ReadToFollowing(ROWXML) && rowCount < this.Rows)
             {
                 row = reader.ReadElementContentAsString();
 
@@ -656,7 +665,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">Calling object.</param>
         /// <param name="e">Arguments passed.</param>
-        private void BattleshipForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void SaveGamestateToXML(object sender, FormClosingEventArgs e)
         {
             // Get game board
             string[] computerGrid = this.computerField.PlayFieldToStringArray();
@@ -672,31 +681,33 @@ namespace Battleship
                 writer.WriteStartElement("GameState");
 
                 writer.WriteComment("Settings");
-                writer.WriteElementString("GameMode", Convert.ToString((int)this.gameMode));
-                writer.WriteElementString("SoundOn", this.SoundOn.ToString().ToLower());
+                writer.WriteElementString(GAMEMODEXML, Convert.ToString((int)this.gameMode));
+                writer.WriteElementString(SOUNDONXML, this.SoundOn.ToString().ToLower());
                 foreach (Ship ship in this.Ships)
                 {
-                    writer.WriteElementString("ShipLength", ship.Length.ToString().ToLower());
+                    writer.WriteElementString(SHIPLENGTHXML, ship.Length.ToString().ToLower());
                 }
 
                 writer.WriteComment("Game state");
-                writer.WriteElementString("ShipsLostPlayer", Convert.ToString(this.shipsLostPlayer));
-                writer.WriteElementString("ShipsLostComputer", Convert.ToString(this.shipsLostComputer));
+                writer.WriteElementString(SHIPSLOSTPLAYERXML, Convert.ToString(this.shipsLostPlayer));
+                writer.WriteElementString(SHIPSLOSTCOMPUTERXML, Convert.ToString(this.shipsLostComputer));
 
                 writer.WriteComment("Game board");
-                writer.WriteElementString("GridHeight", Convert.ToString(computerGrid.Length));
-                writer.WriteElementString("GridWidth", Convert.ToString(computerGrid[0].Length));
-                writer.WriteStartElement("ComputerGrid");
+                writer.WriteElementString(GRIDHEIGHTXML, Convert.ToString(computerGrid.Length));
+                writer.WriteElementString(GRIDWIDTHXML, Convert.ToString(computerGrid[0].Length));
+
+                writer.WriteStartElement(COMPUTERGRIDXML);
                 foreach (string row in computerGrid)
                 {
-                    writer.WriteElementString("Row", row);
+                    writer.WriteElementString(ROWXML, row);
                 }
 
                 writer.WriteEndElement();
-                writer.WriteStartElement("PlayerGrid");
+
+                writer.WriteStartElement(PLAYERGRIDXML);
                 foreach (string row in playerGrid)
                 {
-                    writer.WriteElementString("Row", row);
+                    writer.WriteElementString(ROWXML, row);
                 }
 
                 writer.WriteEndElement();

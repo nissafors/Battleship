@@ -68,7 +68,7 @@
             this.nyttSpelToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.nyttSpelToolStripMenuItem.Text = "Nytt spel";
-            this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.NyttSpelToolStripMenuItem_Click);
+            this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.NewGame);
             // 
             // inställningarToolStripMenuItem
             // 
@@ -76,7 +76,7 @@
             this.inställningarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.inställningarToolStripMenuItem.Text = "Inställningar";
-            this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.InställningarToolStripMenuItem_Click);
+            this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.OpenOptions);
             // 
             // avslutaToolStripMenuItem
             // 
@@ -84,7 +84,7 @@
             this.avslutaToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.avslutaToolStripMenuItem.Text = "Avsluta";
-            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.AvslutaToolStripMenuItem_Click);
+            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.Quit);
             // 
             // btnStartGame
             // 
@@ -95,7 +95,7 @@
             this.btnStartGame.TabIndex = 1;
             this.btnStartGame.Text = "Starta spelet";
             this.btnStartGame.UseVisualStyleBackColor = true;
-            this.btnStartGame.Click += new System.EventHandler(this.BtnStartGame_Click);
+            this.btnStartGame.Click += new System.EventHandler(this.StartGame);
             // 
             // lblSetShip
             // 
@@ -134,7 +134,7 @@
             this.MaximizeBox = false;
             this.Name = "BattleshipForm";
             this.Text = "Sänka Skepp";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BattleshipForm_FormClosing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SaveGamestateToXML);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
