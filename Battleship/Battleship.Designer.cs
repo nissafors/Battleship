@@ -65,7 +65,7 @@
             this.nyttSpelToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.nyttSpelToolStripMenuItem.Text = "Nytt spel";
-            this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.nyttSpelToolStripMenuItem_Click);
+            this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.NyttSpelToolStripMenuItem_Click);
             // 
             // inställningarToolStripMenuItem
             // 
@@ -73,7 +73,7 @@
             this.inställningarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.inställningarToolStripMenuItem.Text = "Inställningar";
-            this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.inställningarToolStripMenuItem_Click);
+            this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.InställningarToolStripMenuItem_Click);
             // 
             // avslutaToolStripMenuItem
             // 
@@ -81,7 +81,7 @@
             this.avslutaToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.avslutaToolStripMenuItem.Text = "Avsluta";
-            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.avslutaToolStripMenuItem_Click);
+            this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.AvslutaToolStripMenuItem_Click);
             // 
             // btnStartGame
             // 
@@ -92,7 +92,7 @@
             this.btnStartGame.TabIndex = 1;
             this.btnStartGame.Text = "Starta spelet";
             this.btnStartGame.UseVisualStyleBackColor = true;
-            this.btnStartGame.Click += new System.EventHandler(this.btnStartGame_Click);
+            this.btnStartGame.Click += new System.EventHandler(this.BtnStartGame_Click);
             // 
             // lblSetShip
             // 

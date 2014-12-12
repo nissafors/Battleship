@@ -10,13 +10,12 @@
 namespace Battleship
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml;
-    using System.IO;
-    using System.Collections.Generic;
 
     /// <summary>
     /// This is the main form including basic UI control and game logic.
@@ -43,8 +42,6 @@ namespace Battleship
         /// </summary>
         private const int GRIDPADDINGCENTER = 50;
 
-        public const int CARRIERLENGTH = 5, SUBMARINELENGTH = 4, CRUISERLENGTH = 3, PATROLBOATLENGTH = 2;
-
         /// <summary>
         /// The text to display when the player has won.
         /// </summary>
@@ -56,9 +53,14 @@ namespace Battleship
         private const string COMPUTERWON = "Datorn vann!";
 
         /// <summary>
-        /// The path to the gamestate xml-file
+        /// The path to the xml-file containing game state
         /// </summary>
         private const string GAMESTATEPATH = "gamestate.xml";
+
+        /// <summary>
+        /// The lengths of the different ships
+        /// </summary>
+        private const int CARRIERLENGTH = 5, SUBMARINELENGTH = 4, CRUISERLENGTH = 3, PATROLBOATLENGTH = 2;
 
         /// <summary>
         /// The game board panel containing the players ships.
@@ -93,7 +95,7 @@ namespace Battleship
         /// <summary>
         /// Used to DO the computer shooting in a separate thread.
         /// </summary>
-        private BackgroundWorker bgWorker;
+        private BackgroundWorker backgWorker;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BattleshipForm"/> class
@@ -102,16 +104,29 @@ namespace Battleship
         {
             this.InitializeComponent();
 
-            if (ReadGameStateFromXML())
+            if (this.ReadGameStateFromXML())
             {
+                this.Width = (SQUARESIZE * this.Cols * 2) + 168;
+                this.Height = (SQUARESIZE * this.Rows) + 158;
+
                 this.InitializeGameBoard();
+                
+                if (this.gameMode != Mode.Playing)
+                {
+                    // The save did not contain a game in progress. 
+                    // Set up for a new game.
+                    this.lblSetShip.Visible = true;
+                    this.gameMode = Mode.SettingShips;
+                    this.playerField = new BattleshipPanel(this.Cols, this.Rows, true);
+                    this.computerField = new BattleshipPanel(this.Cols, this.Rows, false);
+                }
             }
             else 
             {
                 // Default settings
                 this.Rows = this.Cols = 10;
-                this.NumberOfPatrolboats = NumberOfCruisers = NumberOfSubmarines = NumberOfCarriers = 1;
-                this.NumberOfShips = NumberOfPatrolboats + NumberOfCruisers + NumberOfSubmarines + NumberOfCarriers;
+                this.NumberOfPatrolboats = this.NumberOfCruisers = this.NumberOfSubmarines = this.NumberOfCarriers = 1;
+                this.NumberOfShips = this.NumberOfPatrolboats + this.NumberOfCruisers + this.NumberOfSubmarines + this.NumberOfCarriers;
                 this.SoundOn = true;
 
                 this.RestartGame();
@@ -165,11 +180,23 @@ namespace Battleship
         public int NumberOfShips { get; set; }
 
         /// <summary>
-        /// Gets or sets the number of each boat type used in this game.
+        /// Gets or sets the number of patrol-boats used in this game.
         /// </summary>
         public int NumberOfPatrolboats { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of cruisers used in this game.
+        /// </summary>
         public int NumberOfCruisers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of submarines used in this game.
+        /// </summary>
         public int NumberOfSubmarines { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of carriers used in this game.
+        /// </summary>
         public int NumberOfCarriers { get; set; }
        
         /// <summary>
@@ -230,7 +257,7 @@ namespace Battleship
         /// </summary>
         private void ResetShips()
         {
-            Ships = new Ship[NumberOfShips];
+            this.Ships = new Ship[this.NumberOfShips];
             Ship patrolboats = new Ship();
             Ship cruisers = new Ship();
             Ship submarines = new Ship();
@@ -243,22 +270,25 @@ namespace Battleship
 
             int tempShips = 0;
 
-            for (int i = 0; i < NumberOfPatrolboats; i++)
+            for (int i = 0; i < this.NumberOfPatrolboats; i++)
             {
                 this.Ships[tempShips] = patrolboats;
                 tempShips++;
             }
-            for (int i = 0; i < NumberOfCruisers; i++)
+
+            for (int i = 0; i < this.NumberOfCruisers; i++)
             {
                 this.Ships[tempShips] = cruisers;
                 tempShips++;
             }
-            for (int i = 0; i < NumberOfSubmarines; i++)
+
+            for (int i = 0; i < this.NumberOfSubmarines; i++)
             {
                 this.Ships[tempShips] = submarines;
                 tempShips++;
             }
-            for (int i = 0; i < NumberOfCarriers; i++)
+
+            for (int i = 0; i < this.NumberOfCarriers; i++)
             {
                 this.Ships[tempShips] = carriers;
                 tempShips++;
@@ -298,12 +328,17 @@ namespace Battleship
             lblGameOver.Visible = true;
         }
 
+        /// <summary>
+        /// Handles player interaction with the playing fields. Outcome depends on GameMode.
+        /// </summary>
+        /// <param name="sender">A System.Object containing the sender date</param>
+        /// <param name="e">A System.Windows.Forms.MouseEventArgs that contain the event data.</param>
         private void UpdateForm(object sender, MouseEventArgs e)
         {
             int col, row; 
             row = e.Location.Y / this.computerField.SquareHeight;
             col = e.Location.X / this.computerField.SquareWidth;
-
+            
             if (sender.Equals(this.computerField) && this.gameMode == Mode.Playing)
             {
                 // We are here because the player fired off a torpedo.
@@ -334,10 +369,10 @@ namespace Battleship
                     this.computerField.Enabled = false;
 
                     // Computer shooting may take some time so it has to be done in a separate thread.
-                    this.bgWorker = new BackgroundWorker();
-                    this.bgWorker.DoWork += new DoWorkEventHandler(this.bgWorker_DoWork);
-                    this.bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(this.bgWorker_RunWorkerCompleted);
-                    this.bgWorker.RunWorkerAsync();
+                    this.backgWorker = new BackgroundWorker();
+                    this.backgWorker.DoWork += new DoWorkEventHandler(this.BackgroundWorker_DoWork);
+                    this.backgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(this.BackgroundWorker_RunWorkerCompleted);
+                    this.backgWorker.RunWorkerAsync();
                 }
             }
             else if (sender.Equals(this.playerField) && this.gameMode == Mode.SettingShips)
@@ -393,7 +428,12 @@ namespace Battleship
             }
         }
        
-        private void inställningarToolStripMenuItem_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Runs the options form.
+        /// </summary>
+        /// <param name="sender">A System.Object containing the sender data.</param>
+        /// <param name="e">A System.EventArgs that contain the event data.</param>
+        private void InställningarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Options optionForm = new Options(this);
             optionForm.ShowDialog();
@@ -405,7 +445,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">Arguments passed.</param>
-        private void btnStartGame_Click(object sender, EventArgs e)
+        private void BtnStartGame_Click(object sender, EventArgs e)
         {
             this.gameMode = Mode.Playing;
             btnStartGame.Enabled = false;
@@ -417,12 +457,17 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">Arguments passed.</param>
-        private void nyttSpelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NyttSpelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.RestartGame();
         }
 
-        private void avslutaToolStripMenuItem_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Closes the program
+        /// </summary>
+        /// <param name="sender">A System.Object containing the sender data.</param>
+        /// <param name="e">An System.EventArgs that contain the event data.</param>
+        private void AvslutaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -433,7 +478,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">Calling object.</param>
         /// <param name="e">Arguments passed.</param>
-        private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             // Computer shoots as long as it doesn't miss
             int sleepMS = 700;
@@ -477,7 +522,7 @@ namespace Battleship
         /// </summary>
         /// <param name="sender">Calling object.</param>
         /// <param name="e">Arguments passed.</param>
-        private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // Both player and computer are done shooting for now.
             this.computerField.Enabled = true;
@@ -491,10 +536,10 @@ namespace Battleship
         }
 
         /// <summary>
-        /// Tries to read the saved gamestate and settings in <paramref name="GAMESTATEPATH"/>.
-        /// <para>Returns true if succesfull.</para>
+        /// Tries to read the saved game state and settings in <paramref name="GAMESTATEPATH"/>.
+        /// <para>Returns true if successful.</para>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns true if it successfully reads from the file</returns>
         private bool ReadGameStateFromXML()
         {
             List<Ship> shipList = new List<Ship>();
@@ -503,31 +548,30 @@ namespace Battleship
 
             try
             {
-                using (FileStream sourceFile = File.Open(GAMESTATEPATH, FileMode.Open))
+                using (XmlReader reader = XmlReader.Create(GAMESTATEPATH))
                 {
-                    XmlReaderSettings readerSettings = new XmlReaderSettings();
-                    using (XmlReader reader = XmlReader.Create(sourceFile, readerSettings))
+                    while (reader.Read())
                     {
-                        while (reader.Read())
+                        // Handle the contents of the XML-file depending on the name of the tag
+                        switch (reader.Name)
                         {
-                            if (reader.Name == "GameMode")
-                            {
-                                gameMode = (Mode)reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name == "SoundOn")
-                            {
-                                SoundOn = reader.ReadElementContentAsBoolean();
-                            }
-                            else if (reader.Name == "ShipsLostPlayer")
-                            {
+                            case "GameMode":
+                                this.gameMode = (Mode)reader.ReadElementContentAsInt();
+                                break;
+
+                            case "SoundOn":
+                                this.SoundOn = reader.ReadElementContentAsBoolean();
+                                break;
+
+                            case "ShipsLostPlayer":
                                 this.shipsLostPlayer = reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name == "ShipsLostComputer")
-                            {
+                                break;
+
+                            case "ShipsLostComputer":
                                 this.shipsLostComputer = reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name == "ShipLength")
-                            {
+                                break;
+
+                            case "ShipLength":
                                 shipLength = reader.ReadElementContentAsInt();
                                 shipList.Add(new Ship() { Name = "Ship", Length = shipLength });
                                 if (shipLength == CARRIERLENGTH)
@@ -546,44 +590,34 @@ namespace Battleship
                                 {
                                     this.NumberOfPatrolboats++;
                                 }
-                            }
-                            else if (reader.Name == "GridHeight")
-                            {
+
+                                break;
+
+                            case "GridHeight":
                                 this.Rows = reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name == "GridWidth")
-                            {
+                                break;
+
+                            case "GridWidth":
                                 this.Cols = reader.ReadElementContentAsInt();
-                            }
-                            else if (reader.Name == "ComputerGrid")
-                            {
-                                computerField = new BattleshipPanel(ReadArrayFromXML(reader.ReadSubtree()), false);
-                            }
-                            else if (reader.Name == "PlayerGrid")
-                            {
-                                playerField = new BattleshipPanel(ReadArrayFromXML(reader.ReadSubtree()), true);
-                            }
+                                break;
+
+                            case "ComputerGrid":
+                                this.computerField = new BattleshipPanel(this.ReadArrayFromXML(reader.ReadSubtree()), false);
+                                break;
+
+                            case "PlayerGrid":
+                                this.playerField = new BattleshipPanel(this.ReadArrayFromXML(reader.ReadSubtree()), true);
+                                break;
                         }
                     }
                 }
 
-                Ships = shipList.ToArray();
-                NumberOfShips = NumberOfCarriers + NumberOfSubmarines + NumberOfCruisers + NumberOfPatrolboats;
-
-                if (gameMode != Mode.Playing)
-                {
-                    this.lblSetShip.Visible = true;
-                    gameMode = Mode.SettingShips;
-                    playerField = new BattleshipPanel(this.Cols, this.Rows, true);
-                    computerField = new BattleshipPanel(this.Cols, this.Rows, false);
-                }
-
-                this.Width = (SQUARESIZE * this.Cols * 2) + 168;
-                this.Height = (SQUARESIZE * this.Rows) + 158;
+                this.Ships = shipList.ToArray();
+                this.NumberOfShips = this.NumberOfCarriers + this.NumberOfSubmarines + this.NumberOfCruisers + this.NumberOfPatrolboats;
 
                 return true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 // An exception occured when trying to read the gamestate file
                 return false;
@@ -611,10 +645,68 @@ namespace Battleship
                 {
                     playField[rowCount, i] = (Square)int.Parse(row[i].ToString());
                 }
+
                 rowCount++;
             }
 
             return playField;
+        }
+
+        /// <summary>
+        /// Fires when the program is closing. Saves game state in an xml file.
+        /// </summary>
+        /// <param name="sender">Calling object.</param>
+        /// <param name="e">Arguments passed.</param>
+        private void BattleshipForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Get game board
+            string[] computerGrid = this.computerField.PlayFieldToStringArray();
+            string[] playerGrid = this.playerField.PlayFieldToStringArray();
+
+            XmlWriterSettings settings = new XmlWriterSettings() { Indent = true, NewLineOnAttributes = true };
+
+            // Write XML file
+            using (XmlWriter writer = XmlWriter.Create(GAMESTATEPATH, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteComment("This file was autogenerated by Battleship. Do not change!");
+                writer.WriteStartElement("GameState");
+
+                writer.WriteComment("Settings");
+                writer.WriteElementString("GameMode", Convert.ToString((int)this.gameMode));
+                writer.WriteElementString("SoundOn", this.SoundOn.ToString().ToLower());
+                foreach (Ship ship in this.Ships)
+                {
+                    writer.WriteElementString("ShipLength", ship.Length.ToString().ToLower());
+                }
+
+                writer.WriteComment("Game state");
+                writer.WriteElementString("ShipsLostPlayer", Convert.ToString(this.shipsLostPlayer));
+                writer.WriteElementString("ShipsLostComputer", Convert.ToString(this.shipsLostComputer));
+
+                writer.WriteComment("Game board");
+                writer.WriteElementString("GridHeight", Convert.ToString(computerGrid.Length));
+                writer.WriteElementString("GridWidth", Convert.ToString(computerGrid[0].Length));
+                writer.WriteStartElement("ComputerGrid");
+                foreach (string row in computerGrid)
+                {
+                    writer.WriteElementString("Row", row);
+                }
+
+                writer.WriteEndElement();
+                writer.WriteStartElement("PlayerGrid");
+                foreach (string row in playerGrid)
+                {
+                    writer.WriteElementString("Row", row);
+                }
+
+                writer.WriteEndElement();
+
+                writer.WriteEndElement();
+                writer.WriteEndDocument();
+
+                this.Dispose();
+            }
         }
 
         /// <summary>
@@ -641,61 +733,6 @@ namespace Battleship
             /// The starting column for this ship if set. Null if not yet placed.
             /// </summary>
             public int? Col;
-        }
-
-        /// <summary>
-        /// Fires when the program is closing. Saves game state in an xml file.
-        /// </summary>
-        /// <param name="sender">Calling object.</param>
-        /// <param name="e">Arguments passed.</param>
-        private void BattleshipForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Get game board
-            string[] computerGrid = computerField.PlayFieldToStringArray();
-            string[] playerGrid = playerField.PlayFieldToStringArray();
-
-            XmlWriterSettings settings = new XmlWriterSettings(){ Indent = true, NewLineOnAttributes = true};
-
-            // Write XML file
-            using (XmlWriter writer = XmlWriter.Create(GAMESTATEPATH, settings))
-            {
-                writer.WriteStartDocument();
-                writer.WriteComment("This file was autogenerated by Battleship. Do not change!");
-                writer.WriteStartElement("GameState");
-
-                writer.WriteComment("Settings");
-                writer.WriteElementString("GameMode", Convert.ToString((int)gameMode));
-                writer.WriteElementString("SoundOn", SoundOn.ToString().ToLower());
-                foreach (Ship ship in Ships)
-                {
-                    writer.WriteElementString("ShipLength", ship.Length.ToString().ToLower());
-                }
-
-                writer.WriteComment("Game state");
-                writer.WriteElementString("ShipsLostPlayer", Convert.ToString(shipsLostPlayer));
-                writer.WriteElementString("ShipsLostComputer", Convert.ToString(shipsLostComputer));
-
-                writer.WriteComment("Game board");
-                writer.WriteElementString("GridHeight", Convert.ToString(computerGrid.Length));
-                writer.WriteElementString("GridWidth", Convert.ToString(computerGrid[0].Length));
-                writer.WriteStartElement("ComputerGrid");
-                foreach (String row in computerGrid)
-                {
-                    writer.WriteElementString("Row", row);
-                }
-                writer.WriteEndElement();
-                writer.WriteStartElement("PlayerGrid");
-                foreach (String row in playerGrid)
-                {
-                    writer.WriteElementString("Row", row);
-                }
-                writer.WriteEndElement();
-
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-
-                this.Dispose();
-            }
         }
     }
 }
