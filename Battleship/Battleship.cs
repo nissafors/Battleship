@@ -106,24 +106,22 @@ namespace Battleship
 
             if (this.ReadGameStateFromXML())
             {
-                this.Width = (SQUARESIZE * this.Cols * 2) + 168;
-                this.Height = (SQUARESIZE * this.Rows) + 158;
-
-                this.InitializeGameBoard();
-                
                 if (this.gameMode != Mode.Playing)
                 {
                     // The save did not contain a game in progress. 
                     // Set up for a new game.
-                    this.lblSetShip.Visible = true;
-                    this.gameMode = Mode.SettingShips;
-                    this.playerField = new BattleshipPanel(this.Cols, this.Rows, true);
-                    this.computerField = new BattleshipPanel(this.Cols, this.Rows, false);
+                    this.RestartGame();
+                }
+                else
+                {
+                    this.FormSize();
+                    this.InitializeGameBoard();
                 }
             }
             else 
             {
-                // Default settings
+                // Failed to read settings from file
+                // Using default settings
                 this.Rows = this.Cols = 10;
                 this.NumberOfPatrolboats = this.NumberOfCruisers = this.NumberOfSubmarines = this.NumberOfCarriers = 1;
                 this.NumberOfShips = this.NumberOfPatrolboats + this.NumberOfCruisers + this.NumberOfSubmarines + this.NumberOfCarriers;
@@ -222,9 +220,9 @@ namespace Battleship
                 shipLength[i++] = ship.Length;
             }
 
-            this.computerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, false);
-            this.playerField = new Battleship.BattleshipPanel(this.Rows, this.Cols, true);
-            this.computerField.AutoShipPlacing(shipLength);
+            this.playerField = new BattleshipPanel(this.Cols, this.Rows, true);
+            this.computerField = new BattleshipPanel(this.Cols, this.Rows, false);
+            
             this.shipsSetCount = 0;
             this.shipsLostComputer = 0;
             this.shipsLostPlayer = 0;
@@ -232,24 +230,18 @@ namespace Battleship
             lblGameOver.Visible = false;
 
             this.InitializeGameBoard();
+            this.computerField.AutoShipPlacing(shipLength);
+            this.FormSize();
         }
 
         /// <summary>
-        /// Calculates and sets the size of the game fields and window.
+        /// Calculates and sets the size of the window.
         /// </summary>
         public void FormSize()
         {
-            this.playerField.ChangeSize(this.Rows, this.Cols);
-            this.computerField.ChangeSize(this.Rows, this.Cols);
-
             this.Width = (SQUARESIZE * this.Cols * 2) + 168;
             this.Height = (SQUARESIZE * this.Rows) + 158;
             this.Padding = new Padding(0, 0, 50, 50);
-
-            this.computerField.Location = new Point((25 * this.Cols) + 100, 70);
-
-            this.computerField.Size = new System.Drawing.Size(this.Rows * 25, this.Cols * 25);
-            this.playerField.Size = new System.Drawing.Size(this.Rows * 25, this.Cols * 25);
         }
 
         /// <summary>
@@ -296,19 +288,17 @@ namespace Battleship
         }
 
         /// <summary>
-        /// Creates one game board panel with auto-placed ships for the computer, and one empty game board panel for the player.
+        /// Places one game board panel for the computer, and one game board panel for the player.
         /// </summary>
         private void InitializeGameBoard()
         {
-            // From the list of ships, create an array with only the lengths of the ships for the AutoShipPlacing method.
-
             // Create players panel
             this.playerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT, GRIDPADDINGTOP);
             this.playerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
             this.Controls.Add(this.playerField);
 
-            // Create computers panel and autoplace the ships.
+            // Create computers panel
             this.computerField.Location = new System.Drawing.Point(GRIDPADDINGLEFT + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
             this.computerField.Size = new System.Drawing.Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UpdateForm);
@@ -572,6 +562,8 @@ namespace Battleship
                                 break;
 
                             case "ShipLength":
+                                // Add the ship to the list of ships then count up the correct kind of ship
+                                // depending on the length of the added ship.
                                 shipLength = reader.ReadElementContentAsInt();
                                 shipList.Add(new Ship() { Name = "Ship", Length = shipLength });
                                 if (shipLength == CARRIERLENGTH)
@@ -602,10 +594,12 @@ namespace Battleship
                                 break;
 
                             case "ComputerGrid":
+                                // Send the computerGrid XML subtree to ReadArrayFromXML to parse the array
                                 this.computerField = new BattleshipPanel(this.ReadArrayFromXML(reader.ReadSubtree()), false);
                                 break;
 
                             case "PlayerGrid":
+                                // Send the computerGrid XML subtree to ReadArrayFromXML to parse the array
                                 this.playerField = new BattleshipPanel(this.ReadArrayFromXML(reader.ReadSubtree()), true);
                                 break;
                         }

@@ -412,14 +412,15 @@ namespace Battleship
         /// <returns>Returns a string array.</returns>
         public string[] PlayFieldToStringArray()
         {
-            string[] stringArray = new string[playField.GetLength(0)];
-            for (int row = 0; row < playField.GetLength(0); row++)
+            string[] stringArray = new string[this.playField.GetLength(0)];
+            for (int row = 0; row < this.playField.GetLength(0); row++)
             {
-                for (int col = 0; col < playField.GetLength(1); col++)
+                for (int col = 0; col < this.playField.GetLength(1); col++)
                 {
-                    stringArray[row] += Convert.ToString((int)playField[row, col]);
+                    stringArray[row] += Convert.ToString((int)this.playField[row, col]);
                 }
             }
+
             return stringArray;
         }
 
