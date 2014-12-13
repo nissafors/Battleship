@@ -154,7 +154,12 @@ namespace Battleship
             /// <summary>
             /// The computer has won the game.
             /// </summary>
-            ComputerWon
+            ComputerWon,
+
+            /// <summary>
+            /// Game board not accessible.
+            /// </summary>
+            Hold
         }
 
         /// <summary>
@@ -228,9 +233,22 @@ namespace Battleship
             this.shipsLostPlayer = 0;
             this.gameMode = Mode.SettingShips;
             lblGameOver.Visible = false;
-
             this.InitializeGameBoard();
-            this.computerField.AutoShipPlacing(shipLength);
+
+            try
+            {
+                this.computerField.AutoShipPlacing(shipLength);
+            }
+            catch (InsufficientGridSpaceException)
+            {
+                this.gameMode = Mode.Hold;
+                MessageBox.Show(
+                    "Datorn kan inte att placerar sina skepp. Prova att minska antalet och/eller storleken under inställningar.",
+                    "Fel!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
             this.FormSize();
         }
 
