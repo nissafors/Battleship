@@ -195,7 +195,7 @@
             this.optionsAvbryt.TabIndex = 13;
             this.optionsAvbryt.Text = "Avbryt";
             this.optionsAvbryt.UseVisualStyleBackColor = true;
-            this.optionsAvbryt.Click += new System.EventHandler(this.optionsAvbryt_Click);
+            this.optionsAvbryt.Click += new System.EventHandler(this.OptionsAvbryt_Click);
             // 
             // optionsSpela
             // 
@@ -206,7 +206,7 @@
             this.optionsSpela.TabIndex = 12;
             this.optionsSpela.Text = "Nytt spel";
             this.optionsSpela.UseVisualStyleBackColor = true;
-            this.optionsSpela.Click += new System.EventHandler(this.optionsSpela_Click);
+            this.optionsSpela.Click += new System.EventHandler(this.OptionsSpela_Click);
             // 
             // soundCheckBox
             // 
