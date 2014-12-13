@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------------------------------
-// <copyright file="Battleship.cs" company="None">
+// <copyright file="BattleshipForm.cs" company="None">
 //      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
 // </copyright>
 // <author>Henrik Ottehall</author>

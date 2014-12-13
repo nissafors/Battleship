@@ -45,12 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI.cs" />
-    <Compile Include="Battleship.cs">
+    <Compile Include="BattleshipForm.cs">
       <SubType>Form</SubType>
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Battleship.Designer.cs">
-      <DependentUpon>Battleship.cs</DependentUpon>
+    <Compile Include="BattleshipForm.Designer.cs">
+      <DependentUpon>BattleshipForm.cs</DependentUpon>
     </Compile>
     <Compile Include="BattleshipPanel.cs">
       <SubType>Component</SubType>
@@ -67,8 +67,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipPositioner.cs" />
     <Compile Include="AudioEffect.cs" />
-    <EmbeddedResource Include="Battleship.resx">
-      <DependentUpon>Battleship.cs</DependentUpon>
+    <EmbeddedResource Include="BattleshipForm.resx">
+      <DependentUpon>BattleshipForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
