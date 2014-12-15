@@ -327,7 +327,7 @@ namespace Battleship
 
                 // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
                 // with regards to the size of the field and then check if it's settable from the far side of the ship
-                if (row - shipLength >= 0 &&
+                if (row - (shipLength - 1) >= 0 &&
                     this.shipPlacer.IsSettable(this.playField, shipLength, ShipPositioner.Orientation.Vertical, row - shipLength + 1, col))
                 {
                     // The ship fits to the above of the chosen spot.
@@ -337,7 +337,7 @@ namespace Battleship
 
                 // ShipPositioner.IsSettable can only check to the right and down so make sure the ship fits
                 // with regards to the size of the field and then check if it's settable from the far side of the ship
-                if (col - shipLength >= 0 &&
+                if (col - (shipLength - 1) >= 0 &&
                     this.shipPlacer.IsSettable(this.playField, shipLength, ShipPositioner.Orientation.Horizontal, row, col - shipLength + 1))
                 {
                     // The ship fits to the left of the chosen spot.
