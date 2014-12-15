@@ -5,45 +5,52 @@
 // <author>Victor Ström Nilsson</author>
 //-----------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 namespace Battleship
 {
+using System;
+using System.Windows.Forms;
+
+    /// <summary>
+    /// A form where the user can make adjustments such as changing the size of the grid, change the
+    /// amount of ships and turn off sound.
+    /// </summary>
     public partial class Options : Form
     {
-        public Options(BattleshipForm BattleshipForm )
+        /// <summary>
+        /// This form is called by a BattleshipForm object who provides a reference to itself. This
+        /// field holds that reference.
+        /// </summary>
+        private readonly BattleshipForm battleshipForm;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Options"/> class.
+        /// /// </summary>
+        /// <param name="battleshipForm">A reference to the calling BattleshipForm object.</param>
+        public Options(BattleshipForm battleshipForm)
         {
             InitializeComponent();
-            this._BsForm = BattleshipForm;
-            
-            sizeComboBox.SelectedIndex = sizeComboBox.FindString(_BsForm.Rows.ToString());
-            soundCheckBox.Checked = _BsForm.SoundOn;
-            numericPatrolboats.Value = _BsForm.NumberOfPatrolboats;
-            numericCruisers.Value = _BsForm.NumberOfCruisers;
-            numericSubmarines.Value = _BsForm.NumberOfSubmarines;
-            numericCarriers.Value = _BsForm.NumberOfCarriers;
-        }
+            this.battleshipForm = battleshipForm;
 
-        private readonly BattleshipForm _BsForm;
+            sizeComboBox.SelectedIndex = sizeComboBox.FindString(this.battleshipForm.Rows.ToString());
+            soundCheckBox.Checked = this.battleshipForm.SoundOn;
+            numericPatrolboats.Value = this.battleshipForm.NumberOfPatrolboats;
+            numericCruisers.Value = this.battleshipForm.NumberOfCruisers;
+            numericSubmarines.Value = this.battleshipForm.NumberOfSubmarines;
+            numericCarriers.Value = this.battleshipForm.NumberOfCarriers;
+        }
 
         /// <summary>
         /// Displays a message asking the user to either save the settings and start a new game or to discard the changes.
         /// </summary>       
-        private void optionsAvbryt_Click(object sender, EventArgs e)
+        /// <param name="sender">The calling object.</param>
+        /// <param name="e">Parameters provided.</param>
+        private void OptionsAvbryt_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNo);
 
             if (result == DialogResult.Yes)
             {
-                saveSettings();
+                this.SaveSettings();
                 
                 this.Close();
             }
@@ -53,36 +60,41 @@ namespace Battleship
             }
         }
      
-        private void optionsSpela_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Save settings if user clicks the play button.
+        /// </summary>
+        /// <param name="sender">The calling object.</param>
+        /// <param name="e">Arguments provided.</param>
+        private void OptionsSpela_Click(object sender, EventArgs e)
         {
-            saveSettings();
+            this.SaveSettings();
         }
 
         /// <summary>
         /// Applies the chosen settings and restarts the game.
         /// </summary>
-        private void saveSettings()
+        private void SaveSettings()
         {
-            this._BsForm.Cols = Convert.ToInt32(sizeComboBox.SelectedItem);
-            this._BsForm.Rows = Convert.ToInt32(sizeComboBox.SelectedItem);
-            this._BsForm.FormSize();
+            this.battleshipForm.Cols = Convert.ToInt32(sizeComboBox.SelectedItem);
+            this.battleshipForm.Rows = Convert.ToInt32(sizeComboBox.SelectedItem);
+            this.battleshipForm.FormSize();
 
             if (soundCheckBox.Checked == true)
             {
-                this._BsForm.SoundOn = true;
+                this.battleshipForm.SoundOn = true;
             }
             else if (soundCheckBox.Checked == false)
             {
-                this._BsForm.SoundOn = false;
+                this.battleshipForm.SoundOn = false;
             }
 
-            this._BsForm.NumberOfShips = (Convert.ToInt32(numericPatrolboats.Value) + Convert.ToInt32(numericCruisers.Value) + Convert.ToInt32(numericSubmarines.Value) + Convert.ToInt32(numericCarriers.Value));
-            this._BsForm.NumberOfPatrolboats = Convert.ToInt32(numericPatrolboats.Value);
-            this._BsForm.NumberOfCruisers = Convert.ToInt32(numericCruisers.Value);
-            this._BsForm.NumberOfSubmarines = Convert.ToInt32(numericSubmarines.Value);
-            this._BsForm.NumberOfCarriers = Convert.ToInt32(numericCarriers.Value);
+            this.battleshipForm.NumberOfShips = Convert.ToInt32(numericPatrolboats.Value) + Convert.ToInt32(numericCruisers.Value) + Convert.ToInt32(numericSubmarines.Value) + Convert.ToInt32(numericCarriers.Value);
+            this.battleshipForm.NumberOfPatrolboats = Convert.ToInt32(numericPatrolboats.Value);
+            this.battleshipForm.NumberOfCruisers = Convert.ToInt32(numericCruisers.Value);
+            this.battleshipForm.NumberOfSubmarines = Convert.ToInt32(numericSubmarines.Value);
+            this.battleshipForm.NumberOfCarriers = Convert.ToInt32(numericCarriers.Value);
 
-            this._BsForm.RestartGame();
+            this.battleshipForm.RestartGame();
             this.Close();
         }
     }

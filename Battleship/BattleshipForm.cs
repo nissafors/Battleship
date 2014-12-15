@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------------------------------------
-// <copyright file="Battleship.cs" company="None">
+// <copyright file="BattleshipForm.cs" company="None">
 //      Copyright (c) Andreas Andersson, Henrik Ottehall, Victor Ström Nilsson & Torbjörn Widström 2014
 // </copyright>
 // <author>Henrik Ottehall</author>
@@ -70,6 +70,11 @@ namespace Battleship
             PLAYERGRIDXML = "PlayerGrid", ROWXML = "Row";
 
         /// <summary>
+        /// Text for the start game/new game button.
+        /// </summary>
+        private const string STARTGAMEBTNTEXT = "Starta spelet", NEWGAMEBTNTEXT = "Nytt spel";
+        
+        /// <summary>
         /// The game board panel containing the players ships.
         /// </summary>
         private BattleshipPanel playerField;
@@ -137,7 +142,7 @@ namespace Battleship
                 this.RestartGame();
             }
 
-            lblSetShip.Text = "Placera skepp " + (this.shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
+            this.UpdateSetShipLabel();
         }
 
         /// <summary>
@@ -163,7 +168,12 @@ namespace Battleship
             /// <summary>
             /// The computer has won the game.
             /// </summary>
-            ComputerWon
+            ComputerWon,
+
+            /// <summary>
+            /// Game board not accessible.
+            /// </summary>
+            Hold
         }
 
         /// <summary>
@@ -223,8 +233,10 @@ namespace Battleship
             this.shipsLostPlayer = 0;
             this.gameMode = Mode.SettingShips;
 
-            lblSetShip.Visible = true;
+            this.UpdateSetShipLabel();
             lblGameOver.Visible = false;
+            this.InitializeGameBoard();
+            btnStartGame.Text = STARTGAMEBTNTEXT;
             
             this.Controls.Remove(this.playerField);
             this.Controls.Remove(this.computerField);
@@ -242,7 +254,21 @@ namespace Battleship
                 shipLength[i] = this.Ships[i].Length;
             }
 
-            this.computerField.AutoShipPlacing(shipLength);
+            try
+            {
+                this.computerField.AutoShipPlacing(shipLength);
+            }
+            catch (InsufficientGridSpaceException)
+            {
+                this.gameMode = Mode.Hold;
+                MessageBox.Show(
+                    "Datorn kan inte att placerar sina skepp. Prova att minska antalet och/eller storleken under inställningar.",
+                    "Fel!",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+            this.FormSize();
         }
 
         /// <summary>
@@ -250,9 +276,9 @@ namespace Battleship
         /// </summary>
         public void FormSize()
         {
-            this.MaximumSize = new Size((SQUARESIZE * this.Cols * 2) + (GRIDPADDINGSIDE * 2) + GRIDPADDINGCENTER, (SQUARESIZE * this.Rows) + (GRIDPADDINGTOP * 2));
-            this.MinimumSize = new Size((SQUARESIZE * this.Cols * 2) + (GRIDPADDINGSIDE * 2) + GRIDPADDINGCENTER, (SQUARESIZE * this.Rows) + (GRIDPADDINGTOP * 2));
-            this.Padding = new Padding(0, 0, 50, 50);
+            Size formSize = new Size((SQUARESIZE * this.Cols * 2) + (GRIDPADDINGSIDE * 2) + GRIDPADDINGCENTER + 15, (SQUARESIZE * this.Rows) + (GRIDPADDINGTOP * 2));
+            this.MaximumSize = formSize;
+            this.MinimumSize = formSize;
         }
 
         /// <summary>
@@ -303,15 +329,17 @@ namespace Battleship
         /// </summary>
         private void InitializeGameBoard()
         {
+            Size panelSize = new Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
+
             // Create players panel
             this.playerField.Location = new Point(GRIDPADDINGSIDE, GRIDPADDINGTOP);
-            this.playerField.Size = new Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
+            this.playerField.Size = panelSize;
             this.playerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMouseClick);
             this.Controls.Add(this.playerField);
 
             // Create computers panel
             this.computerField.Location = new Point(GRIDPADDINGSIDE + GRIDPADDINGCENTER + (this.Cols * SQUARESIZE), GRIDPADDINGTOP);
-            this.computerField.Size = new Size(this.Rows * SQUARESIZE, this.Cols * SQUARESIZE);
+            this.computerField.Size = panelSize;
             this.computerField.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnMouseClick);
             this.Controls.Add(this.computerField);
         }
@@ -327,6 +355,8 @@ namespace Battleship
             this.computerField.ShowShips = true;
             System.Threading.Thread.Sleep(500);
             lblGameOver.Visible = true;
+            btnStartGame.Text = NEWGAMEBTNTEXT;
+            btnStartGame.Enabled = true;
         }
 
         /// <summary>
@@ -405,7 +435,7 @@ namespace Battleship
                     if (this.shipsSetCount == this.Ships.Length)
                     {
                         btnStartGame.Enabled = true;
-                        lblSetShip.Visible = false;
+                        this.UpdateSetShipLabel();
                     }
 
                     this.Ships[shipArrayIndex].Row = row;
@@ -416,7 +446,7 @@ namespace Battleship
                     // Disable start button and null the coordinates of the removed ship
                     this.shipsSetCount--;
                     btnStartGame.Enabled = false;
-                    lblSetShip.Visible = true;
+                    this.UpdateSetShipLabel();
                     for (shipArrayIndex = 0; shipArrayIndex < this.Ships.Length; shipArrayIndex++)
                     {
                         if (this.Ships[shipArrayIndex].Row == row && this.Ships[shipArrayIndex].Col == col)
@@ -427,7 +457,7 @@ namespace Battleship
                     }
                 }
 
-                lblSetShip.Text = "Placera skepp " + (this.shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString();
+                this.UpdateSetShipLabel();
             }
         }
        
@@ -450,9 +480,18 @@ namespace Battleship
         /// <param name="e">Arguments passed.</param>
         private void StartGame(object sender, EventArgs e)
         {
-            this.gameMode = Mode.Playing;
-            btnStartGame.Enabled = false;
-            this.playerField.ClearForbiddenSquares();
+            if (this.gameMode == Mode.SettingShips)
+            {
+                this.gameMode = Mode.Playing;
+                btnStartGame.Enabled = false;
+                this.playerField.ClearForbiddenSquares();
+            }
+            else if (this.gameMode == Mode.PlayerWon || this.gameMode == Mode.ComputerWon)
+            {
+                this.RestartGame();
+            }
+
+            this.UpdateSetShipLabel();
         }
 
         /// <summary>
@@ -497,11 +536,11 @@ namespace Battleship
                 {
                     return this.playerField.ComputerShoot();
                 });
-
-                // Prolong the next sleep if ship was sunk because sinking sound takes longer to play
-                sleepMS = (result == Square.Sunk) ? 2200 : 700;
+                
                 if (this.SoundOn)
                 {
+                    // Prolong the next sleep if ship was sunk because sinking sound takes longer to play
+                    sleepMS = (result == Square.Sunk) ? 2200 : 700;
                     AudioEffect player = new AudioEffect(result);
                     player.Play();
                 }
@@ -540,6 +579,25 @@ namespace Battleship
         }
 
         /// <summary>
+        /// Update the label showing number of ships placed.
+        /// </summary>
+        private void UpdateSetShipLabel()
+        {
+            if (this.gameMode == Mode.SettingShips)
+            {
+                lblSetShip.Visible = true;
+
+                lblSetShip.Text = (this.shipsSetCount < this.Ships.Length) ?
+                    lblSetShip.Text = "Placera skepp " + (this.shipsSetCount + 1).ToString() + " av " + this.Ships.Length.ToString() :
+                    lblSetShip.Text = "Alla skepp är placerade";
+            }
+            else
+            {
+                lblSetShip.Visible = false;
+            }
+        }
+
+        /// <summary>
         /// Tries to read the saved game state and settings in <paramref name="GAMESTATEPATH"/>.
         /// <para>Returns true if successful.</para>
         /// </summary>
@@ -547,7 +605,6 @@ namespace Battleship
         private bool ReadGameStateFromXML()
         {
             List<Ship> shipList = new List<Ship>();
-            this.lblSetShip.Visible = false;
             int shipLength;
 
             try
@@ -622,6 +679,7 @@ namespace Battleship
 
                 this.Ships = shipList.ToArray();
                 this.NumberOfShips = this.NumberOfCarriers + this.NumberOfSubmarines + this.NumberOfCruisers + this.NumberOfPatrolboats;
+                this.UpdateSetShipLabel();
 
                 return true;
             }

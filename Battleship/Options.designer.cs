@@ -93,11 +93,6 @@
             // numericCarriers
             // 
             this.numericCarriers.Location = new System.Drawing.Point(149, 152);
-            this.numericCarriers.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
             this.numericCarriers.Name = "numericCarriers";
             this.numericCarriers.Size = new System.Drawing.Size(67, 20);
             this.numericCarriers.TabIndex = 19;
@@ -111,11 +106,6 @@
             // numericSubmarines
             // 
             this.numericSubmarines.Location = new System.Drawing.Point(149, 126);
-            this.numericSubmarines.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
             this.numericSubmarines.Name = "numericSubmarines";
             this.numericSubmarines.Size = new System.Drawing.Size(67, 20);
             this.numericSubmarines.TabIndex = 18;
@@ -129,11 +119,6 @@
             // numericCruisers
             // 
             this.numericCruisers.Location = new System.Drawing.Point(149, 100);
-            this.numericCruisers.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
             this.numericCruisers.Name = "numericCruisers";
             this.numericCruisers.Size = new System.Drawing.Size(67, 20);
             this.numericCruisers.TabIndex = 17;
@@ -156,11 +141,6 @@
             // numericPatrolboats
             // 
             this.numericPatrolboats.Location = new System.Drawing.Point(149, 74);
-            this.numericPatrolboats.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
             this.numericPatrolboats.Name = "numericPatrolboats";
             this.numericPatrolboats.Size = new System.Drawing.Size(67, 20);
             this.numericPatrolboats.TabIndex = 15;
@@ -195,7 +175,7 @@
             this.optionsAvbryt.TabIndex = 13;
             this.optionsAvbryt.Text = "Avbryt";
             this.optionsAvbryt.UseVisualStyleBackColor = true;
-            this.optionsAvbryt.Click += new System.EventHandler(this.optionsAvbryt_Click);
+            this.optionsAvbryt.Click += new System.EventHandler(this.OptionsAvbryt_Click);
             // 
             // optionsSpela
             // 
@@ -206,7 +186,7 @@
             this.optionsSpela.TabIndex = 12;
             this.optionsSpela.Text = "Nytt spel";
             this.optionsSpela.UseVisualStyleBackColor = true;
-            this.optionsSpela.Click += new System.EventHandler(this.optionsSpela_Click);
+            this.optionsSpela.Click += new System.EventHandler(this.OptionsSpela_Click);
             // 
             // soundCheckBox
             // 
@@ -269,7 +249,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.optionsAvbryt;
-            this.ClientSize = new System.Drawing.Size(234, 259);
+            this.ClientSize = new System.Drawing.Size(230, 255);
             this.ControlBox = false;
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
