@@ -42,8 +42,6 @@
             this.optionsAvbryt = new System.Windows.Forms.Button();
             this.optionsSpela = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.soundCheckBox = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -102,6 +100,7 @@
             0,
             0,
             0});
+            this.numericCarriers.ValueChanged += new System.EventHandler(this.SettingsChanged);
             // 
             // numericSubmarines
             // 
@@ -115,6 +114,7 @@
             0,
             0,
             0});
+            this.numericSubmarines.ValueChanged += new System.EventHandler(this.SettingsChanged);
             // 
             // numericCruisers
             // 
@@ -128,6 +128,7 @@
             0,
             0,
             0});
+            this.numericCruisers.ValueChanged += new System.EventHandler(this.SettingsChanged);
             // 
             // label6
             // 
@@ -150,63 +151,47 @@
             0,
             0,
             0});
+            this.numericPatrolboats.ValueChanged += new System.EventHandler(this.SettingsChanged);
             // 
             // sizeComboBox
             // 
             this.sizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sizeComboBox.FormattingEnabled = true;
             this.sizeComboBox.Items.AddRange(new object[] {
-            "8",
-            "10",
-            "12",
-            "14"});
+            "8x8",
+            "10x10",
+            "12x12",
+            "14x14"});
             this.sizeComboBox.Location = new System.Drawing.Point(95, 27);
             this.sizeComboBox.Name = "sizeComboBox";
             this.sizeComboBox.Size = new System.Drawing.Size(121, 21);
             this.sizeComboBox.TabIndex = 14;
             this.toolTip1.SetToolTip(this.sizeComboBox, "Välj storlek på spelplanen. (x*x)");
+            this.sizeComboBox.SelectedIndexChanged += new System.EventHandler(this.SettingsChanged);
             // 
             // optionsAvbryt
             // 
+            this.optionsAvbryt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.optionsAvbryt.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.optionsAvbryt.Location = new System.Drawing.Point(149, 225);
+            this.optionsAvbryt.Location = new System.Drawing.Point(149, 183);
             this.optionsAvbryt.Name = "optionsAvbryt";
             this.optionsAvbryt.Size = new System.Drawing.Size(75, 23);
             this.optionsAvbryt.TabIndex = 13;
             this.optionsAvbryt.Text = "Avbryt";
             this.optionsAvbryt.UseVisualStyleBackColor = true;
-            this.optionsAvbryt.Click += new System.EventHandler(this.OptionsAvbryt_Click);
+            this.optionsAvbryt.Click += new System.EventHandler(this.Cancel);
             // 
             // optionsSpela
             // 
+            this.optionsSpela.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.optionsSpela.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.optionsSpela.Location = new System.Drawing.Point(68, 225);
+            this.optionsSpela.Location = new System.Drawing.Point(68, 183);
             this.optionsSpela.Name = "optionsSpela";
             this.optionsSpela.Size = new System.Drawing.Size(75, 23);
             this.optionsSpela.TabIndex = 12;
             this.optionsSpela.Text = "Nytt spel";
             this.optionsSpela.UseVisualStyleBackColor = true;
-            this.optionsSpela.Click += new System.EventHandler(this.OptionsSpela_Click);
-            // 
-            // soundCheckBox
-            // 
-            this.soundCheckBox.AutoSize = true;
-            this.soundCheckBox.Checked = true;
-            this.soundCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.soundCheckBox.Location = new System.Drawing.Point(102, 191);
-            this.soundCheckBox.Name = "soundCheckBox";
-            this.soundCheckBox.Size = new System.Drawing.Size(15, 14);
-            this.soundCheckBox.TabIndex = 24;
-            this.soundCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 191);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(30, 13);
-            this.label1.TabIndex = 25;
-            this.label1.Text = "Ljud:";
+            this.optionsSpela.Click += new System.EventHandler(this.SaveSettings);
             // 
             // label10
             // 
@@ -249,14 +234,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.optionsAvbryt;
-            this.ClientSize = new System.Drawing.Size(230, 255);
+            this.ClientSize = new System.Drawing.Size(226, 209);
             this.ControlBox = false;
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.soundCheckBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -300,8 +283,6 @@
         private System.Windows.Forms.Button optionsAvbryt;
         private System.Windows.Forms.Button optionsSpela;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.CheckBox soundCheckBox;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;

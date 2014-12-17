@@ -23,6 +23,11 @@ using System.Windows.Forms;
         private readonly BattleshipForm battleshipForm;
 
         /// <summary>
+        /// Indicates whether the player have changed settings
+        /// </summary>
+        private bool settingsChanged;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Options"/> class.
         /// /// </summary>
         /// <param name="battleshipForm">A reference to the calling BattleshipForm object.</param>
@@ -32,11 +37,22 @@ using System.Windows.Forms;
             this.battleshipForm = battleshipForm;
 
             sizeComboBox.SelectedIndex = sizeComboBox.FindString(this.battleshipForm.Rows.ToString());
-            soundCheckBox.Checked = this.battleshipForm.SoundOn;
             numericPatrolboats.Value = this.battleshipForm.NumberOfPatrolboats;
             numericCruisers.Value = this.battleshipForm.NumberOfCruisers;
             numericSubmarines.Value = this.battleshipForm.NumberOfSubmarines;
             numericCarriers.Value = this.battleshipForm.NumberOfCarriers;
+
+            this.settingsChanged = false;
+        }
+
+        /// <summary>
+        /// Used when any setting have been changed.
+        /// </summary>
+        /// <param name="sender">The calling object.</param>
+        /// <param name="e">Parameters provided.</param>
+        private void SettingsChanged(object sender, EventArgs e)
+        {
+            this.settingsChanged = true;
         }
 
         /// <summary>
@@ -44,49 +60,29 @@ using System.Windows.Forms;
         /// </summary>       
         /// <param name="sender">The calling object.</param>
         /// <param name="e">Parameters provided.</param>
-        private void OptionsAvbryt_Click(object sender, EventArgs e)
+        private void Cancel(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNo);
+            if (this.settingsChanged)
+            {
+                var result = MessageBox.Show("Vill du spara inställningarna och starta om spelet?", "Är du säker?", MessageBoxButtons.YesNo);
 
-            if (result == DialogResult.Yes)
-            {
-                this.SaveSettings();
-                
-                this.Close();
+                if (result == DialogResult.Yes)
+                {
+                    this.SaveSettings();
+                }
             }
-            else if (result == DialogResult.No)
-            {
-                this.Close();
-            }
+            this.Dispose();
+            this.Close();
         }
      
         /// <summary>
-        /// Save settings if user clicks the play button.
-        /// </summary>
-        /// <param name="sender">The calling object.</param>
-        /// <param name="e">Arguments provided.</param>
-        private void OptionsSpela_Click(object sender, EventArgs e)
-        {
-            this.SaveSettings();
-        }
-
-        /// <summary>
         /// Applies the chosen settings and restarts the game.
         /// </summary>
-        private void SaveSettings()
+        private void SaveSettings(object sender = null, EventArgs e = null)
         {
             this.battleshipForm.Cols = Convert.ToInt32(sizeComboBox.SelectedItem);
             this.battleshipForm.Rows = Convert.ToInt32(sizeComboBox.SelectedItem);
             this.battleshipForm.FormSize();
-
-            if (soundCheckBox.Checked == true)
-            {
-                this.battleshipForm.SoundOn = true;
-            }
-            else if (soundCheckBox.Checked == false)
-            {
-                this.battleshipForm.SoundOn = false;
-            }
 
             this.battleshipForm.NumberOfShips = Convert.ToInt32(numericPatrolboats.Value) + Convert.ToInt32(numericCruisers.Value) + Convert.ToInt32(numericSubmarines.Value) + Convert.ToInt32(numericCarriers.Value);
             this.battleshipForm.NumberOfPatrolboats = Convert.ToInt32(numericPatrolboats.Value);

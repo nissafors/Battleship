@@ -138,6 +138,7 @@ namespace Battleship
                 this.NumberOfPatrolboats = this.NumberOfCruisers = this.NumberOfSubmarines = this.NumberOfCarriers = 1;
                 this.NumberOfShips = this.NumberOfPatrolboats + this.NumberOfCruisers + this.NumberOfSubmarines + this.NumberOfCarriers;
                 this.SoundOn = true;
+                this.SoundToggleMenuStrip.Checked = true;
 
                 this.RestartGame();
             }
@@ -473,6 +474,24 @@ namespace Battleship
         }
 
         /// <summary>
+        /// Toggle whether sound is on or off.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ToggleSound(object sender, EventArgs e)
+        {
+            if (this.SoundOn)
+            {
+                this.SoundOn = false;
+            }
+            else
+            {
+                this.SoundOn = true;
+            }
+
+            this.SoundToggleMenuStrip.Checked = SoundOn;
+        }
+        /// <summary>
         /// This button gets enabled when all ships in <see cref="Ships"/> list have been placed.
         /// Clicking it starts the game by changing the <see cref="gameMode"/>gameMode.
         /// </summary>
@@ -622,6 +641,7 @@ namespace Battleship
 
                             case SOUNDONXML:
                                 this.SoundOn = reader.ReadElementContentAsBoolean();
+                                this.SoundToggleMenuStrip.Checked = this.SoundOn;
                                 break;
 
                             case SHIPSLOSTPLAYERXML:

@@ -31,11 +31,13 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.arkivToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nyttSpelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.inställningarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.avslutaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnStartGame = new System.Windows.Forms.Button();
             this.lblSetShip = new System.Windows.Forms.Label();
             this.lblGameOver = new System.Windows.Forms.Label();
+            this.OptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OptionsMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
+            this.SoundToggleMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,10 +45,11 @@
             // 
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.arkivToolStripMenuItem});
+            this.arkivToolStripMenuItem,
+            this.OptionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(54, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(230, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -54,7 +57,6 @@
             // 
             this.arkivToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nyttSpelToolStripMenuItem,
-            this.inställningarToolStripMenuItem,
             this.avslutaToolStripMenuItem});
             this.arkivToolStripMenuItem.Name = "arkivToolStripMenuItem";
             this.arkivToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
@@ -64,23 +66,15 @@
             // 
             this.nyttSpelToolStripMenuItem.Name = "nyttSpelToolStripMenuItem";
             this.nyttSpelToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.nyttSpelToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.nyttSpelToolStripMenuItem.Text = "Nytt spel";
             this.nyttSpelToolStripMenuItem.Click += new System.EventHandler(this.NewGame);
-            // 
-            // inställningarToolStripMenuItem
-            // 
-            this.inställningarToolStripMenuItem.Name = "inställningarToolStripMenuItem";
-            this.inställningarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.inställningarToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.inställningarToolStripMenuItem.Text = "Inställningar";
-            this.inställningarToolStripMenuItem.Click += new System.EventHandler(this.OpenOptions);
             // 
             // avslutaToolStripMenuItem
             // 
             this.avslutaToolStripMenuItem.Name = "avslutaToolStripMenuItem";
             this.avslutaToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.avslutaToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.avslutaToolStripMenuItem.Text = "Avsluta";
             this.avslutaToolStripMenuItem.Click += new System.EventHandler(this.Quit);
             // 
@@ -119,6 +113,31 @@
             this.lblGameOver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblGameOver.Visible = false;
             // 
+            // OptionsToolStripMenuItem
+            // 
+            this.OptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OptionsMenuStrip,
+            this.SoundToggleMenuStrip});
+            this.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem";
+            this.OptionsToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
+            this.OptionsToolStripMenuItem.Text = "Inställningar";
+            // 
+            // OptionsMenuStrip
+            // 
+            this.OptionsMenuStrip.Name = "OptionsMenuStrip";
+            this.OptionsMenuStrip.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.OptionsMenuStrip.Size = new System.Drawing.Size(215, 22);
+            this.OptionsMenuStrip.Text = "Spelplan och båtar";
+            this.OptionsMenuStrip.Click += new System.EventHandler(this.OpenOptions);
+            // 
+            // SoundToggleMenuStrip
+            // 
+            this.SoundToggleMenuStrip.Name = "SoundToggleMenuStrip";
+            this.SoundToggleMenuStrip.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.SoundToggleMenuStrip.Size = new System.Drawing.Size(215, 22);
+            this.SoundToggleMenuStrip.Text = "Ljud";
+            this.SoundToggleMenuStrip.Click += new System.EventHandler(this.ToggleSound);
+            // 
             // BattleshipForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,12 +163,14 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem arkivToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem inställningarToolStripMenuItem;
         private System.Windows.Forms.Button btnStartGame;
         private System.Windows.Forms.Label lblSetShip;
         private System.Windows.Forms.ToolStripMenuItem nyttSpelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem avslutaToolStripMenuItem;
         private System.Windows.Forms.Label lblGameOver;
+        private System.Windows.Forms.ToolStripMenuItem OptionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem OptionsMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem SoundToggleMenuStrip;
 
 
 
